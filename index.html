@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn With Khairul</title>
+    <link rel="icon" type="image/png" href="photo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Calendar Appointment Scheduling -->
+    <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+    <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/><circle cx="25" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            z-index: 1;
+        }
+
+        .linkedin-banner-link {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 3;
+            text-decoration: none;
+        }
+
+        .linkedin-tooltip {
+            background: rgba(0, 119, 181, 0.9);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .linkedin-tooltip:hover {
+            background: rgba(0, 119, 181, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .linkedin-tooltip i {
+            font-size: 1.2rem;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            color: #2d3748;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about {
+            background: #f8fafc;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-image {
+            text-align: center;
+        }
+
+        .profile-image {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto;
+            object-fit: cover;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+            border: 5px solid white;
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #4a5568;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        /* Experience Section */
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .experience-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .experience-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .experience-card h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        .experience-card .company {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .experience-card .achievement {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #e53e3e;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Services Section */
+        .services {
+            background: #f8fafc;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .service-features li {
+            margin: 0.5rem 0;
+            color: #4a5568;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            color: #48bb78;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Testimonial Section */
+        .testimonial {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .testimonial-content {
+            background: rgba(255,255,255,0.1);
+            padding: 2.5rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .testimonial-quote {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .testimonial-author {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .stars {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin: 1rem 0;
+        }
+
+        /* LinkedIn Connect Section */
+        .linkedin-connect {
+            padding: 5rem 0;
+            background: #f8fafc;
+        }
+
+        .linkedin-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .linkedin-text h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .linkedin-text p {
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .connect-benefits {
+            list-style: none;
+            margin-bottom: 2.5rem;
+        }
+
+        .connect-benefits li {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            font-size: 1rem;
+            color: #4a5568;
+        }
+
+        .connect-benefits i {
+            color: #48bb78;
+            margin-right: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .linkedin-connect-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: #0077b5;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 119, 181, 0.3);
+        }
+
+        .linkedin-connect-button:hover {
+            background: #005885;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 119, 181, 0.4);
+        }
+
+        .linkedin-image {
+            position: relative;
+            text-align: center;
+        }
+
+        .linkedin-banner-img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .linkedin-banner-img:hover {
+            transform: translateY(-5px);
+        }
+
+        .banner-overlay {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            background: #0077b5;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .linkedin-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Pricing Section */
+        .first-lesson-card {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 0 auto 2rem auto;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(72, 187, 120, 0.3);
+            max-width: 500px;
+        }
+
+        .first-lesson-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .first-lesson-price {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .first-lesson-price span {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .refundable-badge {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            margin: 1rem 0;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+
+        .payment-info {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .payment-methods {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-methods i {
+            font-size: 1.5rem;
+            color: #0070ba;
+        }
+
+        .payment-methods span {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .payment-note {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .pricing-explanation {
+            margin-top: 2rem;
+        }
+
+        .pricing-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .price-tier {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border: 2px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        .price-tier:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .price-tier.featured {
+            border-color: #667eea;
+            transform: scale(1.02);
+        }
+
+        .tier-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .tier-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        .price-tier ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .price-tier li {
+            margin: 0.8rem 0;
+            color: #4a5568;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .price-tier li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #48bb78;
+            font-weight: bold;
+        }
+
+        .pricing-note {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 5px solid #667eea;
+            margin-top: 2rem;
+        }
+
+        .pricing-note p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #2d3748;
+        }
+
+        .pricing-toggle {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .pricing-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            margin-top: 1rem;
+        }
+
+        .pricing-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .pricing-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-arrow.rotated {
+            transform: rotate(180deg);
+        }
+
+        .pricing-content {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Booking Section */
+        .booking {
+            padding: 5rem 0;
+            background: #f8fafc;
+        }
+
+        .booking-button-container {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .calendar-button-wrapper {
+            margin-bottom: 3rem;
+        }
+
+        .booking-info {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .booking-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .booking-feature {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .booking-feature:hover {
+            transform: translateY(-3px);
+        }
+
+        .booking-feature i {
+            font-size: 1.5rem;
+            color: #667eea;
+            min-width: 24px;
+        }
+
+        .booking-feature span {
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        .pricing-card.featured::before {
+            content: 'RECOMMENDED';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #667eea;
+            margin: 1rem 0;
+        }
+
+        .price-label {
+            font-size: 1.1rem;
+            color: #4a5568;
+            margin-bottom: 2rem;
+        }
+
+        .value-points {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .value-points li {
+            margin: 0.8rem 0;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .value-points li::before {
+            content: '🎯';
+            margin-right: 0.5rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+        }
+
+        .contact .section-title {
+            color: white;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .contact-item-link:hover .contact-item {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        .contact-item i {
+            font-size: 2rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item-link:hover .contact-item i {
+            color: #764ba2;
+        }
+
+        .contact-item h4 {
+            color: white;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .contact-item p {
+            color: rgba(255,255,255,0.9);
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-size: 1.1rem;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .profile-image {
+                width: 200px;
+                height: 200px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .linkedin-banner-link {
+                top: 10px;
+                right: 10px;
+            }
+
+            .linkedin-tooltip {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+
+            .linkedin-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+            
+            .linkedin-image {
+                order: -1;
+                margin-bottom: 1rem;
+            }
+            
+            .linkedin-banner-img {
+                max-width: 350px;
+            }
+
+            .linkedin-text h2 {
+                font-size: 2rem;
+            }
+
+            .booking-info {
+                padding: 1.5rem;
+                margin: 0 1rem;
+            }
+
+            .booking-features {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .pricing-tiers {
+                grid-template-columns: 1fr;
+            }
+
+            .price-tier.featured {
+                transform: none;
+            }
+
+            .first-lesson-card {
+                padding: 2rem;
+            }
+
+            .first-lesson-price {
+                font-size: 2.5rem;
+            }
+
+            .payment-methods {
+                flex-direction: column;
+                gap: 0.3rem;
+            }
+
+            .payment-methods i {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header/Hero Section -->
+    <header>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Khairul Hamid</h1>
+                <div class="subtitle">Remote .NET Engineer | 5+ Years with International Companies</div>
+                <p style="font-size: 1.2rem; opacity: 0.9; max-width: 700px; margin: 0 auto;">
+                    Ready to break into tech or advance your .NET skills? I work remotely from Indonesia for international companies, building enterprise systems for markets across Australia, Indonesia, and the USA. Let me help you prepare for your next career step.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-number">5+</div>
+                        <div class="stat-label">Years Remote Experience</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">International Markets</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">Enterprise</div>
+                        <div class="stat-label">Systems Built</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <h2 class="section-title">A Little About Me</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="photo.png" alt="Khairul Hamid" class="profile-image">
+                </div>
+                <div class="about-text">
+                    <h3>Who I Help & How</h3>
+                    <p>Over 5+ years working remotely from Indonesia for international companies, I've built enterprise systems and learned what it takes to succeed in the global tech industry. Now I help others prepare for their next career step.</p>
+                    
+                    <p><strong>I specialize in helping:</strong></p>
+                    <ul style="margin: 1.5rem 0; padding-left: 2rem; line-height: 1.8;">
+                        <li><strong>CS Students</strong> preparing for .NET developer roles</li>
+                        <li><strong>Experienced Software Engineers</strong> transitioning to .NET</li>
+                        <li><strong>Career Changers</strong> with no prior experience wanting to become Software Engineers</li>
+                    </ul>
+                    
+                    <p>My teaching approach focuses on <strong>real-world applications</strong>. I prepare practical examples from actual enterprise scenarios and provide resources that mirror what you'll encounter in professional environments. Whether you're starting with fundamentals or diving into advanced .NET concepts, I'll help you build the skills that matter in today's tech industry.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience">
+        <div class="container">
+            <h2 class="section-title">My Professional Background</h2>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <h4>Liven Group - Senior .NET Engineer</h4>
+                    <div class="company">Global Restaurant Platform</div>
+                    <div class="achievement">120M+</div>
+                    <p>transactions annually across Australia, Indonesia, Singapore</p>
+                    <p>Helped improve system efficiency and <strong>reduce operational costs</strong> for clients</p>
+                </div>
+                
+                <div class="experience-card">
+                    <h4>Bipo Service - Senior Software Engineer</h4>
+                    <div class="company">Multi-Tenant HRMS Platform</div>
+                    <div class="achievement">650K+</div>
+                    <p>users across 170+ global markets</p>
+                    <p>Worked on building scalable systems with <strong>.NET 8.0</strong> and modern architecture</p>
+                </div>
+                
+                <div class="experience-card">
+                    <h4>PT Telkom Indonesia - Mobile Developer</h4>
+                    <div class="company">Agricultural Fintech Platform</div>
+                    <div class="achievement">$32M+</div>
+                    <p>capital disbursement through React Native platform</p>
+                    <p>Contributed to a platform that helped <strong>71,000+ farmers</strong> access financial services</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services">
+        <div class="container">
+            <h2 class="section-title">What I Teach</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h4>Web Fundamentals</h4>
+                    <p>Master the foundation of web development with modern best practices</p>
+                    <ul class="service-features">
+                        <li>HTML5 & Semantic Markup</li>
+                        <li>CSS3 & Modern Layouts</li>
+                        <li>JavaScript ES6+</li>
+                        <li>Responsive Design</li>
+                        <li>Web Performance</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fab fa-microsoft"></i>
+                    </div>
+                    <h4>.NET Full Stack</h4>
+                    <p>Learn enterprise-grade development with cutting-edge .NET technologies</p>
+                    <ul class="service-features">
+                        <li>C# & .NET Core/.NET 8</li>
+                        <li>ASP.NET Core APIs</li>
+                        <li>Entity Framework Core</li>
+                        <li>Microservices Architecture</li>
+                        <li>Cloud Deployment (AWS/Azure)</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h4>Enterprise Patterns</h4>
+                    <p>Advanced concepts used in production systems serving millions</p>
+                    <ul class="service-features">
+                        <li>Clean Architecture</li>
+                        <li>Domain Driven Design</li>
+                        <li>CQRS & Event Sourcing</li>
+                        <li>Scalable Database Design</li>
+                        <li>DevOps & CI/CD</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="testimonial">
+        <div class="container">
+            <h2 class="section-title">What My Students Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-content">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-quote">
+                        "Khairul is a great teacher, he understands HTML and CSS, and what I like the most about his teaching style and methodology that Khairul is proactive, he prepares sample of websites and codes ahead of time, very informative and provides a lot of resources. You won't regret booking your TRIAL lesson with Khairul, I highly recommend him for web development classes."
+                    </div>
+                    <div class="testimonial-author">— Omar from Jordan</div>
+                </div>
+                <div class="testimonial-content">
+                    <div class="stars">★★★★★</div>
+                    <div class="testimonial-quote">
+                        "Learning with Khairul has been fantastic! He breaks down complex programming concepts into manageable pieces and always makes sure I understand before moving forward. His real-world experience really shows in how he teaches - very practical and applicable."
+                    </div>
+                    <div class="testimonial-author">— Max from Canberra, Australia</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LinkedIn Connect Section -->
+    <section class="linkedin-connect">
+        <div class="container">
+            <div class="linkedin-content">
+                <div class="linkedin-text">
+                    <h2>Let's Connect!</h2>
+                    <p>Join my professional network and stay updated with the latest in software development, coding tutorials, and industry insights.</p>
+                    <ul class="connect-benefits">
+                        <li><i class="fas fa-check-circle"></i> Get notified about new tutorials and resources</li>
+                        <li><i class="fas fa-check-circle"></i> Connect with other developers in my network</li>
+                        <li><i class="fas fa-check-circle"></i> Stay updated on industry trends and opportunities</li>
+                        <li><i class="fas fa-check-circle"></i> Access exclusive content and tips</li>
+                    </ul>
+                    <a href="https://www.linkedin.com/in/mkhairulhamid/" target="_blank" class="linkedin-connect-button">
+                        <i class="fab fa-linkedin"></i>
+                        Connect on LinkedIn
+                    </a>
+                </div>
+                <div class="linkedin-image">
+                    <img src="linkedin-banner.png" alt="Khairul Hamid LinkedIn Profile" class="linkedin-banner-img">
+                    <div class="banner-overlay">
+                        <i class="fab fa-linkedin linkedin-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing">
+        <div class="container">
+            <h2 class="section-title">Ready to Get Started?</h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #4a5568; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Take the first step with a risk-free session. Let's discuss your goals and create your personalized learning path.
+            </p>
+            
+            <!-- First Lesson - Always Visible -->
+            <div class="first-lesson-card">
+                <h3>🎯 Start Your Journey</h3>
+                <div class="first-lesson-price">$10 <span>First Lesson</span></div>
+                <div class="refundable-badge">💰 100% Money-Back Guarantee</div>
+                <p>Let's meet, discuss your goals, and create a personalized learning plan. If you're not satisfied, you get your money back - no questions asked!</p>
+                <div class="payment-info">
+                    <div class="payment-methods">
+                        <i class="fab fa-paypal"></i>
+                        <span>Easy payment via PayPal</span>
+                    </div>
+                    <p class="payment-note">Accepts all major cards, bank transfers & digital wallets</p>
+                </div>
+            </div>
+
+            <div class="pricing-toggle">
+                <button class="pricing-button" onclick="togglePricing()">
+                    <i class="fas fa-info-circle"></i>
+                    See Detailed Pricing Structure
+                    <i class="fas fa-chevron-down pricing-arrow"></i>
+                </button>
+            </div>
+            <div class="pricing-content" id="pricingContent" style="display: none;">
+
+                <!-- Pricing Explanation -->
+                <div class="pricing-explanation">
+                    <h3 style="text-align: center; margin-bottom: 2rem;">After Our First Lesson</h3>
+                    <p style="text-align: center; margin-bottom: 3rem; font-size: 1.1rem; color: #4a5568;">
+                        Based on our discussion, I'll recommend a rate between <strong>$10-50 per hour</strong> depending on your needs. Here's how I determine pricing:
+                    </p>
+                    
+                    <div class="pricing-tiers">
+                        <div class="price-tier">
+                            <div class="tier-price">$10-15</div>
+                            <div class="tier-title">Basic Concepts</div>
+                            <ul>
+                                <li>HTML, CSS, JavaScript fundamentals</li>
+                                <li>Basic programming concepts</li>
+                                <li>Minimal preparation needed</li>
+                                <li>Standard teaching materials</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="price-tier">
+                            <div class="tier-price">$20-25</div>
+                            <div class="tier-title">Intermediate Skills</div>
+                            <ul>
+                                <li>C# and .NET Core basics</li>
+                                <li>Database fundamentals</li>
+                                <li>Some custom examples needed</li>
+                                <li>Code review sessions</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="price-tier featured">
+                            <div class="tier-price">$30-35</div>
+                            <div class="tier-title">Professional Development</div>
+                            <ul>
+                                <li>Advanced .NET concepts</li>
+                                <li>API development & testing</li>
+                                <li>Custom project guidance</li>
+                                <li>Interview preparation</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="price-tier">
+                            <div class="tier-price">$40-45</div>
+                            <div class="tier-title">Enterprise Level</div>
+                            <ul>
+                                <li>Architecture patterns</li>
+                                <li>Microservices & cloud</li>
+                                <li>Complex preparation required</li>
+                                <li>Real-world case studies</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="price-tier">
+                            <div class="tier-price">$50</div>
+                            <div class="tier-title">Expert Consultation</div>
+                            <ul>
+                                <li>System design & architecture</li>
+                                <li>Career mentorship</li>
+                                <li>Extensive preparation time</li>
+                                <li>Professional project review</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="pricing-note">
+                        <p><strong>💬 All prices are negotiable!</strong> I understand everyone has different circumstances. Let's find a rate that works for both of us and helps you achieve your career goals.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="booking">
+        <div class="container">
+            <h2 class="section-title">Book Your Session</h2>
+            <p style="text-align: center; font-size: 1.2rem; color: #4a5568; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Ready to start learning? Choose a time that works for you and let's begin your coding journey together!
+            </p>
+            <div class="booking-button-container">
+                <!-- Google Calendar Appointment Scheduling begin -->
+                <div class="calendar-button-wrapper">
+                    <script>
+                    (function() {
+                      var target = document.currentScript;
+                      window.addEventListener('load', function() {
+                        calendar.schedulingButton.load({
+                          url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ3gLcvTZZsUBkWEUfgnrqd4DVYTL6qAaNJI-XYgu04NS5ku8d_Qd9U4_Kc4u8W_n4YkpHwUpMjU?gv=true',
+                          color: '#667eea',
+                          label: 'Book Your Tutoring Session',
+                          target,
+                        });
+                      });
+                    })();
+                    </script>
+                </div>
+                <!-- end Google Calendar Appointment Scheduling -->
+                <div class="booking-info">
+                    <div class="booking-features">
+                        <div class="booking-feature">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Choose your preferred time</span>
+                        </div>
+                        <div class="booking-feature">
+                            <i class="fas fa-video"></i>
+                            <span>Online sessions via video call</span>
+                        </div>
+                        <div class="booking-feature">
+                            <i class="fas fa-clock"></i>
+                            <span>Flexible scheduling options</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container">
+            <h2 class="section-title">Let's Start Learning Together</h2>
+            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 2rem;">
+                I'd love to learn about your goals and see how I can help you on your coding journey. 
+                Let's have a friendly chat about what you'd like to achieve!
+            </p>
+            
+            <div class="contact-info">
+                <a href="mailto:mkhairulhamid@gmail.com" class="contact-item-link">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <h4>Email</h4>
+                        <p>mkhairulhamid@gmail.com</p>
+                    </div>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/mkhairulhamid/" target="_blank" class="contact-item-link">
+                    <div class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        <h4>LinkedIn</h4>
+                        <p>linkedin.com/in/mkhairulhamid/</p>
+                    </div>
+                </a>
+                
+                <a href="https://mkhairulhamid.github.io/personalweb/" target="_blank" class="contact-item-link">
+                    <div class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        <h4>Portfolio</h4>
+                        <p>mkhairulhamid.github.io/personalweb/</p>
+                    </div>
+                </a>
+            </div>
+            
+            <a href="mailto:mkhairulhamid@gmail.com?subject=Tutoring%20Inquiry&body=Hi%20Khairul,%0D%0A%0D%0AI'm%20interested%20in%20learning%20more%20about%20your%20tutoring%20services.%20Please%20let%20me%20know%20your%20availability.%0D%0A%0D%0AThanks!" class="cta-button">
+                <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i>
+Let's Start Learning Together
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Add smooth scrolling for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add animation on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all cards and sections
+            document.querySelectorAll('.experience-card, .service-card, .pricing-card').forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+
+        // Toggle pricing section visibility
+        function togglePricing() {
+            const pricingContent = document.getElementById('pricingContent');
+            const arrow = document.querySelector('.pricing-arrow');
+            const button = document.querySelector('.pricing-button');
+
+            if (pricingContent.style.display === 'none') {
+                pricingContent.style.display = 'block';
+                arrow.classList.add('rotated');
+                button.innerHTML = '<i class="fas fa-info-circle"></i> Hide Detailed Pricing <i class="fas fa-chevron-up pricing-arrow rotated"></i>';
+            } else {
+                pricingContent.style.display = 'none';
+                arrow.classList.remove('rotated');
+                button.innerHTML = '<i class="fas fa-info-circle"></i> See Detailed Pricing Structure <i class="fas fa-chevron-down pricing-arrow"></i>';
+            }
+        }
+    </script>
+</body>
+</html>
