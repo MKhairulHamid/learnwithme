@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.NET Intermediate Concepts - Learn With Khairul</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22grad%22 x1=%220%%22 y1=%220%%22 x2=%22100%%22 y2=%22100%%22><stop offset=%220%%22 style=%22stop-color:%23667eea;stop-opacity:1%22 /><stop offset=%22100%%22 style=%22stop-color:%23764ba2;stop-opacity:1%22 /></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22url(%23grad)%22/><text x=%2250%22 y=%2260%22 font-family=%22Arial,sans-serif%22 font-size=%2240%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22white%22>LK</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Header */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo i {
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content-section {
+            padding: 3rem 0;
+        }
+
+        .intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .intro h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        /* Question Categories */
+        .category {
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .category-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-content {
+            padding: 2rem;
+        }
+
+        /* Questions */
+        .question {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-text:hover {
+            color: #ff6b6b;
+        }
+
+        .question-text i {
+            transition: transform 0.3s ease;
+        }
+
+        .question-text.active i {
+            transform: rotate(90deg);
+        }
+
+        .answer {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b6b;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .answer.active {
+            display: block;
+            animation: slideDown 0.3s ease-in-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer ul {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .answer li {
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Progress */
+        .progress-bar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            transition: width 0.3s ease;
+            z-index: 999;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .category-content {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                Learn With Khairul
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="learning-materials.html" class="nav-link back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Materials
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>.NET Intermediate Concepts & Patterns</h1>
+            <p>Advanced topics for developers ready to take their .NET skills to the next level</p>
+            <div class="difficulty-badge">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i> Intermediate Level
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <section class="content-section">
+        <div class="container">
+            <div class="intro">
+                <h2>🚀 Ready to Level Up?</h2>
+                <p>This collection covers intermediate-level .NET concepts that separate good developers from great ones. These topics are commonly discussed in mid-level interviews and are essential for building robust, scalable applications.</p>
+                <p><strong>💡 Prerequisites:</strong> Solid understanding of C# basics, ASP.NET Core fundamentals, and Entity Framework.</p>
+            </div>
+
+            <!-- Advanced C# Concepts -->
+            <div class="category">
+                <div class="category-header">
+                    <h3><i class="fas fa-code"></i> Advanced C# Concepts</h3>
+                    <p>Deep dive into C# language features and patterns</p>
+                </div>
+                <div class="category-content">
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            1. Explain delegates, events, and lambda expressions with practical examples.
+                        </div>
+                        <div class="answer">
+                            <p><strong>Delegates:</strong> Type-safe function pointers that can hold references to methods.</p>
+                            <div class="code-block">
+// Declare delegate
+public delegate void LogHandler(string message);
+
+// Usage
+LogHandler logger = Console.WriteLine;
+logger += (msg) => File.WriteAllText("log.txt", msg);
+logger("This will be logged to console AND file");
+                            </div>
+                            
+                            <p><strong>Events:</strong> Special kind of multicast delegate that provides encapsulation.</p>
+                            <div class="code-block">
+public class OrderService
+{
+    public event Action&lt;Order&gt; OrderPlaced;
+    
+    public void PlaceOrder(Order order)
+    {
+        // Process order...
+        OrderPlaced?.Invoke(order);
+    }
+}
+
+// Usage
+orderService.OrderPlaced += (order) => emailService.SendConfirmation(order);
+orderService.OrderPlaced += (order) => inventoryService.UpdateStock(order);
+                            </div>
+                            
+                            <p><strong>Lambda Expressions:</strong> Anonymous functions using => syntax.</p>
+                            <div class="code-block">
+// Various lambda forms
+Func&lt;int, int, int&gt; add = (x, y) => x + y;
+Predicate&lt;string&gt; isEmpty = s => string.IsNullOrEmpty(s);
+
+// With LINQ
+var adults = users.Where(u => u.Age >= 18).ToList();
+var names = users.Select(u => u.Name).ToList();
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            2. What are generics and how do constraints work?
+                        </div>
+                        <div class="answer">
+                            <p><strong>Generics</strong> allow you to write type-safe, reusable code without specifying the exact data type.</p>
+                            
+                            <div class="code-block">
+// Generic class with constraints
+public class Repository&lt;T&gt; where T : class, IEntity, new()
+{
+    private List&lt;T&gt; _entities = new List&lt;T&gt;();
+    
+    public void Add(T entity)
+    {
+        if (entity.Id == 0)
+            entity.Id = GenerateId();
+        _entities.Add(entity);
+    }
+    
+    public T GetById(int id) => _entities.FirstOrDefault(e => e.Id == id);
+}
+
+// Generic methods with multiple constraints
+public TResult ProcessEntity&lt;TEntity, TResult&gt;(TEntity entity)
+    where TEntity : class, IValidatable
+    where TResult : class, new()
+{
+    if (!entity.IsValid())
+        throw new ArgumentException("Invalid entity");
+        
+    return new TResult();
+}
+
+// Common constraints:
+// where T : class          // Reference type
+// where T : struct         // Value type
+// where T : IComparable    // Implements interface
+// where T : BaseClass      // Inherits from class
+// where T : new()          // Has parameterless constructor
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            3. How does async/await work and what are best practices?
+                        </div>
+                        <div class="answer">
+                            <p><strong>async/await</strong> enables asynchronous programming, allowing threads to be freed up while waiting for I/O operations.</p>
+                            
+                            <div class="code-block">
+// Proper async method
+public async Task&lt;User&gt; GetUserAsync(int id)
+{
+    using var httpClient = new HttpClient();
+    var response = await httpClient.GetAsync($"api/users/{id}");
+    
+    if (!response.IsSuccessStatusCode)
+        return null;
+        
+    var json = await response.Content.ReadAsStringAsync();
+    return JsonSerializer.Deserialize&lt;User&gt;(json);
+}
+
+// ConfigureAwait(false) for library code
+public async Task&lt;string&gt; ProcessDataAsync(string data)
+{
+    var result = await ProcessInternalAsync(data).ConfigureAwait(false);
+    return await FormatResultAsync(result).ConfigureAwait(false);
+}
+
+// Parallel execution
+public async Task&lt;(User user, List&lt;Order&gt; orders)&gt; GetUserDataAsync(int userId)
+{
+    var userTask = GetUserAsync(userId);
+    var ordersTask = GetOrdersAsync(userId);
+    
+    await Task.WhenAll(userTask, ordersTask);
+    
+    return (await userTask, await ordersTask);
+}
+                            </div>
+                            
+                            <p><strong>Best Practices:</strong></p>
+                            <ul>
+                                <li>Use async/await all the way down (avoid mixing with .Result)</li>
+                                <li>Use ConfigureAwait(false) in library code</li>
+                                <li>Don't use async void except for event handlers</li>
+                                <li>Use Task.WhenAll for parallel operations</li>
+                                <li>Consider using IAsyncEnumerable for streaming data</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            4. Explain SOLID principles with C# examples.
+                        </div>
+                        <div class="answer">
+                            <p><strong>S - Single Responsibility Principle:</strong> A class should have only one reason to change.</p>
+                            <div class="code-block">
+// Bad - Multiple responsibilities
+public class User
+{
+    public string Name { get; set; }
+    public void Save() { /* database logic */ }
+    public void SendEmail() { /* email logic */ }
+}
+
+// Good - Separated responsibilities
+public class User
+{
+    public string Name { get; set; }
+}
+
+public class UserRepository
+{
+    public void Save(User user) { /* database logic */ }
+}
+
+public class EmailService
+{
+    public void SendWelcomeEmail(User user) { /* email logic */ }
+}
+                            </div>
+                            
+                            <p><strong>O - Open/Closed Principle:</strong> Open for extension, closed for modification.</p>
+                            <div class="code-block">
+public abstract class PaymentProcessor
+{
+    public abstract void ProcessPayment(decimal amount);
+}
+
+public class CreditCardProcessor : PaymentProcessor
+{
+    public override void ProcessPayment(decimal amount)
+    {
+        // Credit card processing logic
+    }
+}
+
+public class PayPalProcessor : PaymentProcessor
+{
+    public override void ProcessPayment(decimal amount)
+    {
+        // PayPal processing logic
+    }
+}
+                            </div>
+                            
+                            <p><strong>L - Liskov Substitution Principle:</strong> Objects of a superclass should be replaceable with objects of its subclasses.</p>
+                            <p><strong>I - Interface Segregation Principle:</strong> Many client-specific interfaces are better than one general-purpose interface.</p>
+                            <p><strong>D - Dependency Inversion Principle:</strong> Depend on abstractions, not concretions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Design Patterns -->
+            <div class="category">
+                <div class="category-header">
+                    <h3><i class="fas fa-puzzle-piece"></i> Design Patterns</h3>
+                    <p>Common software design patterns in C#</p>
+                </div>
+                <div class="category-content">
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            5. Implement the Repository and Unit of Work patterns.
+                        </div>
+                        <div class="answer">
+                            <p><strong>Repository Pattern:</strong> Encapsulates data access logic.</p>
+                            <div class="code-block">
+public interface IRepository&lt;T&gt; where T : class
+{
+    Task&lt;T&gt; GetByIdAsync(int id);
+    Task&lt;IEnumerable&lt;T&gt;&gt; GetAllAsync();
+    Task AddAsync(T entity);
+    void Update(T entity);
+    void Delete(T entity);
+}
+
+public class UserRepository : IRepository&lt;User&gt;
+{
+    private readonly AppDbContext _context;
+    
+    public UserRepository(AppDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task&lt;User&gt; GetByIdAsync(int id)
+    {
+        return await _context.Users.FindAsync(id);
+    }
+    
+    public async Task&lt;IEnumerable&lt;User&gt;&gt; GetAllAsync()
+    {
+        return await _context.Users.ToListAsync();
+    }
+    
+    // ... other methods
+}
+                            </div>
+                            
+                            <p><strong>Unit of Work Pattern:</strong> Maintains a list of objects affected by a business transaction.</p>
+                            <div class="code-block">
+public interface IUnitOfWork : IDisposable
+{
+    IRepository&lt;User&gt; Users { get; }
+    IRepository&lt;Order&gt; Orders { get; }
+    Task&lt;int&gt; SaveChangesAsync();
+}
+
+public class UnitOfWork : IUnitOfWork
+{
+    private readonly AppDbContext _context;
+    
+    public UnitOfWork(AppDbContext context)
+    {
+        _context = context;
+        Users = new UserRepository(_context);
+        Orders = new OrderRepository(_context);
+    }
+    
+    public IRepository&lt;User&gt; Users { get; }
+    public IRepository&lt;Order&gt; Orders { get; }
+    
+    public async Task&lt;int&gt; SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
+    
+    public void Dispose()
+    {
+        _context.Dispose();
+    }
+}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            6. Explain the Factory and Builder patterns.
+                        </div>
+                        <div class="answer">
+                            <p><strong>Factory Pattern:</strong> Creates objects without exposing instantiation logic.</p>
+                            <div class="code-block">
+public interface IPaymentFactory
+{
+    IPaymentProcessor CreateProcessor(PaymentType type);
+}
+
+public class PaymentFactory : IPaymentFactory
+{
+    private readonly IServiceProvider _serviceProvider;
+    
+    public PaymentFactory(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+    
+    public IPaymentProcessor CreateProcessor(PaymentType type)
+    {
+        return type switch
+        {
+            PaymentType.CreditCard => _serviceProvider.GetRequiredService&lt;CreditCardProcessor&gt;(),
+            PaymentType.PayPal => _serviceProvider.GetRequiredService&lt;PayPalProcessor&gt;(),
+            PaymentType.BankTransfer => _serviceProvider.GetRequiredService&lt;BankTransferProcessor&gt;(),
+            _ => throw new ArgumentException($"Unknown payment type: {type}")
+        };
+    }
+}
+                            </div>
+                            
+                            <p><strong>Builder Pattern:</strong> Constructs complex objects step by step.</p>
+                            <div class="code-block">
+public class QueryBuilder
+{
+    private string _select = "*";
+    private string _from;
+    private List&lt;string&gt; _conditions = new();
+    private string _orderBy;
+    
+    public QueryBuilder Select(string fields)
+    {
+        _select = fields;
+        return this;
+    }
+    
+    public QueryBuilder From(string table)
+    {
+        _from = table;
+        return this;
+    }
+    
+    public QueryBuilder Where(string condition)
+    {
+        _conditions.Add(condition);
+        return this;
+    }
+    
+    public QueryBuilder OrderBy(string field)
+    {
+        _orderBy = field;
+        return this;
+    }
+    
+    public string Build()
+    {
+        var query = $"SELECT {_select} FROM {_from}";
+        
+        if (_conditions.Any())
+            query += $" WHERE {string.Join(" AND ", _conditions)}";
+            
+        if (!string.IsNullOrEmpty(_orderBy))
+            query += $" ORDER BY {_orderBy}";
+            
+        return query;
+    }
+}
+
+// Usage
+var query = new QueryBuilder()
+    .Select("Name, Email")
+    .From("Users")
+    .Where("Age > 18")
+    .Where("IsActive = 1")
+    .OrderBy("Name")
+    .Build();
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance & Optimization -->
+            <div class="category">
+                <div class="category-header">
+                    <h3><i class="fas fa-tachometer-alt"></i> Performance & Optimization</h3>
+                    <p>Writing efficient and scalable .NET applications</p>
+                </div>
+                <div class="category-content">
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            7. What are different caching strategies in .NET?
+                        </div>
+                        <div class="answer">
+                            <p><strong>In-Memory Caching:</strong> Store data in application memory.</p>
+                            <div class="code-block">
+public class ProductService
+{
+    private readonly IMemoryCache _cache;
+    private readonly IProductRepository _repository;
+    
+    public ProductService(IMemoryCache cache, IProductRepository repository)
+    {
+        _cache = cache;
+        _repository = repository;
+    }
+    
+    public async Task&lt;Product&gt; GetProductAsync(int id)
+    {
+        var cacheKey = $"product_{id}";
+        
+        if (_cache.TryGetValue(cacheKey, out Product cachedProduct))
+            return cachedProduct;
+            
+        var product = await _repository.GetByIdAsync(id);
+        
+        _cache.Set(cacheKey, product, TimeSpan.FromMinutes(30));
+        
+        return product;
+    }
+}
+                            </div>
+                            
+                            <p><strong>Distributed Caching:</strong> Share cache across multiple instances.</p>
+                            <div class="code-block">
+public class UserService
+{
+    private readonly IDistributedCache _distributedCache;
+    
+    public async Task&lt;User&gt; GetUserAsync(int id)
+    {
+        var cacheKey = $"user_{id}";
+        var cachedUser = await _distributedCache.GetStringAsync(cacheKey);
+        
+        if (!string.IsNullOrEmpty(cachedUser))
+            return JsonSerializer.Deserialize&lt;User&gt;(cachedUser);
+            
+        var user = await _repository.GetByIdAsync(id);
+        
+        var options = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1),
+            SlidingExpiration = TimeSpan.FromMinutes(15)
+        };
+        
+        await _distributedCache.SetStringAsync(cacheKey, 
+            JsonSerializer.Serialize(user), options);
+            
+        return user;
+    }
+}
+
+// In Program.cs
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+});
+                            </div>
+                            
+                            <p><strong>Response Caching:</strong> Cache HTTP responses.</p>
+                            <div class="code-block">
+[HttpGet]
+[ResponseCache(Duration = 300, VaryByQueryKeys = new[] { "category" })]
+public async Task&lt;ActionResult&lt;IEnumerable&lt;Product&gt;&gt;&gt; GetProducts(string category)
+{
+    var products = await _productService.GetProductsByCategoryAsync(category);
+    return Ok(products);
+}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            8. How do you optimize Entity Framework queries?
+                        </div>
+                        <div class="answer">
+                            <p><strong>Common EF Optimization Techniques:</strong></p>
+                            
+                            <div class="code-block">
+// 1. Use Include for eager loading
+var users = await context.Users
+    .Include(u => u.Orders)
+    .ThenInclude(o => o.OrderItems)
+    .ToListAsync();
+
+// 2. Use Select for projection
+var userSummaries = await context.Users
+    .Select(u => new UserSummaryDto
+    {
+        Id = u.Id,
+        Name = u.Name,
+        OrderCount = u.Orders.Count(),
+        TotalSpent = u.Orders.Sum(o => o.Total)
+    })
+    .ToListAsync();
+
+// 3. Use AsNoTracking for read-only queries
+var products = await context.Products
+    .AsNoTracking()
+    .Where(p => p.Category == "Electronics")
+    .ToListAsync();
+
+// 4. Batch operations
+await context.BulkInsertAsync(newUsers);
+await context.BulkUpdateAsync(usersToUpdate);
+
+// 5. Use compiled queries for repeated queries
+private static readonly Func&lt;AppDbContext, int, Task&lt;User&gt;&gt; GetUserByIdCompiled =
+    EF.CompileAsyncQuery((AppDbContext context, int id) =>
+        context.Users.FirstOrDefault(u => u.Id == id));
+
+public async Task&lt;User&gt; GetUserAsync(int id)
+{
+    return await GetUserByIdCompiled(_context, id);
+}
+
+// 6. Split queries for multiple includes
+var users = await context.Users
+    .AsSplitQuery()
+    .Include(u => u.Orders)
+    .Include(u => u.Addresses)
+    .ToListAsync();
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testing -->
+            <div class="category">
+                <div class="category-header">
+                    <h3><i class="fas fa-vial"></i> Testing & Quality</h3>
+                    <p>Unit testing, integration testing, and code quality</p>
+                </div>
+                <div class="category-content">
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            9. How do you write effective unit tests with xUnit and Moq?
+                        </div>
+                        <div class="answer">
+                            <div class="code-block">
+// Service to test
+public class OrderService
+{
+    private readonly IRepository&lt;Order&gt; _orderRepository;
+    private readonly IEmailService _emailService;
+    
+    public OrderService(IRepository&lt;Order&gt; orderRepository, IEmailService emailService)
+    {
+        _orderRepository = orderRepository;
+        _emailService = emailService;
+    }
+    
+    public async Task&lt;Order&gt; CreateOrderAsync(CreateOrderRequest request)
+    {
+        if (request.Items?.Any() != true)
+            throw new ArgumentException("Order must have items");
+            
+        var order = new Order
+        {
+            UserId = request.UserId,
+            Items = request.Items,
+            Total = request.Items.Sum(i => i.Price * i.Quantity),
+            CreatedAt = DateTime.UtcNow
+        };
+        
+        await _orderRepository.AddAsync(order);
+        await _emailService.SendOrderConfirmationAsync(order);
+        
+        return order;
+    }
+}
+
+// Unit tests
+public class OrderServiceTests
+{
+    private readonly Mock&lt;IRepository&lt;Order&gt;&gt; _mockOrderRepository;
+    private readonly Mock&lt;IEmailService&gt; _mockEmailService;
+    private readonly OrderService _orderService;
+    
+    public OrderServiceTests()
+    {
+        _mockOrderRepository = new Mock&lt;IRepository&lt;Order&gt;&gt;();
+        _mockEmailService = new Mock&lt;IEmailService&gt;();
+        _orderService = new OrderService(_mockOrderRepository.Object, _mockEmailService.Object);
+    }
+    
+    [Fact]
+    public async Task CreateOrderAsync_ValidRequest_ReturnsOrder()
+    {
+        // Arrange
+        var request = new CreateOrderRequest
+        {
+            UserId = 1,
+            Items = new List&lt;OrderItem&gt;
+            {
+                new() { ProductId = 1, Price = 10.00m, Quantity = 2 },
+                new() { ProductId = 2, Price = 5.00m, Quantity = 1 }
+            }
+        };
+        
+        // Act
+        var result = await _orderService.CreateOrderAsync(request);
+        
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(25.00m, result.Total);
+        Assert.Equal(2, result.Items.Count);
+        
+        _mockOrderRepository.Verify(x => x.AddAsync(It.IsAny&lt;Order&gt;()), Times.Once);
+        _mockEmailService.Verify(x => x.SendOrderConfirmationAsync(It.IsAny&lt;Order&gt;()), Times.Once);
+    }
+    
+    [Fact]
+    public async Task CreateOrderAsync_EmptyItems_ThrowsArgumentException()
+    {
+        // Arrange
+        var request = new CreateOrderRequest { UserId = 1, Items = new List&lt;OrderItem&gt;() };
+        
+        // Act & Assert
+        await Assert.ThrowsAsync&lt;ArgumentException&gt;(() => _orderService.CreateOrderAsync(request));
+        
+        _mockOrderRepository.Verify(x => x.AddAsync(It.IsAny&lt;Order&gt;()), Times.Never);
+    }
+}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            10. What is integration testing and how do you implement it?
+                        </div>
+                        <div class="answer">
+                            <p><strong>Integration Testing</strong> tests the interaction between different components/layers.</p>
+                            
+                            <div class="code-block">
+public class OrderIntegrationTests : IClassFixture&lt;WebApplicationFactory&lt;Program&gt;&gt;
+{
+    private readonly WebApplicationFactory&lt;Program&gt; _factory;
+    private readonly HttpClient _client;
+    
+    public OrderIntegrationTests(WebApplicationFactory&lt;Program&gt; factory)
+    {
+        _factory = factory.WithWebHostBuilder(builder =>
+        {
+            builder.UseEnvironment("Testing");
+            builder.ConfigureServices(services =>
+            {
+                // Replace real database with in-memory database
+                services.RemoveAll&lt;DbContextOptions&lt;AppDbContext&gt;&gt;();
+                services.AddDbContext&lt;AppDbContext&gt;(options =>
+                    options.UseInMemoryDatabase("TestDb"));
+            });
+        });
+        
+        _client = _factory.CreateClient();
+    }
+    
+    [Fact]
+    public async Task CreateOrder_ValidData_ReturnsCreatedOrder()
+    {
+        // Arrange
+        var orderRequest = new
+        {
+            UserId = 1,
+            Items = new[]
+            {
+                new { ProductId = 1, Quantity = 2, Price = 10.00 }
+            }
+        };
+        
+        // Act
+        var response = await _client.PostAsync("/api/orders",
+            new StringContent(JsonSerializer.Serialize(orderRequest),
+                Encoding.UTF8, "application/json"));
+        
+        // Assert
+        response.EnsureSuccessStatusCode();
+        
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var createdOrder = JsonSerializer.Deserialize&lt;Order&gt;(responseContent);
+        
+        Assert.NotNull(createdOrder);
+        Assert.Equal(20.00m, createdOrder.Total);
+    }
+    
+    [Fact]
+    public async Task GetOrder_ExistingId_ReturnsOrder()
+    {
+        // Arrange - seed data
+        using var scope = _factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService&lt;AppDbContext&gt;();
+        
+        var order = new Order { Id = 1, UserId = 1, Total = 100.00m };
+        context.Orders.Add(order);
+        await context.SaveChangesAsync();
+        
+        // Act
+        var response = await _client.GetAsync("/api/orders/1");
+        
+        // Assert
+        response.EnsureSuccessStatusCode();
+        
+        var responseContent = await response.Content.ReadAsStringAsync();
+        var retrievedOrder = JsonSerializer.Deserialize&lt;Order&gt;(responseContent);
+        
+        Assert.Equal(1, retrievedOrder.Id);
+        Assert.Equal(100.00m, retrievedOrder.Total);
+    }
+}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Question toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const questions = document.querySelectorAll('.question-text');
+            const totalQuestions = questions.length;
+            let answeredQuestions = 0;
+            
+            questions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (answer.classList.contains('active')) {
+                        answer.classList.remove('active');
+                        icon.style.transform = 'rotate(0deg)';
+                        this.classList.remove('active');
+                        answeredQuestions--;
+                    } else {
+                        answer.classList.add('active');
+                        icon.style.transform = 'rotate(90deg)';
+                        this.classList.add('active');
+                        answeredQuestions++;
+                    }
+                    
+                    // Update progress bar
+                    const progress = (answeredQuestions / totalQuestions) * 100;
+                    document.getElementById('progressBar').style.width = progress + '%';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

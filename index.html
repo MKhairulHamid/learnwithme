@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learn With Khairul</title>
-    <link rel="icon" type="image/png" href="photo.png">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22grad%22 x1=%220%%22 y1=%220%%22 x2=%22100%%22 y2=%22100%%22><stop offset=%220%%22 style=%22stop-color:%23667eea;stop-opacity:1%22 /><stop offset=%22100%%22 style=%22stop-color:%23764ba2;stop-opacity:1%22 /></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22url(%23grad)%22/><text x=%2250%22 y=%2260%22 font-family=%22Arial,sans-serif%22 font-size=%2240%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22white%22>LK</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <!-- Google Calendar Appointment Scheduling -->
@@ -967,11 +967,173 @@
                 overflow: hidden !important;
             }
         }
+        /* Navigation Header */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 30px rgba(0,0,0,0.15);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo i {
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 50%;
+            background: #667eea;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white !important;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-cta::after {
+            display: none;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #4a5568;
+            cursor: pointer;
+        }
+
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                transform: translateY(-100vh);
+                transition: transform 0.3s ease;
+            }
+
+            .nav-menu.active {
+                transform: translateY(0);
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-logo {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Add top padding to body to account for fixed header */
+        body {
+            padding-top: 70px;
+        }
+
     </style>
 </head>
 <body>
+    <!-- Navigation Header -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                Learn With Khairul
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="learning-materials/learning-materials.html" class="nav-link">Learning Materials</a></li>
+                <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+                <li><a href="#pricing" class="nav-link">Pricing</a></li>
+                <li><a href="#booking" class="nav-link nav-cta">Book Session</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
     <!-- Header/Hero Section -->
-    <header>
+    <header id="hero">
         <div class="container">
             <div class="hero-content">
                 <h1>Khairul Hamid</h1>
@@ -999,12 +1161,12 @@
     </header>
 
     <!-- About Section -->
-    <section class="about">
+    <section id="about" class="about">
         <div class="container">
             <h2 class="section-title">A Little About Me</h2>
             <div class="about-content">
                 <div class="about-image">
-                    <img src="photo.png" alt="Khairul Hamid" class="profile-image">
+                    <img src="images/photo.png" alt="Khairul Hamid" class="profile-image">
                 </div>
                 <div class="about-text">
                     <h3>Who I Help & How</h3>
@@ -1024,7 +1186,7 @@
     </section>
 
     <!-- Experience Section -->
-    <section class="experience">
+    <section id="experience" class="experience">
         <div class="container">
             <h2 class="section-title">My Professional Background</h2>
             <div class="experience-grid">
@@ -1056,7 +1218,7 @@
     </section>
 
     <!-- Services Section -->
-    <section class="services">
+    <section id="services" class="services">
         <div class="container">
             <h2 class="section-title">What I Teach</h2>
             <div class="services-grid">
@@ -1109,7 +1271,7 @@
     </section>
 
     <!-- Testimonial Section -->
-    <section class="testimonial">
+    <section id="testimonials" class="testimonial">
         <div class="container">
             <h2 class="section-title">What My Students Say</h2>
             <div class="testimonials-grid">
@@ -1118,14 +1280,14 @@
                     <div class="testimonial-quote">
                         "Khairul is a great teacher, he understands HTML and CSS, and what I like the most about his teaching style and methodology that Khairul is proactive, he prepares sample of websites and codes ahead of time, very informative and provides a lot of resources. You won't regret booking your TRIAL lesson with Khairul, I highly recommend him for web development classes."
                     </div>
-                    <div class="testimonial-author">— Omar from Jordan</div>
+                    <div class="testimonial-author">— Omar 🇯🇴</div>
                 </div>
                 <div class="testimonial-content">
                     <div class="stars">★★★★★</div>
                     <div class="testimonial-quote">
                         "Learning with Khairul has been fantastic! He breaks down complex programming concepts into manageable pieces and always makes sure I understand before moving forward. His real-world experience really shows in how he teaches - very practical and applicable."
                     </div>
-                    <div class="testimonial-author">— Max from Canberra, Australia</div>
+                    <div class="testimonial-author">— Max 🇦🇺</div>
                 </div>
             </div>
         </div>
@@ -1150,7 +1312,7 @@
                     </a>
                 </div>
                 <div class="linkedin-image">
-                    <img src="linkedin-banner.png" alt="Khairul Hamid LinkedIn Profile" class="linkedin-banner-img">
+                    <img src="images/linkedin-banner.png" alt="Khairul Hamid LinkedIn Profile" class="linkedin-banner-img">
                     <div class="banner-overlay">
                         <i class="fab fa-linkedin linkedin-icon"></i>
                     </div>
@@ -1160,7 +1322,7 @@
     </section>
 
     <!-- Pricing Section -->
-    <section class="pricing">
+    <section id="pricing" class="pricing">
         <div class="container">
             <h2 class="section-title">Ready to Get Started?</h2>
             <p style="text-align: center; font-size: 1.2rem; color: #4a5568; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
@@ -1264,7 +1426,7 @@
     </section>
 
     <!-- Booking Section -->
-    <section class="booking">
+    <section id="booking" class="booking">
         <div class="container">
             <h2 class="section-title">Book Your Session</h2>
             <p style="text-align: center; font-size: 1.2rem; color: #4a5568; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
@@ -1393,6 +1555,81 @@ Let's Start Learning Together
                 button.innerHTML = '<i class="fas fa-info-circle"></i> See Detailed Pricing Structure <i class="fas fa-chevron-down pricing-arrow"></i>';
             }
         }
+
+        // Navigation functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbar = document.getElementById('navbar');
+            const mobileToggle = document.getElementById('mobileToggle');
+            const navMenu = document.getElementById('navMenu');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            // Handle navbar scroll effect
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 100) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            // Mobile menu toggle
+            mobileToggle.addEventListener('click', function() {
+                navMenu.classList.toggle('active');
+                const icon = this.querySelector('i');
+                if (navMenu.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+
+            // Smooth scrolling for navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetId = this.getAttribute('href');
+                    
+                    // If it's an external link (not starting with #), let it navigate normally
+                    if (!targetId.startsWith('#')) {
+                        // Close mobile menu if open
+                        navMenu.classList.remove('active');
+                        const icon = mobileToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        return; // Don't prevent default, allow normal navigation
+                    }
+                    
+                    e.preventDefault();
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 70; // Account for fixed navbar
+                        
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+
+                        // Close mobile menu if open
+                        navMenu.classList.remove('active');
+                        const icon = mobileToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!navbar.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                    const icon = mobileToggle.querySelector('i');
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
     </script>
 </body>
 </html>

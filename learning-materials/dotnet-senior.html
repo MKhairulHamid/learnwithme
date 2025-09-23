@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>.NET Senior Architecture & Leadership - Learn With Khairul</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22grad%22 x1=%220%%22 y1=%220%%22 x2=%22100%%22 y2=%22100%%22><stop offset=%220%%22 style=%22stop-color:%23667eea;stop-opacity:1%22 /><stop offset=%22100%%22 style=%22stop-color:%23764ba2;stop-opacity:1%22 /></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22url(%23grad)%22/><text x=%2250%22 y=%2260%22 font-family=%22Arial,sans-serif%22 font-size=%2240%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22white%22>LK</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Header */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo i {
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* Content */
+        .content-section {
+            padding: 3rem 0;
+        }
+
+        .intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .intro h2 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+        }
+
+        /* Question Categories */
+        .category {
+            background: white;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .category-header {
+            background: linear-gradient(135deg, #2d3748, #1a202c);
+            color: white;
+            padding: 1.5rem;
+        }
+
+        .category-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-content {
+            padding: 2rem;
+        }
+
+        /* Questions */
+        .question {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .question:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .question-text:hover {
+            color: #2d3748;
+        }
+
+        .question-text i {
+            transition: transform 0.3s ease;
+        }
+
+        .question-text.active i {
+            transform: rotate(90deg);
+        }
+
+        .answer {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #2d3748;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .answer.active {
+            display: block;
+            animation: slideDown 0.3s ease-in-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer ul {
+            padding-left: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .answer li {
+            margin-bottom: 0.5rem;
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        /* Progress */
+        .progress-bar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #2d3748, #1a202c);
+            transition: width 0.3s ease;
+            z-index: 999;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .category-content {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                Learn With Khairul
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="learning-materials.html" class="nav-link back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Materials
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>.NET Senior Architecture & Leadership</h1>
+            <p>Enterprise-level concepts and leadership skills for senior .NET developers</p>
+            <div class="difficulty-badge">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> Senior Level
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <section class="content-section">
+        <div class="container">
+            <div class="intro">
+                <h2>🎯 Senior Developer Excellence</h2>
+                <p>This collection focuses on enterprise architecture, system design, and leadership skills that senior developers need. These topics go beyond coding - they're about making strategic technical decisions that impact entire organizations.</p>
+                <p><strong>💡 Prerequisites:</strong> Strong intermediate .NET skills, experience with production systems, and understanding of software architecture principles.</p>
+            </div>
+
+            <!-- System Architecture -->
+            <div class="category">
+                <div class="category-header">
+                    <h3><i class="fas fa-building"></i> System Architecture & Design</h3>
+                    <p>Designing scalable, maintainable enterprise systems</p>
+                </div>
+                <div class="category-content">
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            1. How do you design a scalable microservices architecture in .NET?
+                        </div>
+                        <div class="answer">
+                            <p><strong>Key Principles for Microservices Architecture:</strong></p>
+                            
+                            <div class="code-block">
+// 1. Service per Business Capability
+// UserService - handles user management
+public class UserService
+{
+    private readonly IUserRepository _userRepository;
+    private readonly IMessageBus _messageBus;
+    
+    public async Task&lt;User&gt; CreateUserAsync(CreateUserRequest request)
+    {
+        var user = new User(request.Email, request.Name);
+        await _userRepository.SaveAsync(user);
+        
+        // Publish domain event
+        await _messageBus.PublishAsync(new UserCreatedEvent
+        {
+            UserId = user.Id,
+            Email = user.Email,
+            CreatedAt = DateTime.UtcNow
+        });
+        
+        return user;
+    }
+}
+
+// 2. API Gateway Pattern
+public class ApiGateway
+{
+    private readonly IHttpClientFactory _httpClientFactory;
+    
+    public async Task&lt;UserProfileResponse&gt; GetUserProfileAsync(int userId)
+    {
+        var userClient = _httpClientFactory.CreateClient("UserService");
+        var orderClient = _httpClientFactory.CreateClient("OrderService");
+        
+        // Parallel calls to different services
+        var userTask = userClient.GetAsync($"/users/{userId}");
+        var ordersTask = orderClient.GetAsync($"/users/{userId}/orders");
+        
+        await Task.WhenAll(userTask, ordersTask);
+        
+        var user = await userTask.Result.Content.ReadFromJsonAsync&lt;User&gt;();
+        var orders = await ordersTask.Result.Content.ReadFromJsonAsync&lt;List&lt;Order&gt;&gt;();
+        
+        return new UserProfileResponse
+        {
+            User = user,
+            Orders = orders,
+            TotalOrders = orders.Count
+        };
+    }
+}
+
+// 3. Service Discovery and Health Checks
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddHealthChecks()
+            .AddCheck&lt;DatabaseHealthCheck&gt;("database")
+            .AddCheck&lt;ExternalApiHealthCheck&gt;("external-api");
+            
+        services.AddConsul();
+        services.AddHttpClient();
+    }
+    
+    public void Configure(IApplicationBuilder app)
+    {
+        app.UseHealthChecks("/health");
+        app.UseConsul(); // Service registration
+    }
+}
+                            </div>
+                            
+                            <p><strong>Architecture Considerations:</strong></p>
+                            <ul>
+                                <li><strong>Database per Service:</strong> Each service owns its data</li>
+                                <li><strong>Event-Driven Communication:</strong> Async messaging for loose coupling</li>
+                                <li><strong>Circuit Breaker Pattern:</strong> Handle service failures gracefully</li>
+                                <li><strong>Distributed Tracing:</strong> Monitor requests across services</li>
+                                <li><strong>API Versioning:</strong> Maintain backward compatibility</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            2. Implement Domain Driven Design (DDD) in .NET applications.
+                        </div>
+                        <div class="answer">
+                            <p><strong>DDD Implementation Structure:</strong></p>
+                            
+                            <div class="code-block">
+// Domain Layer - Core business logic
+public class Order : AggregateRoot
+{
+    private readonly List&lt;OrderItem&gt; _items = new();
+    
+    public OrderId Id { get; private set; }
+    public CustomerId CustomerId { get; private set; }
+    public OrderStatus Status { get; private set; }
+    public Money Total =&gt; new Money(_items.Sum(i =&gt; i.Price.Amount * i.Quantity));
+    public IReadOnlyList&lt;OrderItem&gt; Items =&gt; _items.AsReadOnly();
+    
+    public Order(CustomerId customerId)
+    {
+        Id = new OrderId(Guid.NewGuid());
+        CustomerId = customerId;
+        Status = OrderStatus.Draft;
+        
+        AddDomainEvent(new OrderCreatedEvent(Id, CustomerId));
+    }
+    
+    public void AddItem(ProductId productId, Money price, int quantity)
+    {
+        if (Status != OrderStatus.Draft)
+            throw new InvalidOperationException("Cannot modify confirmed order");
+            
+        var existingItem = _items.FirstOrDefault(i =&gt; i.ProductId == productId);
+        if (existingItem != null)
+        {
+            existingItem.ChangeQuantity(existingItem.Quantity + quantity);
+        }
+        else
+        {
+            _items.Add(new OrderItem(productId, price, quantity));
+        }
+        
+        AddDomainEvent(new OrderItemAddedEvent(Id, productId, quantity));
+    }
+    
+    public void Confirm()
+    {
+        if (Status != OrderStatus.Draft)
+            throw new InvalidOperationException("Order already confirmed");
+            
+        if (!_items.Any())
+            throw new InvalidOperationException("Cannot confirm empty order");
+            
+        Status = OrderStatus.Confirmed;
+        AddDomainEvent(new OrderConfirmedEvent(Id, Total));
+    }
+}
+
+// Value Objects
+public class Money : ValueObject
+{
+    public decimal Amount { get; }
+    public string Currency { get; }
+    
+    public Money(decimal amount, string currency = "USD")
+    {
+        if (amount &lt; 0) throw new ArgumentException("Amount cannot be negative");
+        Amount = amount;
+        Currency = currency;
+    }
+    
+    protected override IEnumerable&lt;object&gt; GetEqualityComponents()
+    {
+        yield return Amount;
+        yield return Currency;
+    }
+}
+
+// Domain Services
+public class OrderPricingService
+{
+    private readonly IDiscountPolicy _discountPolicy;
+    
+    public Money CalculateTotal(Order order, Customer customer)
+    {
+        var subtotal = order.Items.Sum(i =&gt; i.Price.Amount * i.Quantity);
+        var discount = _discountPolicy.CalculateDiscount(customer, subtotal);
+        return new Money(subtotal - discount);
+    }
+}
+
+// Application Layer - Use Cases
+public class ConfirmOrderHandler : IRequestHandler&lt;ConfirmOrderCommand, Result&gt;
+{
+    private readonly IOrderRepository _orderRepository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IDomainEventDispatcher _eventDispatcher;
+    
+    public async Task&lt;Result&gt; Handle(ConfirmOrderCommand command)
+    {
+        var order = await _orderRepository.GetByIdAsync(command.OrderId);
+        if (order == null)
+            return Result.NotFound("Order not found");
+            
+        order.Confirm();
+        
+        await _unitOfWork.SaveChangesAsync();
+        await _eventDispatcher.DispatchAsync(order.DomainEvents);
+        
+        return Result.Success();
+    }
+}
+
+// Infrastructure Layer - Data Access
+public class OrderRepository : IOrderRepository
+{
+    private readonly AppDbContext _context;
+    
+    public async Task&lt;Order&gt; GetByIdAsync(OrderId id)
+    {
+        return await _context.Orders
+            .Include(o =&gt; o.Items)
+            .FirstOrDefaultAsync(o =&gt; o.Id == id);
+    }
+    
+    public async Task SaveAsync(Order order)
+    {
+        _context.Orders.Add(order);
+    }
+}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            3. How do you implement Event Sourcing and CQRS patterns?
+                        </div>
+                        <div class="answer">
+                            <p><strong>Event Sourcing:</strong> Store all changes as a sequence of events.</p>
+                            
+                            <div class="code-block">
+// Event Store
+public interface IEventStore
+{
+    Task SaveEventsAsync(Guid streamId, IEnumerable&lt;DomainEvent&gt; events, int expectedVersion);
+    Task&lt;IEnumerable&lt;DomainEvent&gt;&gt; GetEventsAsync(Guid streamId);
+}
+
+// Aggregate Base
+public abstract class AggregateRoot
+{
+    public Guid Id { get; protected set; }
+    public int Version { get; private set; }
+    
+    private readonly List&lt;DomainEvent&gt; _uncommittedEvents = new();
+    
+    public IReadOnlyList&lt;DomainEvent&gt; UncommittedEvents =&gt; _uncommittedEvents.AsReadOnly();
+    
+    protected void RaiseEvent(DomainEvent domainEvent)
+    {
+        _uncommittedEvents.Add(domainEvent);
+        Apply(domainEvent);
+        Version++;
+    }
+    
+    public void LoadFromHistory(IEnumerable&lt;DomainEvent&gt; events)
+    {
+        foreach (var evt in events)
+        {
+            Apply(evt);
+            Version++;
+        }
+    }
+    
+    public void MarkEventsAsCommitted()
+    {
+        _uncommittedEvents.Clear();
+    }
+    
+    protected abstract void Apply(DomainEvent domainEvent);
+}
+
+// Account Aggregate with Event Sourcing
+public class Account : AggregateRoot
+{
+    public decimal Balance { get; private set; }
+    public string AccountNumber { get; private set; }
+    
+    public Account() { } // For reconstruction
+    
+    public Account(string accountNumber, decimal initialBalance)
+    {
+        RaiseEvent(new AccountCreatedEvent
+        {
+            AggregateId = Guid.NewGuid(),
+            AccountNumber = accountNumber,
+            InitialBalance = initialBalance,
+            Timestamp = DateTime.UtcNow
+        });
+    }
+    
+    public void Deposit(decimal amount)
+    {
+        if (amount &lt;= 0)
+            throw new ArgumentException("Amount must be positive");
+            
+        RaiseEvent(new MoneyDepositedEvent
+        {
+            AggregateId = Id,
+            Amount = amount,
+            Timestamp = DateTime.UtcNow
+        });
+    }
+    
+    public void Withdraw(decimal amount)
+    {
+        if (amount &lt;= 0)
+            throw new ArgumentException("Amount must be positive");
+        if (Balance &lt; amount)
+            throw new InvalidOperationException("Insufficient funds");
+            
+        RaiseEvent(new MoneyWithdrawnEvent
+        {
+            AggregateId = Id,
+            Amount = amount,
+            Timestamp = DateTime.UtcNow
+        });
+    }
+    
+    protected override void Apply(DomainEvent domainEvent)
+    {
+        switch (domainEvent)
+        {
+            case AccountCreatedEvent created:
+                Id = created.AggregateId;
+                AccountNumber = created.AccountNumber;
+                Balance = created.InitialBalance;
+                break;
+                
+            case MoneyDepositedEvent deposited:
+                Balance += deposited.Amount;
+                break;
+                
+            case MoneyWithdrawnEvent withdrawn:
+                Balance -= withdrawn.Amount;
+                break;
+        }
+    }
+}
+
+// CQRS - Separate Read Models
+public class AccountSummaryReadModel
+{
+    public Guid AccountId { get; set; }
+    public string AccountNumber { get; set; }
+    public decimal CurrentBalance { get; set; }
+    public int TransactionCount { get; set; }
+    public DateTime LastActivity { get; set; }
+}
+
+// Query Handler
+public class GetAccountSummaryHandler : IRequestHandler&lt;GetAccountSummaryQuery, AccountSummaryReadModel&gt;
+{
+    private readonly IReadModelRepository _repository;
+    
+    public async Task&lt;AccountSummaryReadModel&gt; Handle(GetAccountSummaryQuery query)
+    {
+        return await _repository.GetAccountSummaryAsync(query.AccountId);
+    }
+}
+
+// Event Projections
+public class AccountSummaryProjection : IEventHandler&lt;MoneyDepositedEvent&gt;, IEventHandler&lt;MoneyWithdrawnEvent&gt;
+{
+    private readonly IReadModelRepository _repository;
+    
+    public async Task Handle(MoneyDepositedEvent evt)
+    {
+        var summary = await _repository.GetAccountSummaryAsync(evt.AggregateId);
+        summary.CurrentBalance += evt.Amount;
+        summary.TransactionCount++;
+        summary.LastActivity = evt.Timestamp;
+        
+        await _repository.SaveAccountSummaryAsync(summary);
+    }
+}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cloud & DevOps -->
+            <div class="category">
+                <div class="category-header">
+                    <h3><i class="fas fa-cloud"></i> Cloud Architecture & DevOps</h3>
+                    <p>Deploying and scaling .NET applications in the cloud</p>
+                </div>
+                <div class="category-content">
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            4. Design a CI/CD pipeline for .NET applications using GitHub Actions.
+                        </div>
+                        <div class="answer">
+                            <div class="code-block">
+# .github/workflows/deploy.yml
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  AZURE_WEBAPP_NAME: my-dotnet-app
+  DOTNET_VERSION: '8.0'
+  
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+    
+    - name: Code Coverage Report
+      uses: codecov/codecov-action@v3
+    
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Run SAST with CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: csharp
+    
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+    
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+    
+    - name: Dependency Check
+      run: |
+        dotnet list package --vulnerable --include-transitive
+        dotnet list package --deprecated --include-transitive
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: [test, security-scan]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Build and Publish
+      run: |
+        dotnet publish -c Release -o ./publish
+        
+    - name: Build Docker Image
+      run: |
+        docker build -t ${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }} .
+        docker tag ${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }} ${{ env.AZURE_WEBAPP_NAME }}:latest
+    
+    - name: Log in to Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - name: Push to Container Registry
+      run: |
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_WEBAPP_NAME }}:latest
+
+  deploy-staging:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    environment: staging
+    
+    steps:
+    - name: Deploy to Azure Web App (Staging)
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}-staging
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_STAGING }}
+        images: '${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}'
+    
+    - name: Run Integration Tests
+      run: |
+        # Run smoke tests against staging
+        curl -f https://${{ env.AZURE_WEBAPP_NAME }}-staging.azurewebsites.net/health
+
+  deploy-production:
+    runs-on: ubuntu-latest
+    needs: deploy-staging
+    environment: production
+    
+    steps:
+    - name: Blue-Green Deployment
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        images: '${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_WEBAPP_NAME }}:${{ github.sha }}'
+        slot-name: 'production'
+    
+    - name: Health Check
+      run: |
+        for i in {1..10}; do
+          if curl -f https://${{ env.AZURE_WEBAPP_NAME }}.azurewebsites.net/health; then
+            echo "Health check passed"
+            break
+          fi
+          sleep 30
+        done
+                            </div>
+                            
+                            <p><strong>Infrastructure as Code (Terraform):</strong></p>
+                            <div class="code-block">
+# main.tf
+provider "azurerm" {
+  features {}
+}
+
+resource "azurerm_resource_group" "main" {
+  name     = "rg-${var.app_name}-${var.environment}"
+  location = var.location
+}
+
+resource "azurerm_app_service_plan" "main" {
+  name                = "asp-${var.app_name}-${var.environment}"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  kind                = "Linux"
+  reserved            = true
+
+  sku {
+    tier = var.app_service_tier
+    size = var.app_service_size
+  }
+}
+
+resource "azurerm_app_service" "main" {
+  name                = "${var.app_name}-${var.environment}"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  app_service_plan_id = azurerm_app_service_plan.main.id
+
+  site_config {
+    linux_fx_version = "DOCKER|${var.container_image}"
+    always_on        = true
+  }
+
+  app_settings = {
+    "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
+    "ConnectionStrings__DefaultConnection" = azurerm_sql_database.main.connection_string
+  }
+}
+
+resource "azurerm_application_insights" "main" {
+  name                = "ai-${var.app_name}-${var.environment}"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  application_type    = "web"
+}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            5. How do you implement monitoring, logging, and observability?
+                        </div>
+                        <div class="answer">
+                            <p><strong>Comprehensive Observability Stack:</strong></p>
+                            
+                            <div class="code-block">
+// 1. Structured Logging with Serilog
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .Enrich.WithProperty("Application", "MyApp")
+            .Enrich.WithProperty("Version", Assembly.GetExecutingAssembly().GetName().Version)
+            .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {NewLine}{Exception}")
+            .WriteTo.Seq("http://localhost:5341")
+            .WriteTo.ApplicationInsights("YOUR_INSTRUMENTATION_KEY", TelemetryConverter.Traces)
+            .CreateLogger();
+
+        try
+        {
+            Log.Information("Starting web application");
+            CreateHostBuilder(args).Build().Run();
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Application terminated unexpectedly");
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+    }
+}
+
+// 2. Custom Middleware for Request Logging
+public class RequestLoggingMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger&lt;RequestLoggingMiddleware&gt; _logger;
+
+    public RequestLoggingMiddleware(RequestDelegate next, ILogger&lt;RequestLoggingMiddleware&gt; logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        
+        using (_logger.BeginScope(new Dictionary&lt;string, object&gt;
+        {
+            ["RequestId"] = context.TraceIdentifier,
+            ["UserId"] = context.User?.FindFirst("sub")?.Value,
+            ["IPAddress"] = context.Connection.RemoteIpAddress?.ToString()
+        }))
+        {
+            try
+            {
+                await _next(context);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Request failed for {Method} {Path}",
+                    context.Request.Method, context.Request.Path);
+                throw;
+            }
+            finally
+            {
+                stopwatch.Stop();
+                
+                _logger.LogInformation("Request {Method} {Path} completed in {ElapsedMs}ms with status {StatusCode}",
+                    context.Request.Method,
+                    context.Request.Path,
+                    stopwatch.ElapsedMilliseconds,
+                    context.Response.StatusCode);
+            }
+        }
+    }
+}
+
+// 3. Application Metrics with Prometheus
+public class MetricsMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly Counter _requestCounter;
+    private readonly Histogram _requestDuration;
+    private readonly Gauge _activeConnections;
+
+    public MetricsMiddleware(RequestDelegate next)
+    {
+        _next = next;
+        
+        _requestCounter = Metrics
+            .CreateCounter("http_requests_total", "Total HTTP requests", new[] { "method", "endpoint", "status" });
+            
+        _requestDuration = Metrics
+            .CreateHistogram("http_request_duration_seconds", "HTTP request duration", new[] { "method", "endpoint" });
+            
+        _activeConnections = Metrics
+            .CreateGauge("http_active_connections", "Active HTTP connections");
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        _activeConnections.Inc();
+        
+        using var timer = _requestDuration
+            .WithLabels(context.Request.Method, context.Request.Path)
+            .NewTimer();
+
+        try
+        {
+            await _next(context);
+        }
+        finally
+        {
+            _requestCounter
+                .WithLabels(context.Request.Method, context.Request.Path, context.Response.StatusCode.ToString())
+                .Inc();
+                
+            _activeConnections.Dec();
+        }
+    }
+}
+
+// 4. Health Checks
+public class DatabaseHealthCheck : IHealthCheck
+{
+    private readonly IDbContextFactory&lt;AppDbContext&gt; _contextFactory;
+
+    public async Task&lt;HealthCheckResult&gt; CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            using var dbContext = _contextFactory.CreateDbContext();
+            await dbContext.Database.ExecuteSqlRawAsync("SELECT 1", cancellationToken);
+            
+            return HealthCheckResult.Healthy("Database is responsive");
+        }
+        catch (Exception ex)
+        {
+            return HealthCheckResult.Unhealthy("Database is not responsive", ex);
+        }
+    }
+}
+
+// 5. Distributed Tracing with OpenTelemetry
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddOpenTelemetryTracing(builder =>
+        {
+            builder
+                .SetSampler(new AlwaysOnSampler())
+                .AddAspNetCoreInstrumentation(options =>
+                {
+                    options.Enrich = (activity, eventName, rawObject) =>
+                    {
+                        if (rawObject is HttpRequest request)
+                        {
+                            activity.SetTag("http.user_agent", request.Headers["User-Agent"].ToString());
+                        }
+                    };
+                })
+                .AddHttpClientInstrumentation()
+                .AddEntityFrameworkCoreInstrumentation()
+                .AddSqlClientInstrumentation()
+                .AddJaegerExporter()
+                .AddConsoleExporter();
+        });
+
+        services.AddOpenTelemetryMetrics(builder =>
+        {
+            builder
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddRuntimeInstrumentation()
+                .AddPrometheusExporter();
+        });
+    }
+}
+
+// 6. Custom Business Metrics
+public class OrderService
+{
+    private readonly ILogger&lt;OrderService&gt; _logger;
+    private readonly Counter _ordersCreated;
+    private readonly Histogram _orderValue;
+    
+    public OrderService(ILogger&lt;OrderService&gt; logger)
+    {
+        _logger = logger;
+        
+        _ordersCreated = Metrics
+            .CreateCounter("orders_created_total", "Total orders created", new[] { "status", "payment_method" });
+            
+        _orderValue = Metrics
+            .CreateHistogram("order_value_dollars", "Order value in dollars", new[] { "payment_method" });
+    }
+    
+    public async Task&lt;Order&gt; CreateOrderAsync(CreateOrderRequest request)
+    {
+        using var activity = Activity.Current?.Source.StartActivity("OrderService.CreateOrder");
+        activity?.SetTag("order.user_id", request.UserId.ToString());
+        
+        try
+        {
+            var order = new Order(request);
+            await _repository.SaveAsync(order);
+            
+            _ordersCreated.WithLabels("success", request.PaymentMethod).Inc();
+            _orderValue.WithLabels(request.PaymentMethod).Observe((double)order.Total);
+            
+            _logger.LogInformation("Order created successfully {OrderId} for user {UserId} with value {OrderValue}",
+                order.Id, request.UserId, order.Total);
+                
+            return order;
+        }
+        catch (Exception ex)
+        {
+            _ordersCreated.WithLabels("failed", request.PaymentMethod).Inc();
+            _logger.LogError(ex, "Failed to create order for user {UserId}", request.UserId);
+            throw;
+        }
+    }
+}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance at Scale -->
+            <div class="category">
+                <div class="category-header">
+                    <h3><i class="fas fa-rocket"></i> Performance at Scale</h3>
+                    <p>Optimizing .NET applications for high-performance scenarios</p>
+                </div>
+                <div class="category-content">
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            6. How do you optimize .NET applications for high-throughput scenarios?
+                        </div>
+                        <div class="answer">
+                            <p><strong>High-Performance Optimization Techniques:</strong></p>
+                            
+                            <div class="code-block">
+// 1. Use Span&lt;T&gt; and Memory&lt;T&gt; for zero-allocation operations
+public class HighPerformanceParser
+{
+    public ReadOnlySpan&lt;ProductData&gt; ParseProducts(ReadOnlySpan&lt;char&gt; csvData)
+    {
+        var products = new List&lt;ProductData&gt;();
+        var reader = new SpanReader(csvData);
+        
+        while (reader.TryReadLine(out var line))
+        {
+            if (TryParseProduct(line, out var product))
+            {
+                products.Add(product);
+            }
+        }
+        
+        return CollectionsMarshal.AsSpan(products);
+    }
+    
+    private bool TryParseProduct(ReadOnlySpan&lt;char&gt; line, out ProductData product)
+    {
+        product = default;
+        
+        var reader = new SpanReader(line);
+        
+        if (!reader.TryReadTo(',', out var idSpan) || !int.TryParse(idSpan, out var id))
+            return false;
+            
+        if (!reader.TryReadTo(',', out var nameSpan))
+            return false;
+            
+        if (!reader.TryReadTo(',', out var priceSpan) || !decimal.TryParse(priceSpan, out var price))
+            return false;
+        
+        product = new ProductData(id, nameSpan.ToString(), price);
+        return true;
+    }
+}
+
+// 2. Object Pooling for expensive objects
+public class HttpClientPool : IDisposable
+{
+    private readonly ObjectPool&lt;HttpClient&gt; _pool;
+    private readonly DefaultObjectPolicy&lt;HttpClient&gt; _policy;
+    
+    public HttpClientPool()
+    {
+        _policy = new DefaultObjectPolicy&lt;HttpClient&gt;();
+        var provider = new DefaultObjectPoolProvider();
+        _pool = provider.Create(_policy);
+    }
+    
+    public async Task&lt;T&gt; ExecuteRequestAsync&lt;T&gt;(string url, Func&lt;HttpClient, Task&lt;T&gt;&gt; operation)
+    {
+        var client = _pool.Get();
+        try
+        {
+            return await operation(client);
+        }
+        finally
+        {
+            _pool.Return(client);
+        }
+    }
+}
+
+// 3. Async enumerable for streaming large datasets
+public class ProductService
+{
+    public async IAsyncEnumerable&lt;Product&gt; GetProductsStreamAsync(
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        const int batchSize = 1000;
+        int offset = 0;
+        
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            var batch = await _repository.GetProductBatchAsync(offset, batchSize, cancellationToken);
+            
+            if (!batch.Any())
+                break;
+                
+            foreach (var product in batch)
+            {
+                yield return product;
+            }
+            
+            offset += batchSize;
+        }
+    }
+}
+
+// 4. Channel-based producer-consumer pattern
+public class HighThroughputProcessor
+{
+    private readonly Channel&lt;WorkItem&gt; _workChannel;
+    private readonly ChannelWriter&lt;WorkItem&gt; _writer;
+    private readonly ChannelReader&lt;WorkItem&gt; _reader;
+    
+    public HighThroughputProcessor(int capacity = 10000)
+    {
+        var options = new BoundedChannelOptions(capacity)
+        {
+            FullMode = BoundedChannelFullMode.Wait,
+            SingleReader = false,
+            SingleWriter = false
+        };
+        
+        _workChannel = Channel.CreateBounded&lt;WorkItem&gt;(options);
+        _writer = _workChannel.Writer;
+        _reader = _workChannel.Reader;
+        
+        // Start background processors
+        for (int i = 0; i &lt; Environment.ProcessorCount; i++)
+        {
+            _ = Task.Run(ProcessWorkItemsAsync);
+        }
+    }
+    
+    public async ValueTask&lt;bool&gt; EnqueueWorkAsync(WorkItem item, CancellationToken cancellationToken = default)
+    {
+        return await _writer.WaitToWriteAsync(cancellationToken) && 
+               _writer.TryWrite(item);
+    }
+    
+    private async Task ProcessWorkItemsAsync()
+    {
+        await foreach (var item in _reader.ReadAllAsync())
+        {
+            try
+            {
+                await ProcessItemAsync(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to process work item {ItemId}", item.Id);
+            }
+        }
+    }
+}
+
+// 5. Memory-efficient bulk operations
+public class BulkDataProcessor
+{
+    private readonly ArrayPool&lt;byte&gt; _bytePool = ArrayPool&lt;byte&gt;.Shared;
+    
+    public async Task ProcessLargeFileAsync(Stream fileStream)
+    {
+        var buffer = _bytePool.Rent(4096);
+        try
+        {
+            Memory&lt;byte&gt; memory = buffer.AsMemory(0, buffer.Length);
+            
+            while (true)
+            {
+                var bytesRead = await fileStream.ReadAsync(memory);
+                if (bytesRead == 0)
+                    break;
+                    
+                await ProcessChunkAsync(memory.Slice(0, bytesRead));
+            }
+        }
+        finally
+        {
+            _bytePool.Return(buffer);
+        }
+    }
+    
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private async Task ProcessChunkAsync(ReadOnlyMemory&lt;byte&gt; chunk)
+    {
+        // Process chunk without allocations
+        var span = chunk.Span;
+        for (int i = 0; i &lt; span.Length; i++)
+        {
+            // Process each byte
+            ProcessByte(span[i]);
+        }
+    }
+}
+
+// 6. Configuration for high-performance scenarios
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Configure Kestrel for high performance
+        services.Configure&lt;KestrelServerOptions&gt;(options =>
+        {
+            options.Limits.MaxConcurrentConnections = 1000;
+            options.Limits.MaxConcurrentUpgradedConnections = 1000;
+            options.Limits.MaxRequestBodySize = 52428800; // 50MB
+            options.Limits.MinRequestBodyDataRate = null;
+            options.Limits.MinResponseDataRate = null;
+        });
+        
+        // Configure DbContext for performance
+        services.AddDbContextPool&lt;AppDbContext&gt;(options =>
+        {
+            options.UseSqlServer(connectionString, sqlOptions =>
+            {
+                sqlOptions.CommandTimeout(30);
+                sqlOptions.EnableRetryOnFailure(3);
+            });
+            options.EnableServiceProviderCaching();
+            options.EnableSensitiveDataLogging(false);
+        }, poolSize: 1024);
+        
+        // Configure HTTP clients
+        services.AddHttpClient("default", client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(30);
+        }).ConfigurePrimaryHttpMessageHandler(() =>
+        {
+            return new SocketsHttpHandler()
+            {
+                PooledConnectionLifetime = TimeSpan.FromMinutes(15),
+                PooledConnectionIdleTimeout = TimeSpan.FromMinutes(5),
+                MaxConnectionsPerServer = 50
+            };
+        });
+    }
+}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leadership & Technical Decision Making -->
+            <div class="category">
+                <div class="category-header">
+                    <h3><i class="fas fa-users"></i> Technical Leadership</h3>
+                    <p>Leading teams and making architectural decisions</p>
+                </div>
+                <div class="category-content">
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            7. How do you evaluate and choose between different technical solutions?
+                        </div>
+                        <div class="answer">
+                            <p><strong>Technical Decision Framework:</strong></p>
+                            
+                            <p><strong>1. Define Decision Criteria:</strong></p>
+                            <ul>
+                                <li>Performance requirements (latency, throughput)</li>
+                                <li>Scalability needs (current and future)</li>
+                                <li>Team expertise and learning curve</li>
+                                <li>Maintenance and operational complexity</li>
+                                <li>Cost considerations (development, infrastructure, licensing)</li>
+                                <li>Integration requirements</li>
+                                <li>Security and compliance needs</li>
+                            </ul>
+                            
+                            <p><strong>2. Architecture Decision Records (ADRs):</strong></p>
+                            <div class="code-block">
+# ADR-001: Choose Database for User Service
+
+## Status
+Accepted
+
+## Context
+We need to choose a database solution for our new user service that will:
+- Handle 100K+ users initially, scaling to 1M+
+- Support complex queries for user search and analytics
+- Provide ACID guarantees for user transactions
+- Integrate well with .NET ecosystem
+
+## Decision
+We will use PostgreSQL as the primary database for the user service.
+
+## Rationale
+### PostgreSQL Pros:
+- Excellent .NET support through Npgsql and EF Core
+- Strong ACID guarantees and data consistency
+- Advanced querying capabilities (JSON, full-text search)
+- Proven scalability with read replicas
+- Cost-effective (open source)
+- Team has existing expertise
+
+### Alternatives Considered:
+- **SQL Server**: Higher licensing costs, team expertise available
+- **MongoDB**: Would require significant learning curve, eventual consistency concerns
+- **MySQL**: Less advanced features compared to PostgreSQL
+
+## Consequences
+### Positive:
+- Leverages team's existing SQL knowledge
+- Strong ecosystem support in .NET
+- Cost-effective scaling path
+
+### Negative:
+- Need to set up operational expertise for PostgreSQL
+- Additional infrastructure complexity vs. managed solutions
+
+## Compliance
+This decision supports our requirements for data consistency and compliance with GDPR requirements.
+                            </div>
+                            
+                            <p><strong>3. Technology Evaluation Matrix:</strong></p>
+                            <div class="code-block">
+// Technology Comparison Framework
+public class TechnologyEvaluation
+{
+    public class EvaluationCriteria
+    {
+        public string Name { get; set; }
+        public int Weight { get; set; } // 1-5, 5 being most important
+        public string Description { get; set; }
+    }
+    
+    public class TechnologyOption
+    {
+        public string Name { get; set; }
+        public Dictionary&lt;string, int&gt; Scores { get; set; } // 1-10 scale
+        public List&lt;string&gt; Pros { get; set; }
+        public List&lt;string&gt; Cons { get; set; }
+        public decimal EstimatedCost { get; set; }
+        public TimeSpan ImplementationTime { get; set; }
+    }
+    
+    public TechnologyOption EvaluateOptions(List&lt;EvaluationCriteria&gt; criteria, List&lt;TechnologyOption&gt; options)
+    {
+        var scoredOptions = options.Select(option => new
+        {
+            Option = option,
+            WeightedScore = criteria.Sum(c => 
+                option.Scores.GetValueOrDefault(c.Name, 0) * c.Weight)
+        }).OrderByDescending(x => x.WeightedScore);
+        
+        return scoredOptions.First().Option;
+    }
+}
+
+// Example usage for message queue evaluation
+var criteria = new List&lt;EvaluationCriteria&gt;
+{
+    new() { Name = "Performance", Weight = 5, Description = "Throughput and latency requirements" },
+    new() { Name = "Reliability", Weight = 5, Description = "Message durability and delivery guarantees" },
+    new() { Name = "Team Expertise", Weight = 4, Description = "Current team knowledge and learning curve" },
+    new() { Name = "Operational Complexity", Weight = 4, Description = "Deployment and maintenance overhead" },
+    new() { Name = "Ecosystem", Weight = 3, Description = ".NET integration and tooling" },
+    new() { Name = "Cost", Weight = 3, Description = "Licensing and infrastructure costs" }
+};
+
+var options = new List&lt;TechnologyOption&gt;
+{
+    new()
+    {
+        Name = "RabbitMQ",
+        Scores = new() { {"Performance", 8}, {"Reliability", 9}, {"Team Expertise", 7}, {"Operational Complexity", 6}, {"Ecosystem", 9}, {"Cost", 8} },
+        Pros = new[] { "Excellent .NET support", "Battle-tested", "Rich feature set" }.ToList(),
+        Cons = new[] { "Additional infrastructure", "Learning curve for advanced features" }.ToList()
+    },
+    new()
+    {
+        Name = "Azure Service Bus",
+        Scores = new() { {"Performance", 7}, {"Reliability", 9}, {"Team Expertise", 8}, {"Operational Complexity", 9}, {"Ecosystem", 9}, {"Cost", 6} },
+        Pros = new[] { "Fully managed", "Excellent Azure integration", "No operational overhead" }.ToList(),
+        Cons = new[] { "Vendor lock-in", "Higher cost at scale" }.ToList()
+    }
+};
+                            </div>
+                            
+                            <p><strong>4. Risk Assessment:</strong></p>
+                            <ul>
+                                <li><strong>Technical Risks:</strong> Complexity, performance bottlenecks, integration challenges</li>
+                                <li><strong>Business Risks:</strong> Time to market, cost overruns, vendor dependence</li>
+                                <li><strong>Team Risks:</strong> Knowledge gaps, capacity constraints, learning curve</li>
+                                <li><strong>Operational Risks:</strong> Maintenance burden, scaling challenges, security vulnerabilities</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-text">
+                            <i class="fas fa-chevron-right"></i>
+                            8. How do you conduct effective code reviews and maintain code quality?
+                        </div>
+                        <div class="answer">
+                            <p><strong>Comprehensive Code Review Process:</strong></p>
+                            
+                            <div class="code-block">
+# Code Review Checklist Template
+
+## Architecture & Design
+- [ ] Does the code follow SOLID principles?
+- [ ] Are design patterns used appropriately?
+- [ ] Is the separation of concerns maintained?
+- [ ] Does it integrate well with existing architecture?
+
+## Code Quality
+- [ ] Is the code readable and self-documenting?
+- [ ] Are naming conventions followed consistently?
+- [ ] Is the code DRY (Don't Repeat Yourself)?
+- [ ] Are magic numbers and strings avoided?
+- [ ] Is error handling appropriate and consistent?
+
+## Performance
+- [ ] Are there any obvious performance bottlenecks?
+- [ ] Is memory usage efficient (proper disposal, avoiding leaks)?
+- [ ] Are database queries optimized?
+- [ ] Are expensive operations cached when appropriate?
+
+## Security
+- [ ] Is input validation implemented properly?
+- [ ] Are security best practices followed?
+- [ ] Is sensitive data handled correctly?
+- [ ] Are authentication/authorization checks in place?
+
+## Testing
+- [ ] Are unit tests included and meaningful?
+- [ ] Is test coverage adequate?
+- [ ] Are edge cases covered?
+- [ ] Are tests readable and maintainable?
+
+## Documentation
+- [ ] Are complex algorithms documented?
+- [ ] Are public APIs documented?
+- [ ] Are breaking changes highlighted?
+- [ ] Is the README updated if needed?
+                            </div>
+                            
+                            <p><strong>Code Review Automation:</strong></p>
+                            <div class="code-block">
+// .editorconfig for consistent code style
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+[*.cs]
+# C# specific rules
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_prefer_simple_using_statement = true
+
+# Naming conventions
+dotnet_naming_rule.interfaces_should_be_prefixed_with_i.severity = warning
+dotnet_naming_rule.interfaces_should_be_prefixed_with_i.symbols = interface_symbols
+dotnet_naming_rule.interfaces_should_be_prefixed_with_i.style = prefix_interface_with_i
+
+# Code analysis rules
+dotnet_analyzer_diagnostic.CA1002.severity = warning
+dotnet_analyzer_diagnostic.CA1056.severity = error
+dotnet_analyzer_diagnostic.CA2007.severity = suggestion
+                            </div>
+                            
+                            <div class="code-block">
+// Custom analyzers for team-specific rules
+[DiagnosticAnalyzer(LanguageNames.CSharp)]
+public class DatabaseContextUsageAnalyzer : DiagnosticAnalyzer
+{
+    public static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+        "TEAM001",
+        "DbContext should be used with using statement",
+        "DbContext '{0}' should be wrapped in using statement to ensure proper disposal",
+        "Usage",
+        DiagnosticSeverity.Warning,
+        isEnabledByDefault: true);
+
+    public override ImmutableArray&lt;DiagnosticDescriptor&gt; SupportedDiagnostics =&gt; 
+        ImmutableArray.Create(Rule);
+
+    public override void Initialize(AnalysisContext context)
+    {
+        context.EnableConcurrentExecution();
+        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
+        context.RegisterSyntaxNodeAction(AnalyzeVariableDeclaration, SyntaxKind.VariableDeclaration);
+    }
+
+    private static void AnalyzeVariableDeclaration(SyntaxNodeAnalysisContext context)
+    {
+        var variableDeclaration = (VariableDeclarationSyntax)context.Node;
+        
+        if (IsDbContextType(variableDeclaration.Type, context.SemanticModel) &&
+            !IsInUsingStatement(variableDeclaration))
+        {
+            var diagnostic = Diagnostic.Create(
+                Rule,
+                variableDeclaration.GetLocation(),
+                variableDeclaration.Type.ToString());
+                
+            context.ReportDiagnostic(diagnostic);
+        }
+    }
+}
+
+// Pull Request Template
+/*
+## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix (non-breaking change)
+- [ ] New feature (non-breaking change)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Documentation update
+
+## How Has This Been Tested?
+- [ ] Unit tests
+- [ ] Integration tests
+- [ ] Manual testing
+- [ ] Performance testing
+
+## Checklist:
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation
+- [ ] My changes generate no new warnings
+- [ ] I have added tests that prove my fix is effective or that my feature works
+- [ ] New and existing unit tests pass locally with my changes
+
+## Performance Impact
+Describe any performance implications
+
+## Security Considerations
+Describe any security implications
+
+## Breaking Changes
+List any breaking changes and migration steps
+*/
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Question toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const questions = document.querySelectorAll('.question-text');
+            const totalQuestions = questions.length;
+            let answeredQuestions = 0;
+            
+            questions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    if (answer.classList.contains('active')) {
+                        answer.classList.remove('active');
+                        icon.style.transform = 'rotate(0deg)';
+                        this.classList.remove('active');
+                        answeredQuestions--;
+                    } else {
+                        answer.classList.add('active');
+                        icon.style.transform = 'rotate(90deg)';
+                        this.classList.add('active');
+                        answeredQuestions++;
+                    }
+                    
+                    // Update progress bar
+                    const progress = (answeredQuestions / totalQuestions) * 100;
+                    document.getElementById('progressBar').style.width = progress + '%';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
