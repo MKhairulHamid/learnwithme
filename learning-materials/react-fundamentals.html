@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Fundamentals - Interactive Tutorial - Learn With Khairul</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22grad%22 x1=%220%%22 y1=%220%%22 x2=%22100%%22 y2=%22100%%22><stop offset=%220%%22 style=%22stop-color:%23667eea;stop-opacity:1%22 /><stop offset=%22100%%22 style=%22stop-color:%23764ba2;stop-opacity:1%22 /></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22url(%23grad)%22/><text x=%2250%22 y=%2260%22 font-family=%22Arial,sans-serif%22 font-size=%2240%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22white%22>LK</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Header */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo i {
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #61dafb 0%, #21d4fd 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '⚛️';
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .difficulty-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 70px;
+            z-index: 100;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #61dafb, #21d4fd);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+        /* Assessment Styles */
+        .assessment-section {
+            background: white;
+            margin: 2rem 0;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #61dafb;
+        }
+
+        .assessment-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .assessment-header h2 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-card {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .question-card.correct {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .question-card.incorrect {
+            border-color: #f56565;
+            background: #fffaf0;
+        }
+
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .options {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .option:hover {
+            border-color: #61dafb;
+            background: #f0f9ff;
+        }
+
+        .option.selected {
+            border-color: #61dafb;
+            background: #e0f2fe;
+        }
+
+        .option.correct {
+            border-color: #48bb78;
+            background: #f0fff4;
+        }
+
+        .option.incorrect {
+            border-color: #f56565;
+            background: #fed7d7;
+        }
+
+        .assessment-result {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .score-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* Tutorial Section - Slide Based */
+        .tutorial-section {
+            padding: 2rem 0;
+            min-height: 70vh;
+        }
+
+        .slide-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            padding: 3rem;
+            flex: 1;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide-header {
+            background: linear-gradient(135deg, #61dafb, #21d4fd);
+            color: white;
+            padding: 2rem 3rem;
+            margin: -3rem -3rem 2rem -3rem;
+            position: relative;
+        }
+
+        .slide-header h2 {
+            font-size: 2rem;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .slide-header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .concept-explanation {
+            background: #f8fafc;
+            border-left: 5px solid #61dafb;
+            padding: 2rem;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .concept-explanation h3 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .key-point {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .key-point h4 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .key-point p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .slide-visual {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+
+        .slide-visual h4 {
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .visual-demo {
+            background: white;
+            border: 2px dashed #61dafb;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .component-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .component-box {
+            background: #61dafb;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            margin: 0.5rem;
+        }
+
+        .component-children {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .component-box.child {
+            background: #21d4fd;
+            font-size: 0.9rem;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .slide-navigation {
+            background: #f8fafc;
+            padding: 1.5rem 3rem;
+            margin: 2rem -3rem -3rem -3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .slide-nav-info {
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .slide-nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .slide-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .slide-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .slide-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .slide-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .slide-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slide-dot.active {
+            background: #61dafb;
+            transform: scale(1.3);
+        }
+
+        .slide-dot.completed {
+            background: #48bb78;
+        }
+
+        .sub-concept {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sub-concept:last-child {
+            border-bottom: none;
+        }
+
+        .sub-concept h4 {
+            color: #2d3748;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .example-container {
+            background: #f8fafc;
+            border-left: 4px solid #61dafb;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-header {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+
+        .ecommerce-demo {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .ecommerce-demo h5 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Interactive Elements */
+        .interactive-element {
+            background: #e0f2fe;
+            border: 2px solid #61dafb;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+
+        .try-it-button {
+            background: #61dafb;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .try-it-button:hover {
+            background: #21d4fd;
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .lesson-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .nav-button:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            .concept-content {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            .lesson-nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Hidden sections */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Completion checkmark */
+        .completed {
+            color: #48bb78;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                Learn With Khairul
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="learning-materials.html" class="nav-link back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Materials
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Ready to start - 0% Complete</div>
+    </div>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>React Fundamentals - Interactive Tutorial</h1>
+            <p>Learn React by building an ecommerce application step by step</p>
+            <div class="difficulty-badge">
+                <i class="fab fa-react"></i> Beginner Friendly
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Section 1: Initial Assessment -->
+        <section class="section active" id="initial-assessment">
+            <div class="assessment-section">
+                <div class="assessment-header">
+                    <h2><i class="fas fa-clipboard-check"></i> Initial Knowledge Assessment</h2>
+                    <p>Let's see what you already know about React and web development!</p>
+                </div>
+
+                <div class="question-card" data-question="1" data-correct="2">
+                    <div class="question-text">1. What is React primarily used for?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> Backend API development
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> Database management
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> Building user interfaces for web applications
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> Server configuration
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" data-question="2" data-correct="1">
+                    <div class="question-text">2. What does JSX stand for?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> JavaScript Extended
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> JavaScript XML
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> Java Syntax Extension
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> JSON XML
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" data-question="3" data-correct="0">
+                    <div class="question-text">3. What is a React component?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> A reusable piece of UI that can accept inputs and return elements
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> A CSS class
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> A database table
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> A server endpoint
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" data-question="4" data-correct="2">
+                    <div class="question-text">4. How do you pass data from a parent component to a child component?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> Using global variables
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> Using localStorage
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> Using props
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> Using cookies
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" data-question="5" data-correct="1">
+                    <div class="question-text">5. What hook is used to manage state in functional components?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> useEffect
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> useState
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> useContext
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> useCallback
+                        </div>
+                    </div>
+                </div>
+
+                <button class="try-it-button" id="submitAssessment" style="display:none; margin-top: 2rem;">
+                    <i class="fas fa-check"></i> Submit Assessment
+                </button>
+                
+                <div id="assessmentResult" style="display:none;"></div>
+            </div>
+        </section>
+
+        <!-- Section 2: Tutorial Content - Slide Based -->
+        <section class="section" id="tutorial-content">
+            <div class="tutorial-section">
+                <div class="slide-container">
+                    <!-- Slide 1: Component-Based Architecture -->
+                    <div class="slide active" data-slide="1">
+                        <div class="slide-header">
+                            <div class="slide-number">1 / 8</div>
+                            <h2>Component-Based Architecture</h2>
+                            <p>Building React apps as a tree of reusable components</p>
+                        </div>
+                        
+                        <div class="slide-content">
+                            <div class="concept-explanation">
+                                <h3>🧩 What is Component-Based Architecture?</h3>
+                                <p>React applications are built by composing small, reusable pieces called components. Each component represents a part of the user interface and can be combined to create complex applications.</p>
+                                <p><strong>Think of it like LEGO blocks</strong> - you can build anything by combining simple, reusable pieces!</p>
+                            </div>
+
+                            <div class="key-points">
+                                <div class="key-point">
+                                    <h4>🔄 Reusable</h4>
+                                    <p>Write once, use everywhere. A Button component can be used throughout your app.</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🏗️ Modular</h4>
+                                    <p>Break complex UIs into smaller, manageable pieces that are easier to understand.</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🔧 Maintainable</h4>
+                                    <p>Changes to one component don't affect others. Fix bugs in isolation.</p>
+                                </div>
+                            </div>
+
+                            <div class="slide-visual">
+                                <h4>🛒 Ecommerce Store Component Tree</h4>
+                                <div class="component-tree">
+                                    <div class="component-box">EcommerceApp</div>
+                                    <div class="component-children">
+                                        <div class="component-box child">Header</div>
+                                        <div class="component-box child">ProductGrid</div>
+                                        <div class="component-box child">ShoppingCart</div>
+                                        <div class="component-box child">Footer</div>
+                                    </div>
+                                </div>
+                                <div class="visual-demo">
+                                    <div class="code-example">
+// Simple component structure
+const EcommerceApp = () => {
+  return (
+    &lt;div className="app"&gt;
+      &lt;Header /&gt;           {/* Navigation & logo */}
+      &lt;ProductGrid /&gt;     {/* Display products */}
+      &lt;ShoppingCart /&gt;    {/* Cart functionality */}
+      &lt;Footer /&gt;          {/* Links & contact */}
+    &lt;/div&gt;
+  );
+};
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-navigation">
+                            <div class="slide-nav-info">Component-Based Architecture</div>
+                            <div class="slide-nav-buttons">
+                                <button class="slide-btn" id="prevSlide" disabled>
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <button class="slide-btn" id="nextSlide">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Virtual DOM -->
+                    <div class="slide" data-slide="2">
+                        <div class="slide-header">
+                            <div class="slide-number">2 / 8</div>
+                            <h2>Virtual DOM</h2>
+                            <p>React's secret weapon for fast, efficient updates</p>
+                        </div>
+                        
+                        <div class="slide-content">
+                            <div class="concept-explanation">
+                                <h3>⚡ What is the Virtual DOM?</h3>
+                                <p>The Virtual DOM is a JavaScript representation of the real DOM kept in memory. React uses it to calculate the most efficient way to update the user interface.</p>
+                                <p><strong>Real-world analogy:</strong> It's like planning your room reorganization on paper before actually moving furniture around!</p>
+                            </div>
+
+                            <div class="key-points">
+                                <div class="key-point">
+                                    <h4>🧠 In Memory</h4>
+                                    <p>Virtual DOM lives in JavaScript memory, making it lightning fast to work with.</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🔍 Smart Diffing</h4>
+                                    <p>React compares old and new Virtual DOM to find minimal changes needed.</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🎯 Efficient Updates</h4>
+                                    <p>Only the parts that actually changed get updated in the real DOM.</p>
+                                </div>
+                            </div>
+
+                            <div class="slide-visual">
+                                <h4>🛒 Virtual DOM in Ecommerce</h4>
+                                <div class="visual-demo">
+                                    <p><strong>Scenario:</strong> User adds item to cart</p>
+                                    <div class="interactive-element">
+                                        <p><strong>🎯 Watch this:</strong> When you add items to cart, React only updates the cart counter and total - not the entire page!</p>
+                                        <button class="try-it-button" onclick="demonstrateVirtualDOM()">Add Item to Cart Demo</button>
+                                        <div id="virtualDomDemo" style="margin-top: 1rem;"></div>
+                                    </div>
+                                    <div class="code-example">
+// Before: Cart shows 2 items, $50 total
+// User clicks "Add to Cart" on $20 item
+// After: Cart shows 3 items, $70 total
+
+// React only updates:
+&lt;span className="cart-count"&gt;3&lt;/span&gt;  {/* Was: 2 */}
+&lt;span className="cart-total"&gt;$70&lt;/span&gt; {/* Was: $50 */}
+
+// Everything else stays the same! 🚀
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-navigation">
+                            <div class="slide-nav-info">Virtual DOM</div>
+                            <div class="slide-nav-buttons">
+                                <button class="slide-btn" id="prevSlide">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <button class="slide-btn" id="nextSlide">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: JSX -->
+                    <div class="slide" data-slide="3">
+                        <div class="slide-header">
+                            <div class="slide-number">3 / 8</div>
+                            <h2>JSX (JavaScript XML)</h2>
+                            <p>Writing HTML-like syntax in JavaScript</p>
+                        </div>
+                        
+                        <div class="slide-content">
+                            <div class="concept-explanation">
+                                <h3>📝 What is JSX?</h3>
+                                <p>JSX is a syntax extension that lets you write HTML-like code inside JavaScript. It makes React components more readable and expressive.</p>
+                                <p><strong>Key insight:</strong> JSX gets compiled to regular JavaScript function calls!</p>
+                            </div>
+
+                            <div class="key-points">
+                                <div class="key-point">
+                                    <h4>📖 Readable</h4>
+                                    <p>Looks like HTML, so it's familiar and easy to understand what the UI will look like.</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>💪 Powerful</h4>
+                                    <p>You can embed JavaScript expressions using curly braces { }.</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🔄 Compiled</h4>
+                                    <p>JSX gets transformed into React.createElement() calls behind the scenes.</p>
+                                </div>
+                            </div>
+
+                            <div class="slide-visual">
+                                <h4>🛒 JSX in Ecommerce Components</h4>
+                                <div class="visual-demo">
+                                    <div class="code-example">
+// ✅ With JSX (Clean and readable)
+const ProductCard = ({ product }) => (
+  &lt;div className="product-card"&gt;
+    &lt;img src={product.image} alt={product.name} /&gt;
+    &lt;h3&gt;{product.name}&lt;/h3&gt;
+    &lt;p className="price"&gt;${product.price}&lt;/p&gt;
+    &lt;button className="add-to-cart"&gt;
+      Add to Cart
+    &lt;/button&gt;
+  &lt;/div&gt;
+);
+
+// ❌ Without JSX (Hard to read)
+const ProductCard = ({ product }) => 
+  React.createElement('div', { className: 'product-card' },
+    React.createElement('img', { src: product.image, alt: product.name }),
+    React.createElement('h3', null, product.name),
+    React.createElement('p', { className: 'price' }, '$', product.price),
+    React.createElement('button', { className: 'add-to-cart' }, 'Add to Cart')
+  );
+                                    </div>
+                                    <div class="ecommerce-demo">
+                                        <h5><i class="fas fa-magic"></i> JSX Magic</h5>
+                                        <p>Notice how we use <code>{product.name}</code> and <code>{product.price}</code> to inject JavaScript values into our HTML-like structure!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-navigation">
+                            <div class="slide-nav-info">JSX (JavaScript XML)</div>
+                            <div class="slide-nav-buttons">
+                                <button class="slide-btn" id="prevSlide">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <button class="slide-btn" id="nextSlide">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4: State Management -->
+                    <div class="slide" data-slide="4">
+                        <div class="slide-header">
+                            <div class="slide-number">4 / 8</div>
+                            <h2>State Management</h2>
+                            <p>Managing data that changes over time</p>
+                        </div>
+                        
+                        <div class="slide-content">
+                            <div class="concept-explanation">
+                                <h3>🗃️ What is State?</h3>
+                                <p>State is data that can change over time. When state changes, React automatically re-renders the component to reflect the new data.</p>
+                                <p><strong>Think of it as:</strong> Your component's memory that updates the UI when it changes!</p>
+                            </div>
+
+                            <div class="key-points">
+                                <div class="key-point">
+                                    <h4>📱 Local State</h4>
+                                    <p>Data that belongs to one component (like form inputs, toggle states).</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🌐 Global State</h4>
+                                    <p>Data shared across multiple components (like user info, shopping cart).</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🔒 Immutable</h4>
+                                    <p>Never modify state directly - always create new objects/arrays.</p>
+                                </div>
+                            </div>
+
+                            <div class="slide-visual">
+                                <h4>🛒 Shopping Cart State Example</h4>
+                                <div class="visual-demo">
+                                    <div class="code-example">
+const ShoppingCart = () => {
+  // State: cart items and total
+  const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  const addItem = (product) => {
+    // ✅ Correct: Create new array
+    setItems(prevItems => [...prevItems, product]);
+    setTotal(prevTotal => prevTotal + product.price);
+  };
+
+  const removeItem = (productId) => {
+    // ✅ Correct: Filter creates new array
+    setItems(prevItems => 
+      prevItems.filter(item => item.id !== productId)
+    );
+  };
+
+  return (
+    &lt;div className="cart"&gt;
+      &lt;h2&gt;Cart ({items.length} items)&lt;/h2&gt;
+      &lt;p&gt;Total: ${total}&lt;/p&gt;
+      {items.map(item => (
+        &lt;CartItem key={item.id} item={item} onRemove={removeItem} /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+};
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-navigation">
+                            <div class="slide-nav-info">State Management</div>
+                            <div class="slide-nav-buttons">
+                                <button class="slide-btn" id="prevSlide">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <button class="slide-btn" id="nextSlide">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Continue with more slides... Let me add a few more key concepts -->
+
+                    <!-- Slide 5: Props and Data Flow -->
+                    <div class="slide" data-slide="5">
+                        <div class="slide-header">
+                            <div class="slide-number">5 / 8</div>
+                            <h2>Props & Data Flow</h2>
+                            <p>How components communicate with each other</p>
+                        </div>
+                        
+                        <div class="slide-content">
+                            <div class="concept-explanation">
+                                <h3>📤 What are Props?</h3>
+                                <p>Props (properties) are how parent components pass data to child components. They flow in one direction: from parent to child.</p>
+                                <p><strong>Think of props as:</strong> Function parameters for your components!</p>
+                            </div>
+
+                            <div class="key-points">
+                                <div class="key-point">
+                                    <h4>⬇️ One-Way Flow</h4>
+                                    <p>Data flows from parent to child components, making apps predictable.</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>📋 Read-Only</h4>
+                                    <p>Child components can't modify props - they're immutable.</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🔄 Dynamic</h4>
+                                    <p>When props change, the component automatically re-renders.</p>
+                                </div>
+                            </div>
+
+                            <div class="slide-visual">
+                                <h4>🛒 Product Grid Passing Props</h4>
+                                <div class="visual-demo">
+                                    <div class="code-example">
+// Parent component: ProductGrid
+const ProductGrid = () => {
+  const products = [
+    { id: 1, name: "iPhone 15", price: 999, image: "iphone.jpg" },
+    { id: 2, name: "MacBook Pro", price: 2499, image: "macbook.jpg" }
+  ];
+
+  const handleAddToCart = (product) => {
+    console.log('Adding to cart:', product.name);
+  };
+
+  return (
+    &lt;div className="product-grid"&gt;
+      {products.map(product => (
+        &lt;ProductCard 
+          key={product.id}           // Special prop for React
+          name={product.name}        // String prop
+          price={product.price}      // Number prop
+          image={product.image}      // String prop
+          onAddToCart={handleAddToCart} // Function prop
+        /&gt;
+      ))}
+    &lt;/div&gt;
+  );
+};
+
+// Child component: ProductCard
+const ProductCard = ({ name, price, image, onAddToCart }) => (
+  &lt;div className="product-card"&gt;
+    &lt;img src={image} alt={name} /&gt;
+    &lt;h3&gt;{name}&lt;/h3&gt;
+    &lt;p&gt;${price}&lt;/p&gt;
+    &lt;button onClick={() => onAddToCart({ name, price })}&gt;
+      Add to Cart
+    &lt;/button&gt;
+  &lt;/div&gt;
+);
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-navigation">
+                            <div class="slide-nav-info">Props & Data Flow</div>
+                            <div class="slide-nav-buttons">
+                                <button class="slide-btn" id="prevSlide">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <button class="slide-btn" id="nextSlide">
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add more slides as needed... -->
+                    <!-- For brevity, I'll add a final summary slide -->
+
+                    <!-- Slide 6-8: Continue with hooks, effects, etc. -->
+                    <!-- ... (Similar structure for remaining concepts) ... -->
+
+                    <!-- Final Slide: Summary -->
+                    <div class="slide" data-slide="8">
+                        <div class="slide-header">
+                            <div class="slide-number">8 / 8</div>
+                            <h2>🎉 You've Learned React Fundamentals!</h2>
+                            <p>Ready to build amazing web applications</p>
+                        </div>
+                        
+                        <div class="slide-content">
+                            <div class="concept-explanation">
+                                <h3>🚀 What You Now Know</h3>
+                                <p>Congratulations! You've covered the core concepts of React and seen how they work together in a real ecommerce application.</p>
+                            </div>
+
+                            <div class="key-points">
+                                <div class="key-point">
+                                    <h4>🧩 Components</h4>
+                                    <p>Build UIs as reusable, composable pieces</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>⚡ Virtual DOM</h4>
+                                    <p>Efficient updates for better performance</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>📝 JSX</h4>
+                                    <p>Write HTML-like syntax in JavaScript</p>
+                                </div>
+                                <div class="key-point">
+                                    <h4>🗃️ State & Props</h4>
+                                    <p>Manage data and component communication</p>
+                                </div>
+                            </div>
+
+                            <div class="slide-visual">
+                                <h4>🎯 Next Steps</h4>
+                                <div class="visual-demo">
+                                    <p><strong>Ready for more?</strong> Take the final assessment to test your knowledge!</p>
+                                    <div class="interactive-element">
+                                        <p>✅ Complete the final assessment to see how much you've learned</p>
+                                        <p>🚀 Start building your own React projects</p>
+                                        <p>📚 Explore advanced React patterns and libraries</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="slide-navigation">
+                            <div class="slide-nav-info">Tutorial Complete!</div>
+                            <div class="slide-nav-buttons">
+                                <button class="slide-btn" id="prevSlide">
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <button class="slide-btn" id="nextSlide">
+                                    Take Final Assessment <i class="fas fa-graduation-cap"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide Indicators -->
+                <div class="slide-indicator">
+                    <div class="slide-dot active" data-slide="1"></div>
+                    <div class="slide-dot" data-slide="2"></div>
+                    <div class="slide-dot" data-slide="3"></div>
+                    <div class="slide-dot" data-slide="4"></div>
+                    <div class="slide-dot" data-slide="5"></div>
+                    <div class="slide-dot" data-slide="6"></div>
+                    <div class="slide-dot" data-slide="7"></div>
+                    <div class="slide-dot" data-slide="8"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Final Assessment -->
+        <section class="section" id="final-assessment">
+            <div class="assessment-section">
+                <div class="assessment-header">
+                    <h2><i class="fas fa-graduation-cap"></i> Final Assessment</h2>
+                    <p>Let's see how much you've learned! Apply your new React knowledge.</p>
+                </div>
+
+                <div class="question-card" data-question="6" data-correct="1">
+                    <div class="question-text">6. Which hook would you use to fetch product data when a component mounts?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> useState
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> useEffect
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> useContext
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> useCallback
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" data-question="7" data-correct="2">
+                    <div class="question-text">7. What's the correct way to update an array in state?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> items.push(newItem); setItems(items)
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> items[0] = newItem; setItems(items)
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> setItems([...items, newItem])
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> setItems(items.concat(newItem))
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" data-question="8" data-correct="0">
+                    <div class="question-text">8. In our ecommerce app, how should we pass the shopping cart data to multiple components?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> Use React Context or lift state up to a common parent
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> Store it in localStorage and access it directly
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> Use global variables
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> Pass it through URL parameters
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" data-question="9" data-correct="3">
+                    <div class="question-text">9. What is the key prop used for when rendering lists in React?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> To make items clickable
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> To style the items
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> To sort the items
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> To help React identify which items have changed
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-card" data-question="10" data-correct="1">
+                    <div class="question-text">10. What would you use to optimize a component that doesn't need to re-render when parent updates?</div>
+                    <div class="options">
+                        <div class="option" data-option="0">
+                            <i class="far fa-circle"></i> useState
+                        </div>
+                        <div class="option" data-option="1">
+                            <i class="far fa-circle"></i> React.memo
+                        </div>
+                        <div class="option" data-option="2">
+                            <i class="far fa-circle"></i> useEffect
+                        </div>
+                        <div class="option" data-option="3">
+                            <i class="far fa-circle"></i> useContext
+                        </div>
+                    </div>
+                </div>
+
+                <button class="try-it-button" id="submitFinalAssessment" style="display:none; margin-top: 2rem;">
+                    <i class="fas fa-check"></i> Submit Final Assessment
+                </button>
+                
+                <div id="finalAssessmentResult" style="display:none;"></div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div class="lesson-nav">
+            <button class="nav-button" id="prevBtn" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <button class="nav-button" id="nextBtn">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        let currentSection = 0;
+        const sections = ['initial-assessment', 'tutorial-content', 'final-assessment'];
+        let initialScore = 0;
+        let finalScore = 0;
+        let tutorialProgress = 0;
+        let answeredQuestions = new Set();
+        let finalAnsweredQuestions = new Set();
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            initializeAssessment();
+            initializeSlides();
+            initializeNavigation();
+        });
+
+        // Assessment functionality
+        function initializeAssessment() {
+            // Initial assessment event listeners
+            document.querySelectorAll('#initial-assessment .option').forEach(option => {
+                option.addEventListener('click', function() {
+                    handleOptionClick(this, 'initial');
+                });
+            });
+
+            // Final assessment event listeners
+            document.querySelectorAll('#final-assessment .option').forEach(option => {
+                option.addEventListener('click', function() {
+                    handleOptionClick(this, 'final');
+                });
+            });
+
+            // Submit buttons
+            document.getElementById('submitAssessment').addEventListener('click', () => {
+                submitAssessment('initial');
+            });
+
+            document.getElementById('submitFinalAssessment').addEventListener('click', () => {
+                submitAssessment('final');
+            });
+        }
+
+        function handleOptionClick(clickedOption, assessmentType) {
+            const questionCard = clickedOption.closest('.question-card');
+            const questionNum = questionCard.dataset.question;
+            const options = questionCard.querySelectorAll('.option');
+            
+            // Clear previous selections
+            options.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.querySelector('i').className = 'far fa-circle';
+            });
+            
+            // Select clicked option
+            clickedOption.classList.add('selected');
+            clickedOption.querySelector('i').className = 'fas fa-check-circle';
+            
+            // Track answered questions
+            if (assessmentType === 'initial') {
+                answeredQuestions.add(questionNum);
+                if (answeredQuestions.size === 5) {
+                    document.getElementById('submitAssessment').style.display = 'block';
+                }
+            } else {
+                finalAnsweredQuestions.add(questionNum);
+                if (finalAnsweredQuestions.size === 5) {
+                    document.getElementById('submitFinalAssessment').style.display = 'block';
+                }
+            }
+        }
+
+        function submitAssessment(type) {
+            let score = 0;
+            let total = 0;
+            let questionSet = type === 'initial' ? 
+                document.querySelectorAll('#initial-assessment .question-card') :
+                document.querySelectorAll('#final-assessment .question-card');
+
+            questionSet.forEach(card => {
+                total++;
+                const correctAnswer = parseInt(card.dataset.correct);
+                const selectedOption = card.querySelector('.option.selected');
+                
+                if (selectedOption) {
+                    const selectedAnswer = parseInt(selectedOption.dataset.option);
+                    const options = card.querySelectorAll('.option');
+                    
+                    if (selectedAnswer === correctAnswer) {
+                        score++;
+                        card.classList.add('correct');
+                        selectedOption.classList.add('correct');
+                    } else {
+                        card.classList.add('incorrect');
+                        selectedOption.classList.add('incorrect');
+                        // Show correct answer
+                        options[correctAnswer].classList.add('correct');
+                    }
+                }
+            });
+
+            const percentage = Math.round((score / total) * 100);
+            
+            if (type === 'initial') {
+                initialScore = percentage;
+                showAssessmentResult('assessmentResult', score, total, percentage, 'initial');
+            } else {
+                finalScore = percentage;
+                showAssessmentResult('finalAssessmentResult', score, total, percentage, 'final');
+            }
+            
+            updateProgress();
+        }
+
+        function showAssessmentResult(containerId, score, total, percentage, type) {
+            const container = document.getElementById(containerId);
+            const improvement = type === 'final' ? finalScore - initialScore : 0;
+            
+            let message = '';
+            let color = '';
+            
+            if (percentage >= 80) {
+                message = 'Excellent work!';
+                color = '#48bb78';
+            } else if (percentage >= 60) {
+                message = 'Good job!';
+                color = '#667eea';
+            } else {
+                message = 'Keep learning!';
+                color = '#f56565';
+            }
+
+            container.innerHTML = `
+                <div class="assessment-result">
+                    <div class="score-circle" style="background: ${color};">
+                        ${percentage}%
+                    </div>
+                    <h3>${message}</h3>
+                    <p>You scored ${score} out of ${total} questions correctly.</p>
+                    ${type === 'final' && improvement > 0 ? 
+                        `<p style="margin-top: 1rem;"><i class="fas fa-chart-line"></i> You improved by ${improvement}% since the initial assessment!</p>` : 
+                        ''
+                    }
+                    ${type === 'initial' ? 
+                        '<p style="margin-top: 1rem;">Now let\'s dive into the concepts! Click Next to continue.</p>' :
+                        '<p style="margin-top: 1rem;">Congratulations on completing the React Fundamentals tutorial!</p>'
+                    }
+                </div>
+            `;
+            container.style.display = 'block';
+        }
+
+        // Tutorial slides
+        let currentSlide = 1;
+        const totalSlides = 8;
+        let viewedSlides = new Set([1]); // First slide is viewed by default
+
+        function initializeSlides() {
+            // Slide navigation buttons
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('#prevSlide, #nextSlide')) {
+                    const isNext = e.target.closest('#nextSlide');
+                    if (isNext) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            });
+
+            // Slide indicators
+            document.querySelectorAll('.slide-dot').forEach(dot => {
+                dot.addEventListener('click', function() {
+                    const slideNum = parseInt(this.dataset.slide);
+                    goToSlide(slideNum);
+                });
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (currentSection === 1) { // Only in tutorial section
+                    if (e.key === 'ArrowLeft') {
+                        prevSlide();
+                    } else if (e.key === 'ArrowRight') {
+                        nextSlide();
+                    }
+                }
+            });
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                goToSlide(currentSlide + 1);
+            } else {
+                // Go to final assessment
+                nextSection();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                goToSlide(currentSlide - 1);
+            }
+        }
+
+        function goToSlide(slideNum) {
+            // Hide current slide
+            document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.remove('active');
+            
+            // Show target slide
+            currentSlide = slideNum;
+            document.querySelector(`.slide[data-slide="${currentSlide}"]`).classList.add('active');
+            
+            // Mark as viewed
+            viewedSlides.add(currentSlide);
+            
+            // Update indicators
+            updateSlideIndicators();
+            
+            // Update navigation buttons
+            updateSlideButtons();
+            
+            // Update progress
+            tutorialProgress = Math.max(tutorialProgress, (viewedSlides.size / totalSlides) * 100);
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateSlideIndicators() {
+            document.querySelectorAll('.slide-dot').forEach(dot => {
+                const slideNum = parseInt(dot.dataset.slide);
+                dot.classList.remove('active', 'completed');
+                
+                if (slideNum === currentSlide) {
+                    dot.classList.add('active');
+                } else if (viewedSlides.has(slideNum)) {
+                    dot.classList.add('completed');
+                }
+            });
+        }
+
+        function updateSlideButtons() {
+            const prevBtn = document.querySelector('#prevSlide');
+            const nextBtn = document.querySelector('#nextSlide');
+            
+            if (prevBtn) prevBtn.disabled = currentSlide === 1;
+            
+            if (nextBtn) {
+                if (currentSlide === totalSlides) {
+                    nextBtn.innerHTML = 'Take Final Assessment <i class="fas fa-graduation-cap"></i>';
+                } else {
+                    nextBtn.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
+                }
+            }
+        }
+
+        // Navigation
+        function initializeNavigation() {
+            document.getElementById('nextBtn').addEventListener('click', nextSection);
+            document.getElementById('prevBtn').addEventListener('click', prevSection);
+        }
+
+        function nextSection() {
+            if (currentSection < sections.length - 1) {
+                // Hide current section
+                document.getElementById(sections[currentSection]).classList.remove('active');
+                
+                // Show next section
+                currentSection++;
+                document.getElementById(sections[currentSection]).classList.add('active');
+                
+                updateNavButtons();
+                updateProgress();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 0) {
+                // Hide current section
+                document.getElementById(sections[currentSection]).classList.remove('active');
+                
+                // Show previous section
+                currentSection--;
+                document.getElementById(sections[currentSection]).classList.add('active');
+                
+                updateNavButtons();
+                updateProgress();
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentSection === 0;
+            
+            if (currentSection === sections.length - 1) {
+                nextBtn.textContent = 'Complete Tutorial';
+                nextBtn.innerHTML = '<i class="fas fa-trophy"></i> Complete Tutorial';
+            } else {
+                nextBtn.innerHTML = 'Next <i class="fas fa-chevron-right"></i>';
+            }
+        }
+
+        function updateProgress() {
+            let progress = 0;
+            let progressText = '';
+            
+            if (currentSection === 0) {
+                progress = initialScore > 0 ? 20 : 0;
+                progressText = initialScore > 0 ? 
+                    `Initial Assessment Complete - ${progress}% Complete` : 
+                    'Ready to start - 0% Complete';
+            } else if (currentSection === 1) {
+                progress = 20 + Math.round((viewedSlides.size / totalSlides) * 60); // 60% for tutorial
+                progressText = `Learning React (Slide ${currentSlide}/${totalSlides}) - ${progress}% Complete`;
+            } else if (currentSection === 2) {
+                progress = finalScore > 0 ? 100 : 80;
+                progressText = finalScore > 0 ? 
+                    'Tutorial Complete - 100%' : 
+                    'Final Assessment - 80% Complete';
+            }
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = progressText;
+        }
+
+        // Interactive demonstrations
+        function demonstrateVirtualDOM() {
+            const demo = document.getElementById('virtualDomDemo');
+            const cartCount = Math.floor(Math.random() * 10) + 1;
+            
+            demo.innerHTML = `
+                <div style="background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                    <p><strong>🎯 Virtual DOM in action:</strong></p>
+                    <p>Cart updated: <span style="color: #61dafb; font-weight: bold;">${cartCount} items</span></p>
+                    <p style="font-size: 0.9rem; color: #666;">
+                        Only the cart counter changed - not the entire page! 
+                        That's the Virtual DOM efficiently updating just what's needed.
+                    </p>
+                </div>
+            `;
+        }
+
+        // Main keyboard navigation (for sections)
+        document.addEventListener('keydown', function(e) {
+            if (currentSection !== 1) { // Not in tutorial section
+                if (e.key === 'ArrowLeft' && currentSection > 0) {
+                    prevSection();
+                } else if (e.key === 'ArrowRight' && currentSection < sections.length - 1) {
+                    nextSection();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
