@@ -964,6 +964,7 @@
             .form-container {
                 margin: 0 1rem;
                 padding: 2rem 1.5rem;
+                border-radius: 15px;
             }
 
             .form-row {
@@ -973,6 +974,24 @@
 
             .form-submit-btn {
                 width: 100%;
+                min-width: unset;
+            }
+            
+            /* Fix form inputs going outside screen */
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                box-sizing: border-box;
+                max-width: 100%;
+            }
+            
+            .contact-form-section {
+                padding: 3rem 0;
+            }
+            
+            .contact-form-section .container {
+                padding: 0 1rem;
             }
         }
 
@@ -1010,6 +1029,63 @@
 
             .testimonials-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            /* Fix section title dot alignment on mobile */
+            .section-title {
+                font-size: 2rem;
+                padding: 0 1rem;
+                text-align: center;
+            }
+            
+            .section-title::after {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 50px;
+            }
+            
+            /* Improve text contrast on mobile */
+            .about-text p,
+            .service-card p,
+            .experience-card p {
+                color: #2d3748;
+                font-weight: 400;
+            }
+            
+            /* Fix testimonial section contrast */
+            .testimonial {
+                background: linear-gradient(135deg, #0A2540 0%, #1A3B5C 100%);
+            }
+            
+            .testimonial-content {
+                background: rgba(255,255,255,0.15);
+                border: 2px solid rgba(255,255,255,0.3);
+            }
+            
+            .testimonial-quote {
+                color: #ffffff;
+                font-weight: 400;
+            }
+            
+            .testimonial-author {
+                color: #ffffff;
+                font-weight: 600;
+            }
+            
+            /* Better spacing on mobile */
+            section {
+                padding: 3rem 0;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            /* Fix card overflow */
+            .experience-card,
+            .service-card {
+                margin: 0;
+                padding: 2rem 1.5rem;
             }
 
             .linkedin-banner-link {
@@ -1414,6 +1490,55 @@
             
             .email-option i {
                 font-size: 1.25rem;
+            }
+        }
+        
+        /* Extra small mobile devices */
+        @media (max-width: 480px) {
+            /* Fix form elements going outside viewport */
+            .form-container {
+                margin: 0 0.5rem;
+                padding: 1.5rem 1rem;
+                border-radius: 10px;
+            }
+            
+            .contact-form-section {
+                padding: 2rem 0;
+            }
+            
+            .container {
+                padding: 0 0.5rem;
+            }
+            
+            /* Fix section titles */
+            .section-title {
+                font-size: 1.8rem;
+                padding: 0 0.5rem;
+            }
+            
+            /* Fix hero section */
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-content .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            /* Fix cards */
+            .experience-card,
+            .service-card {
+                padding: 1.5rem 1rem;
+            }
+            
+            /* Fix testimonial cards */
+            .testimonial-content {
+                padding: 1.5rem;
+            }
+            
+            .testimonials-grid {
+                gap: 2rem;
+                margin: 0;
             }
         }
     </style>
@@ -2121,35 +2246,73 @@ Let's Start Learning Together
             
             // Create clean email body without URL encoding first
             const cleanEmailBody = createCleanEmailBody(formData);
+            const encodedBody = encodeURIComponent(cleanEmailBody);
+            
+            // Detect if user is on mobile device
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             
             let mailtoURL;
             
-            switch(provider) {
-                case 'gmail':
-                    // Gmail needs the body to be URL encoded
-                    const gmailBody = encodeURIComponent(cleanEmailBody);
-                    mailtoURL = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipientEmail}&su=${subject}&body=${gmailBody}`;
-                    break;
-                case 'outlook':
-                    // Outlook needs the body to be URL encoded
-                    const outlookBody = encodeURIComponent(cleanEmailBody);
-                    mailtoURL = `https://outlook.live.com/mail/0/deeplink/compose?to=${recipientEmail}&subject=${subject}&body=${outlookBody}`;
-                    break;
-                case 'yahoo':
-                    // Yahoo needs the body to be URL encoded
-                    const yahooBody = encodeURIComponent(cleanEmailBody);
-                    mailtoURL = `https://compose.mail.yahoo.com/?to=${recipientEmail}&subject=${subject}&body=${yahooBody}`;
-                    break;
-                case 'default':
-                default:
-                    // mailto protocol needs URL encoding
-                    const defaultBody = encodeURIComponent(cleanEmailBody);
-                    mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${defaultBody}`;
-                    break;
+            if (isMobile) {
+                // On mobile, use app-specific URLs or mailto to trigger native apps
+                switch(provider) {
+                    case 'gmail':
+                        // Try Gmail app deep link first, fallback to mailto
+                        mailtoURL = `googlegmail://co?to=${recipientEmail}&subject=${subject}&body=${encodedBody}`;
+                        // Fallback to mailto if Gmail app not installed
+                        setTimeout(() => {
+                            window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
+                        }, 500);
+                        break;
+                    case 'outlook':
+                        // Try Outlook app deep link first, fallback to mailto
+                        mailtoURL = `ms-outlook://compose?to=${recipientEmail}&subject=${subject}&body=${encodedBody}`;
+                        // Fallback to mailto if Outlook app not installed
+                        setTimeout(() => {
+                            window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
+                        }, 500);
+                        break;
+                    case 'yahoo':
+                        // Yahoo doesn't have reliable deep links, use mailto
+                        mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
+                        break;
+                    case 'default':
+                    default:
+                        // Use mailto protocol to open default mail app
+                        mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
+                        break;
+                }
+                
+                // For mobile, use window.location.href instead of window.open
+                try {
+                    window.location.href = mailtoURL;
+                } catch (error) {
+                    // Fallback to mailto if app-specific URL fails
+                    window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
+                }
+                
+            } else {
+                // On desktop, use web URLs
+                switch(provider) {
+                    case 'gmail':
+                        mailtoURL = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipientEmail}&su=${subject}&body=${encodedBody}`;
+                        break;
+                    case 'outlook':
+                        mailtoURL = `https://outlook.live.com/mail/0/deeplink/compose?to=${recipientEmail}&subject=${subject}&body=${encodedBody}`;
+                        break;
+                    case 'yahoo':
+                        mailtoURL = `https://compose.mail.yahoo.com/?to=${recipientEmail}&subject=${subject}&body=${encodedBody}`;
+                        break;
+                    case 'default':
+                    default:
+                        // Use mailto protocol for desktop email clients
+                        mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
+                        break;
+                }
+                
+                // Open email client in new tab/window
+                window.open(mailtoURL, '_blank');
             }
-            
-            // Open email client
-            window.open(mailtoURL, '_blank');
             
             // Close modal and show success message
             closeEmailModal();
@@ -2250,13 +2413,16 @@ ${formData.name}`;
         
         // Show success message
         function showSuccessMessage() {
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            const deviceText = isMobile ? 'Your mail app should have opened' : 'Your email client should have opened';
+            
             const form = document.querySelector('form[name="student-inquiry"]');
             form.innerHTML = `
                 <div style="text-align: center; padding: 3rem;">
                     <div style="font-size: 4rem; color: #00D4AA; margin-bottom: 1rem;">✅</div>
                     <h3 style="color: #0A2540; margin-bottom: 1rem;">Email Ready to Send!</h3>
                     <p style="color: #4a5568; font-size: 1.1rem; margin-bottom: 1.5rem;">
-                        Your email client should have opened with your inquiry pre-filled. 
+                        ${deviceText} with your inquiry pre-filled. 
                         Just review and hit send!
                     </p>
                     <p style="color: #4a5568;">
