@@ -1,0 +1,2473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Fundamentals with ShopSmart - Learn With Khairul</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><linearGradient id=%22grad%22 x1=%220%%22 y1=%220%%22 x2=%22100%%22 y2=%22100%%22><stop offset=%220%%22 style=%22stop-color:%23667eea;stop-opacity:1%22 /><stop offset=%22100%%22 style=%22stop-color:%23764ba2;stop-opacity:1%22 /></linearGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22url(%23grad)%22/><text x=%2250%22 y=%2260%22 font-family=%22Arial,sans-serif%22 font-size=%2240%22 font-weight=%22bold%22 text-anchor=%22middle%22 fill=%22white%22>LK</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Header */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo i {
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white !important;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #61dafb 0%, #21d4fd 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title i {
+            color: #61dafb;
+            font-size: 2rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .text-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+
+        .text-content strong {
+            color: #2d3748;
+        }
+
+        /* Code Blocks */
+        .code-example {
+            margin: 1.5rem 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .code-header {
+            background: #2d3748;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-file-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .code-file-name i {
+            color: #61dafb;
+        }
+
+        pre {
+            margin: 0 !important;
+            border-radius: 0 !important;
+            background: #1e1e1e !important;
+        }
+
+        pre code {
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .info-box-blue {
+            background: #e6f3ff;
+            border-color: #61dafb;
+        }
+
+        .info-box-green {
+            background: #e6ffe6;
+            border-color: #48bb78;
+        }
+
+        .info-box-yellow {
+            background: #fff9e6;
+            border-color: #f6ad55;
+        }
+
+        .info-box-purple {
+            background: #f3e8ff;
+            border-color: #9f7aea;
+        }
+
+        .info-box h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-box-blue h4 { color: #0077cc; }
+        .info-box-green h4 { color: #2d7a3e; }
+        .info-box-yellow h4 { color: #c05621; }
+        .info-box-purple h4 { color: #6b46c1; }
+
+        .info-box p {
+            line-height: 1.6;
+            color: #2d3748;
+        }
+
+        .info-box ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .info-box li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+            color: #2d3748;
+        }
+
+        /* Visual Diagram */
+        .diagram {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .diagram-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .flow-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .flow-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            min-width: 150px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: #667eea;
+        }
+
+        /* Key Concepts */
+        .key-concepts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .concept-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .concept-card h4 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .concept-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            background: white;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* File Structure Tree */
+        .file-tree {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'Courier New', monospace;
+            margin: 1.5rem 0;
+        }
+
+        .file-tree-item {
+            padding: 0.25rem 0;
+            color: #2d3748;
+        }
+
+        .file-tree-item i {
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+
+        .folder { color: #f6ad55; }
+        .file-tsx { color: #61dafb; }
+        .file-ts { color: #007acc; }
+        .file-css { color: #9f7aea; }
+
+        /* Interactive Elements */
+        .interactive-demo {
+            background: linear-gradient(135deg, #e6f3ff 0%, #f0e6ff 100%);
+            border: 2px solid #61dafb;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .demo-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-title i {
+            color: #61dafb;
+        }
+
+        /* Footer */
+        .page-footer {
+            background: #2d3748;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            .flow-diagram {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Quiz Styles */
+        .quiz-container {
+            margin: 2rem 0;
+        }
+
+        .quiz-question {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quiz-option {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.05rem;
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: #eef2ff;
+            transform: translateX(5px);
+        }
+
+        .quiz-option.selected {
+            border-color: #667eea;
+            background: #eef2ff;
+            font-weight: 600;
+        }
+
+        .quiz-option.correct {
+            border-color: #48bb78;
+            background: #e6ffe6;
+            color: #2d7a3e;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #f56565;
+            background: #ffe6e6;
+            color: #c53030;
+        }
+
+        .quiz-option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .option-feedback {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .submit-quiz-btn, .start-learning-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .submit-quiz-btn:hover, .start-learning-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-quiz-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .quiz-results {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            margin-top: 2rem;
+        }
+
+        .quiz-results h3 {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .result-message {
+            font-size: 1.3rem;
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .explanation {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-question {
+                padding: 1.5rem;
+            }
+
+            .question-text {
+                font-size: 1.1rem;
+            }
+
+            .quiz-option {
+                padding: 0.875rem 1.25rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                Learn With Khairul
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="learning-materials.html" class="nav-link back-button">
+                    <i class="fas fa-arrow-left"></i> Back to Materials
+                </a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1><i class="fab fa-react"></i> React Fundamentals with ShopSmart</h1>
+            <p>Learn React by exploring a real e-commerce application - hands-on tutorial with code examples</p>
+        </div>
+    </header>
+
+    <!-- Pre-Assessment Quiz -->
+    <section class="container" style="margin-top: 2rem;">
+        <div class="content-section" style="background: linear-gradient(135deg, #fff5e6 0%, #ffe6f0 100%); border: 3px solid #f6ad55;">
+            <h2 class="section-title" style="color: #c05621;">
+                <i class="fas fa-clipboard-check"></i>
+                Pre-Assessment Quiz
+            </h2>
+            
+            <p class="text-content">
+                Before we begin, let's assess your current knowledge of React! This will help you understand how much you'll learn from this tutorial. 
+                Don't worry if you don't know the answers - that's what we're here to learn!
+            </p>
+
+            <div id="pre-quiz" class="quiz-container">
+                <!-- Questions will be inserted here by JavaScript -->
+            </div>
+
+            <div id="pre-results" class="quiz-results" style="display: none;">
+                <h3>Pre-Assessment Results</h3>
+                <p class="result-score"></p>
+                <p class="result-message"></p>
+                <button class="start-learning-btn" onclick="scrollToContent()">
+                    <i class="fas fa-rocket"></i> Start Learning!
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container" id="main-content">
+        
+        <!-- Section 1: Introduction to React -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fab fa-react"></i>
+                What is React?
+            </h2>
+            
+            <p class="text-content">
+                <strong>React</strong> is a JavaScript library for building user interfaces, especially single-page applications. 
+                It was developed by Facebook and is now one of the most popular frontend frameworks.
+            </p>
+
+            <div class="info-box info-box-blue">
+                <h4><i class="fas fa-lightbulb"></i> Why React?</h4>
+                <ul>
+                    <li><strong>Component-Based:</strong> Build encapsulated components that manage their own state</li>
+                    <li><strong>Declarative:</strong> Makes your code more predictable and easier to debug</li>
+                    <li><strong>Learn Once, Write Anywhere:</strong> Can be used for web, mobile (React Native), and desktop apps</li>
+                    <li><strong>Large Ecosystem:</strong> Tons of libraries, tools, and community support</li>
+                </ul>
+            </div>
+
+            <h3 class="section-subtitle">Key Concepts Overview</h3>
+            
+            <div class="key-concepts">
+                <div class="concept-card">
+                    <h4><i class="fas fa-puzzle-piece"></i> Components</h4>
+                    <p>Reusable building blocks of your UI. Like LEGO pieces that you combine to build your application.</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-database"></i> State</h4>
+                    <p>Data that can change over time. When state changes, React re-renders the component.</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-arrows-alt-h"></i> Props</h4>
+                    <p>Properties passed from parent to child components. Think of them as function arguments.</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-magic"></i> Hooks</h4>
+                    <p>Special functions that let you use state and other React features in functional components.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Project Structure -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-folder-tree"></i>
+                ShopSmart Project Structure
+            </h2>
+
+            <p class="text-content">
+                Let's look at how a real React application is organized. Understanding the structure helps you navigate and build applications.
+            </p>
+
+            <div class="file-tree">
+                <div class="file-tree-item"><i class="fas fa-folder folder"></i> src/</div>
+                <div class="file-tree-item" style="margin-left: 20px;"><i class="fas fa-file-code file-tsx"></i> main.tsx - Entry point</div>
+                <div class="file-tree-item" style="margin-left: 20px;"><i class="fas fa-file-code file-tsx"></i> App.tsx - Main app component</div>
+                <div class="file-tree-item" style="margin-left: 20px;"><i class="fas fa-folder folder"></i> components/</div>
+                <div class="file-tree-item" style="margin-left: 40px;"><i class="fas fa-file-code file-tsx"></i> Header.tsx</div>
+                <div class="file-tree-item" style="margin-left: 40px;"><i class="fas fa-file-code file-tsx"></i> Footer.tsx</div>
+                <div class="file-tree-item" style="margin-left: 20px;"><i class="fas fa-folder folder"></i> pages/</div>
+                <div class="file-tree-item" style="margin-left: 40px;"><i class="fas fa-file-code file-tsx"></i> HomePage.tsx</div>
+                <div class="file-tree-item" style="margin-left: 40px;"><i class="fas fa-file-code file-tsx"></i> ProductCatalog.tsx</div>
+                <div class="file-tree-item" style="margin-left: 20px;"><i class="fas fa-folder folder"></i> context/</div>
+                <div class="file-tree-item" style="margin-left: 40px;"><i class="fas fa-file-code file-tsx"></i> CartContext.tsx</div>
+                <div class="file-tree-item" style="margin-left: 40px;"><i class="fas fa-file-code file-tsx"></i> CustomerContext.tsx</div>
+                <div class="file-tree-item" style="margin-left: 20px;"><i class="fas fa-folder folder"></i> services/</div>
+                <div class="file-tree-item" style="margin-left: 40px;"><i class="fas fa-file-code file-ts"></i> api.ts - API calls</div>
+                <div class="file-tree-item" style="margin-left: 20px;"><i class="fas fa-folder folder"></i> types/</div>
+                <div class="file-tree-item" style="margin-left: 40px;"><i class="fas fa-file-code file-ts"></i> index.ts - TypeScript types</div>
+            </div>
+
+            <div class="info-box info-box-green">
+                <h4><i class="fas fa-check-circle"></i> Folder Organization</h4>
+                <p>
+                    <strong>components/</strong> - Reusable UI components<br>
+                    <strong>pages/</strong> - Full page components (one per route)<br>
+                    <strong>context/</strong> - Global state management<br>
+                    <strong>services/</strong> - API calls and external services<br>
+                    <strong>types/</strong> - TypeScript type definitions
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Components -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-puzzle-piece"></i>
+                React Components
+            </h2>
+
+            <p class="text-content">
+                Components are the building blocks of React applications. Every piece of UI is a component - 
+                from a simple button to a complex form or an entire page.
+            </p>
+
+            <h3 class="section-subtitle">What is a Component?</h3>
+            
+            <div class="diagram">
+                <div class="diagram-title">Component Hierarchy in ShopSmart</div>
+                <div class="flow-diagram">
+                    <div class="flow-box">App</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Header</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">HomePage</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">ProductCard</div>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Functional Components</h3>
+            
+            <p class="text-content">
+                Modern React uses <strong>functional components</strong>. They are JavaScript functions that return JSX (React's syntax for describing UI).
+            </p>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        Basic Component Example
+                    </span>
+                </div>
+                <pre><code class="language-tsx">// Simple functional component
+import React from 'react'
+
+const Welcome: React.FC = () => {
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;Welcome to ShopSmart!&lt;/h1&gt;
+      &lt;p&gt;Start shopping for amazing products&lt;/p&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default Welcome</code></pre>
+            </div>
+
+            <div class="info-box info-box-blue">
+                <h4><i class="fas fa-info-circle"></i> Component Breakdown</h4>
+                <ul>
+                    <li><code>React.FC</code> - TypeScript type for Functional Component</li>
+                    <li><code>return</code> - Returns JSX (what to display)</li>
+                    <li><code>export default</code> - Makes component available to other files</li>
+                </ul>
+            </div>
+
+            <h3 class="section-subtitle">Real Example from ShopSmart</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/pages/HomePage.tsx (simplified)
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Button, Typography, Box } from '@mui/material'
+
+const HomePage: React.FC = () => {
+  const navigate = useNavigate()
+
+  return (
+    &lt;Box&gt;
+      {/* Hero Section */}
+      &lt;Box sx={{ textAlign: 'center', py: 8 }}&gt;
+        &lt;Typography variant="h2" gutterBottom&gt;
+          Welcome to ShopSmart
+        &lt;/Typography&gt;
+        &lt;Typography variant="h5" sx={{ mb: 4 }}&gt;
+          Discover amazing products at unbeatable prices
+        &lt;/Typography&gt;
+        &lt;Button
+          variant="contained"
+          size="large"
+          onClick={() => navigate('/products')}
+        &gt;
+          Shop Now
+        &lt;/Button&gt;
+      &lt;/Box&gt;
+    &lt;/Box&gt;
+  )
+}
+
+export default HomePage</code></pre>
+            </div>
+
+            <div class="info-box info-box-yellow">
+                <h4><i class="fas fa-star"></i> Key Points</h4>
+                <ul>
+                    <li>Components import what they need (React, hooks, UI libraries)</li>
+                    <li>JSX looks like HTML but it's actually JavaScript</li>
+                    <li><code>onClick</code>, <code>sx</code> are props passed to components</li>
+                    <li>Components can use hooks like <code>useNavigate()</code></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 4: JSX -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i>
+                JSX - JavaScript XML
+            </h2>
+
+            <p class="text-content">
+                JSX is a syntax extension for JavaScript. It looks like HTML but has the power of JavaScript. 
+                React uses JSX to describe what the UI should look like.
+            </p>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        JSX Examples
+                    </span>
+                </div>
+                <pre><code class="language-tsx">// ✅ JSX allows you to embed JavaScript expressions
+const price = 29.99
+const element = &lt;h2&gt;Price: ${price.toFixed(2)}&lt;/h2&gt;
+
+// ✅ You can use JavaScript logic
+const isInStock = true
+const statusElement = &lt;p&gt;{isInStock ? 'In Stock' : 'Out of Stock'}&lt;/p&gt;
+
+// ✅ You can map arrays to create lists
+const products = ['Laptop', 'Phone', 'Tablet']
+const listElement = (
+  &lt;ul&gt;
+    {products.map((product, index) =&gt; (
+      &lt;li key={index}&gt;{product}&lt;/li&gt;
+    ))}
+  &lt;/ul&gt;
+)
+
+// ✅ JSX attributes use camelCase
+const styledDiv = (
+  &lt;div 
+    className="container"
+    onClick={handleClick}
+    style={{ backgroundColor: 'blue', fontSize: '16px' }}
+  &gt;
+    Click me
+  &lt;/div&gt;
+)</code></pre>
+            </div>
+
+            <div class="info-box info-box-purple">
+                <h4><i class="fas fa-exclamation-triangle"></i> JSX Rules</h4>
+                <ul>
+                    <li>Use <code>className</code> instead of <code>class</code></li>
+                    <li>Use <code>htmlFor</code> instead of <code>for</code></li>
+                    <li>All tags must be closed: <code>&lt;img /&gt;</code> or <code>&lt;br /&gt;</code></li>
+                    <li>Wrap JavaScript expressions in curly braces <code>{}</code></li>
+                    <li>Return one parent element (or use Fragment <code>&lt;&gt;&lt;/&gt;</code>)</li>
+                </ul>
+            </div>
+
+            <h3 class="section-subtitle">JSX in ShopSmart</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        ProductCard rendering with JSX
+                    </span>
+                </div>
+                <pre><code class="language-tsx">// From HomePage.tsx - Displaying products dynamically
+{featuredProducts.map((product) => (
+  &lt;Grid item xs={12} sm={6} md={4} key={product.id}&gt;
+    &lt;Card&gt;
+      &lt;CardMedia
+        component="div"
+        sx={{ height: 200 }}
+      &gt;
+        {product.imageUrl ? (
+          &lt;img src={product.imageUrl} alt={product.name} /&gt;
+        ) : (
+          &lt;ShoppingCart sx={{ fontSize: 60 }} /&gt;
+        )}
+      &lt;/CardMedia&gt;
+      &lt;CardContent&gt;
+        &lt;Typography variant="h6"&gt;
+          {product.name}
+        &lt;/Typography&gt;
+        &lt;Typography variant="h6" color="primary"&gt;
+          ${product.price.toFixed(2)}
+        &lt;/Typography&gt;
+      &lt;/CardContent&gt;
+      &lt;CardActions&gt;
+        &lt;Button
+          onClick={() => handleAddToCart(product.id)}
+          disabled={!product.isInStock}
+        &gt;
+          {product.isInStock ? 'Add to Cart' : 'Out of Stock'}
+        &lt;/Button&gt;
+      &lt;/CardActions&gt;
+    &lt;/Card&gt;
+  &lt;/Grid&gt;
+))}</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 5: Props -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-arrows-alt-h"></i>
+                Props - Passing Data Between Components
+            </h2>
+
+            <p class="text-content">
+                Props (properties) are how we pass data from parent components to child components. 
+                Think of them like function parameters - you pass information in, and the component uses it.
+            </p>
+
+            <div class="diagram">
+                <div class="diagram-title">Props Flow (Parent → Child)</div>
+                <div class="flow-diagram">
+                    <div class="flow-box">Parent<br/>has data</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Pass as<br/>props</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Child<br/>uses data</div>
+                </div>
+            </div>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        Props Example
+                    </span>
+                </div>
+                <pre><code class="language-tsx">// Child Component (receives props)
+interface ProductCardProps {
+  name: string
+  price: number
+  imageUrl?: string
+  onAddToCart: () => void
+}
+
+const ProductCard: React.FC&lt;ProductCardProps&gt; = ({ 
+  name, 
+  price, 
+  imageUrl,
+  onAddToCart 
+}) => {
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;{name}&lt;/h3&gt;
+      &lt;p&gt;${price.toFixed(2)}&lt;/p&gt;
+      {imageUrl && &lt;img src={imageUrl} alt={name} /&gt;}
+      &lt;button onClick={onAddToCart}&gt;Add to Cart&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+// Parent Component (passes props)
+const ProductList: React.FC = () => {
+  const handleAdd = () => console.log('Added!')
+  
+  return (
+    &lt;div&gt;
+      &lt;ProductCard
+        name="Laptop"
+        price={999.99}
+        imageUrl="/laptop.jpg"
+        onAddToCart={handleAdd}
+      /&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+            </div>
+
+            <div class="info-box info-box-green">
+                <h4><i class="fas fa-check-circle"></i> Props Best Practices</h4>
+                <ul>
+                    <li><strong>Props are Read-Only:</strong> Never modify props inside a component</li>
+                    <li><strong>Use TypeScript Interfaces:</strong> Define prop types for better code quality</li>
+                    <li><strong>Destructure Props:</strong> <code>({ name, price })</code> is cleaner than <code>(props)</code></li>
+                    <li><strong>Optional Props:</strong> Use <code>?</code> for optional props like <code>imageUrl?:</code></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 6: State -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-database"></i>
+                State - Managing Dynamic Data
+            </h2>
+
+            <p class="text-content">
+                State is data that can change over time. When state changes, React automatically re-renders the component 
+                to reflect those changes. This is what makes React "reactive"!
+            </p>
+
+            <h3 class="section-subtitle">useState Hook</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        useState Basics
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import React, { useState } from 'react'
+
+const Counter: React.FC = () => {
+  // Declare state variable
+  // [currentValue, functionToUpdateValue] = useState(initialValue)
+  const [count, setCount] = useState(0)
+
+  const increment = () => {
+    setCount(count + 1)  // Update state
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;p&gt;Count: {count}&lt;/p&gt;
+      &lt;button onClick={increment}&gt;Increment&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+            </div>
+
+            <h3 class="section-subtitle">Real Example from ShopSmart Header</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/components/layout/Header.tsx
+                    </span>
+                </div>
+                <pre><code class="language-tsx">const Header: React.FC = () => {
+  // State for menu anchor element
+  const [anchorEl, setAnchorEl] = useState&lt;null | HTMLElement&gt;(null)
+  
+  // State for mobile menu
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  
+  // State for search input
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const handleProfileMenuOpen = (event: React.MouseEvent&lt;HTMLElement&gt;) => {
+    setAnchorEl(event.currentTarget)  // Open menu
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)  // Close menu
+  }
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen)  // Toggle menu
+  }
+
+  return (
+    &lt;AppBar&gt;
+      &lt;Toolbar&gt;
+        {/* Search input controlled by state */}
+        &lt;InputBase
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search products..."
+        /&gt;
+        
+        {/* Profile menu */}
+        &lt;IconButton onClick={handleProfileMenuOpen}&gt;
+          &lt;AccountCircle /&gt;
+        &lt;/IconButton&gt;
+        
+        &lt;Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        &gt;
+          &lt;MenuItem&gt;Profile&lt;/MenuItem&gt;
+          &lt;MenuItem&gt;Logout&lt;/MenuItem&gt;
+        &lt;/Menu&gt;
+      &lt;/Toolbar&gt;
+    &lt;/AppBar&gt;
+  )
+}</code></pre>
+            </div>
+
+            <div class="info-box info-box-blue">
+                <h4><i class="fas fa-lightbulb"></i> Understanding State</h4>
+                <ul>
+                    <li><strong>When to use state:</strong> Data that changes (user input, toggles, counters, etc.)</li>
+                    <li><strong>State is local:</strong> Each component has its own state</li>
+                    <li><strong>State triggers re-render:</strong> When state changes, component re-renders</li>
+                    <li><strong>Multiple states:</strong> You can have many useState hooks in one component</li>
+                </ul>
+            </div>
+
+            <h3 class="section-subtitle">Different Types of State</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        Various useState Examples
+                    </span>
+                </div>
+                <pre><code class="language-tsx">// Boolean state
+const [isLoading, setIsLoading] = useState(false)
+
+// Number state
+const [count, setCount] = useState(0)
+
+// String state
+const [username, setUsername] = useState('')
+
+// Array state
+const [items, setItems] = useState&lt;string[]&gt;([])
+
+// Object state
+const [user, setUser] = useState({ name: '', email: '' })
+
+// Updating different types
+setIsLoading(true)
+setCount(count + 1)
+setUsername('John')
+setItems([...items, 'new item'])  // Add to array
+setUser({ ...user, name: 'Jane' })  // Update object property</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 7: Hooks -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-magic"></i>
+                React Hooks - Superpowers for Components
+            </h2>
+
+            <p class="text-content">
+                Hooks are special functions that let you "hook into" React features. They let you use state 
+                and other React features without writing a class component.
+            </p>
+
+            <h3 class="section-subtitle">Essential Hooks</h3>
+
+            <div class="key-concepts">
+                <div class="concept-card">
+                    <h4><i class="fas fa-database"></i> useState</h4>
+                    <p>Manage component state. We just learned this one!</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-sync"></i> useEffect</h4>
+                    <p>Perform side effects (API calls, subscriptions, timers)</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-share-alt"></i> useContext</h4>
+                    <p>Access context values (global state)</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-route"></i> useNavigate</h4>
+                    <p>Navigate between pages programmatically</p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">useEffect - Side Effects</h3>
+
+            <p class="text-content">
+                useEffect runs code after the component renders. Perfect for fetching data, setting up subscriptions, 
+                or manually changing the DOM.
+            </p>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        useEffect Syntax
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import React, { useState, useEffect } from 'react'
+
+const DataFetcher: React.FC = () => {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  // useEffect(function, dependencies)
+  useEffect(() => {
+    // This runs after component mounts
+    fetchData()
+      .then(result => setData(result))
+      .finally(() => setLoading(false))
+    
+    // Optional cleanup function (runs before unmounting)
+    return () => {
+      // Cleanup code here
+    }
+  }, [])  // Empty array = run once on mount
+
+  if (loading) return &lt;p&gt;Loading...&lt;/p&gt;
+  return &lt;p&gt;Data: {data}&lt;/p&gt;
+}</code></pre>
+            </div>
+
+            <h3 class="section-subtitle">Real Example from ShopSmart CartContext</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/context/CartContext.tsx
+                    </span>
+                </div>
+                <pre><code class="language-tsx">export const CartProvider: React.FC&lt;{ children: React.ReactNode }&gt; = ({ children }) => {
+  const [state, dispatch] = useReducer(cartReducer, initialState)
+
+  // Load cart from localStorage when component mounts
+  useEffect(() => {
+    try {
+      const savedCart = localStorage.getItem(CART_STORAGE_KEY)
+      if (savedCart) {
+        const parsedCart = JSON.parse(savedCart)
+        dispatch({ type: 'LOAD_CART', payload: parsedCart })
+      }
+    } catch (error) {
+      console.error('Error loading cart:', error)
+    }
+  }, [])  // Run once on mount
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(state.items))
+    } catch (error) {
+      console.error('Error saving cart:', error)
+    }
+  }, [state.items])  // Run whenever state.items changes
+
+  return &lt;CartContext.Provider value={contextValue}&gt;{children}&lt;/CartContext.Provider&gt;
+}</code></pre>
+            </div>
+
+            <div class="info-box info-box-yellow">
+                <h4><i class="fas fa-exclamation-circle"></i> useEffect Dependencies</h4>
+                <ul>
+                    <li><code>useEffect(() => {}, [])</code> - Runs once on mount</li>
+                    <li><code>useEffect(() => {}, [state])</code> - Runs when state changes</li>
+                    <li><code>useEffect(() => {})</code> - Runs after every render (usually avoid this!)</li>
+                </ul>
+            </div>
+
+            <h3 class="section-subtitle">Other Common Hooks in ShopSmart</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        Various Hooks Examples
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import { useNavigate, useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
+import { useCart } from '../context/CartContext'
+
+const ProductDetails: React.FC = () => {
+  // Get URL parameters
+  const { id } = useParams&lt;{ id: string }&gt;()
+  
+  // Navigation hook
+  const navigate = useNavigate()
+  
+  // Custom hook from context
+  const { addItem } = useCart()
+  
+  // Data fetching hook (from react-query)
+  const { data: product, isLoading } = useQuery(
+    ['product', id],
+    () => productApi.getProduct(Number(id))
+  )
+
+  const handleAddToCart = () => {
+    if (product) {
+      addItem(product, 1)
+      navigate('/cart')  // Navigate to cart page
+    }
+  }
+
+  if (isLoading) return &lt;p&gt;Loading...&lt;/p&gt;
+  
+  return (
+    &lt;div&gt;
+      &lt;h1&gt;{product.name}&lt;/h1&gt;
+      &lt;button onClick={handleAddToCart}&gt;Add to Cart&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 8: Context API -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-share-alt-square"></i>
+                Context API - Global State Management
+            </h2>
+
+            <p class="text-content">
+                Context provides a way to pass data through the component tree without having to pass props down manually 
+                at every level. Perfect for global data like user info, shopping cart, themes, etc.
+            </p>
+
+            <div class="diagram">
+                <div class="diagram-title">Without Context (Prop Drilling)</div>
+                <div class="flow-diagram">
+                    <div class="flow-box">App<br/>(has data)</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Page<br/>(passes props)</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Layout<br/>(passes props)</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Component<br/>(uses data)</div>
+                </div>
+            </div>
+
+            <div class="diagram">
+                <div class="diagram-title">With Context (Direct Access)</div>
+                <div class="flow-diagram">
+                    <div class="flow-box">Context<br/>(global data)</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Any Component<br/>(direct access)</div>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Creating Context - CartContext Example</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/context/CartContext.tsx (simplified)
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import React, { createContext, useContext, useReducer } from 'react'
+
+// 1. Define the shape of your context
+interface CartContextType {
+  items: CartItemWithProduct[]
+  totalItems: number
+  totalAmount: number
+  addItem: (product: Product, quantity?: number) => void
+  removeItem: (productId: number) => void
+  clearCart: () => void
+}
+
+// 2. Create the context
+const CartContext = createContext&lt;CartContextType | undefined&gt;(undefined)
+
+// 3. Create the provider component
+export const CartProvider: React.FC&lt;{ children: React.ReactNode }&gt; = ({ children }) => {
+  const [state, dispatch] = useReducer(cartReducer, initialState)
+
+  const addItem = (product: Product, quantity: number = 1) => {
+    dispatch({ type: 'ADD_ITEM', payload: { product, quantity } })
+  }
+
+  const removeItem = (productId: number) => {
+    dispatch({ type: 'REMOVE_ITEM', payload: { productId } })
+  }
+
+  const clearCart = () => {
+    dispatch({ type: 'CLEAR_CART' })
+  }
+
+  const contextValue: CartContextType = {
+    ...state,
+    addItem,
+    removeItem,
+    clearCart,
+  }
+
+  return &lt;CartContext.Provider value={contextValue}&gt;{children}&lt;/CartContext.Provider&gt;
+}
+
+// 4. Create custom hook for easy access
+export const useCart = (): CartContextType => {
+  const context = useContext(CartContext)
+  if (context === undefined) {
+    throw new Error('useCart must be used within a CartProvider')
+  }
+  return context
+}</code></pre>
+            </div>
+
+            <h3 class="section-subtitle">Using Context in App</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/App.tsx
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import { CartProvider } from './context/CartContext'
+import { CustomerProvider } from './context/CustomerContext'
+
+function App() {
+  return (
+    // Wrap app with providers
+    &lt;CustomerProvider&gt;
+      &lt;CartProvider&gt;
+        &lt;Box&gt;
+          &lt;Header /&gt;
+          &lt;Routes&gt;
+            &lt;Route path="/" element={&lt;HomePage /&gt;} /&gt;
+            &lt;Route path="/cart" element={&lt;ShoppingCart /&gt;} /&gt;
+            {/* ... other routes */}
+          &lt;/Routes&gt;
+          &lt;Footer /&gt;
+        &lt;/Box&gt;
+      &lt;/CartProvider&gt;
+    &lt;/CustomerProvider&gt;
+  )
+}</code></pre>
+            </div>
+
+            <h3 class="section-subtitle">Using Context in Components</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        Using useCart hook in any component
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import { useCart } from '../context/CartContext'
+
+const ProductCard: React.FC = () => {
+  // Access cart from anywhere!
+  const { addItem, totalItems } = useCart()
+
+  const handleAddToCart = () => {
+    const product = { id: 1, name: 'Laptop', price: 999 }
+    addItem(product, 1)
+    console.log(`Cart now has ${totalItems} items`)
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;button onClick={handleAddToCart}&gt;Add to Cart&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+// In Header component
+const Header: React.FC = () => {
+  const { totalItems } = useCart()  // Same context, different component!
+  
+  return (
+    &lt;AppBar&gt;
+      &lt;Badge badgeContent={totalItems}&gt;
+        &lt;ShoppingCart /&gt;
+      &lt;/Badge&gt;
+    &lt;/AppBar&gt;
+  )
+}</code></pre>
+            </div>
+
+            <div class="info-box info-box-green">
+                <h4><i class="fas fa-check-circle"></i> When to Use Context</h4>
+                <ul>
+                    <li><strong>User authentication state</strong> - Currently logged in user</li>
+                    <li><strong>Shopping cart</strong> - Cart items accessible everywhere</li>
+                    <li><strong>Theme/Dark mode</strong> - UI preferences</li>
+                    <li><strong>Language/Localization</strong> - App language settings</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 9: API Integration -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-cloud"></i>
+                API Integration - Fetching Data
+            </h2>
+
+            <p class="text-content">
+                Most React apps need to fetch data from a backend API. ShopSmart uses <strong>Axios</strong> for HTTP requests 
+                and <strong>React Query</strong> for data fetching and caching.
+            </p>
+
+            <h3 class="section-subtitle">API Service Layer</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/services/api.ts
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import axios from 'axios'
+import { Product, Category, Order } from '../types'
+
+// Create axios instance
+const api = axios.create({
+  baseURL: '/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// Product API methods
+export const productApi = {
+  // GET /api/product
+  getProducts: async (filters?: ProductFilters): Promise&lt;Product[]&gt; => {
+    const response = await api.get&lt;Product[]&gt;('/product', { params: filters })
+    return response.data
+  },
+
+  // GET /api/product/{id}
+  getProduct: async (id: number): Promise&lt;Product&gt; => {
+    const response = await api.get&lt;Product&gt;(`/product/${id}`)
+    return response.data
+  },
+
+  // POST /api/product
+  createProduct: async (product: Omit&lt;Product, 'id'&gt;): Promise&lt;Product&gt; => {
+    const response = await api.post&lt;Product&gt;('/product', product)
+    return response.data
+  },
+
+  // PUT /api/product/{id}
+  updateProduct: async (id: number, product: Partial&lt;Product&gt;): Promise&lt;Product&gt; => {
+    const response = await api.put&lt;Product&gt;(`/product/${id}`, product)
+    return response.data
+  },
+
+  // DELETE /api/product/{id}
+  deleteProduct: async (id: number): Promise&lt;void&gt; => {
+    await api.delete(`/product/${id}`)
+  },
+}
+
+// Category API methods
+export const categoryApi = {
+  getCategories: async (): Promise&lt;Category[]&gt; => {
+    const response = await api.get&lt;Category[]&gt;('/category')
+    return response.data
+  },
+  // ... other methods
+}</code></pre>
+            </div>
+
+            <h3 class="section-subtitle">Using React Query for Data Fetching</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/pages/HomePage.tsx
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import { useQuery } from 'react-query'
+import { productApi, categoryApi } from '../services/api'
+
+const HomePage: React.FC = () => {
+  // Fetch featured products
+  const { data: featuredProducts = [], isLoading: productsLoading } = useQuery(
+    'featured-products',           // Query key (for caching)
+    () => productApi.getProducts({ inStockOnly: true }),  // Query function
+    {
+      select: (data) => data.slice(0, 6),  // Transform data
+    }
+  )
+
+  // Fetch categories
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery(
+    'categories',
+    categoryApi.getCategories
+  )
+
+  if (productsLoading || categoriesLoading) {
+    return &lt;CircularProgress /&gt;
+  }
+
+  return (
+    &lt;Box&gt;
+      {/* Display featured products */}
+      &lt;Grid container spacing={3}&gt;
+        {featuredProducts.map((product) => (
+          &lt;Grid item xs={12} sm={6} md={4} key={product.id}&gt;
+            &lt;ProductCard product={product} /&gt;
+          &lt;/Grid&gt;
+        ))}
+      &lt;/Grid&gt;
+
+      {/* Display categories */}
+      {categories.map((category) => (
+        &lt;CategoryCard key={category.id} category={category} /&gt;
+      ))}
+    &lt;/Box&gt;
+  )
+}</code></pre>
+            </div>
+
+            <div class="info-box info-box-blue">
+                <h4><i class="fas fa-info-circle"></i> React Query Benefits</h4>
+                <ul>
+                    <li><strong>Automatic caching:</strong> Fetched data is cached and reused</li>
+                    <li><strong>Loading states:</strong> <code>isLoading</code>, <code>isError</code> states built-in</li>
+                    <li><strong>Refetching:</strong> Automatic refetch on window focus or reconnection</li>
+                    <li><strong>Mutations:</strong> Easy handling of POST/PUT/DELETE operations</li>
+                </ul>
+            </div>
+
+            <h3 class="section-subtitle">Data Flow Diagram</h3>
+
+            <div class="diagram">
+                <div class="diagram-title">Data Fetching Flow</div>
+                <div class="flow-diagram">
+                    <div class="flow-box">Component<br/>Renders</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">useQuery<br/>Called</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">API<br/>Request</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Data<br/>Received</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Component<br/>Re-renders</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 10: Routing -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-route"></i>
+                React Router - Navigation
+            </h2>
+
+            <p class="text-content">
+                React Router enables navigation between different pages in your single-page application (SPA). 
+                It changes the URL and displays different components without a full page reload.
+            </p>
+
+            <h3 class="section-subtitle">Setting Up Routes</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/App.tsx
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import { Routes, Route } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import ProductCatalog from './pages/ProductCatalog'
+import ProductDetails from './pages/ProductDetails'
+import ShoppingCart from './pages/ShoppingCart'
+
+function App() {
+  return (
+    &lt;Box&gt;
+      &lt;Header /&gt;
+      
+      &lt;Routes&gt;
+        {/* Public Routes */}
+        &lt;Route path="/" element={&lt;HomePage /&gt;} /&gt;
+        &lt;Route path="/products" element={&lt;ProductCatalog /&gt;} /&gt;
+        &lt;Route path="/products/:id" element={&lt;ProductDetails /&gt;} /&gt;
+        &lt;Route path="/category/:categoryId" element={&lt;CategoryPage /&gt;} /&gt;
+        &lt;Route path="/cart" element={&lt;ShoppingCart /&gt;} /&gt;
+        
+        {/* Customer Routes */}
+        &lt;Route path="/profile" element={&lt;CustomerProfile /&gt;} /&gt;
+        &lt;Route path="/orders" element={&lt;OrderHistory /&gt;} /&gt;
+        &lt;Route path="/orders/:id" element={&lt;OrderDetails /&gt;} /&gt;
+        
+        {/* Admin Routes */}
+        &lt;Route path="/admin" element={&lt;AdminDashboard /&gt;} /&gt;
+        &lt;Route path="/admin/products" element={&lt;AdminProducts /&gt;} /&gt;
+      &lt;/Routes&gt;
+      
+      &lt;Footer /&gt;
+    &lt;/Box&gt;
+  )
+}</code></pre>
+            </div>
+
+            <h3 class="section-subtitle">Navigation Methods</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        Different ways to navigate
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import { Link, useNavigate, useParams } from 'react-router-dom'
+
+const NavigationExamples: React.FC = () => {
+  const navigate = useNavigate()
+  const { id } = useParams&lt;{ id: string }&gt;()
+
+  // Method 1: Link component (like &lt;a&gt; tag)
+  const linkExample = (
+    &lt;Link to="/products"&gt;View Products&lt;/Link&gt;
+  )
+
+  // Method 2: Programmatic navigation
+  const handleButtonClick = () => {
+    navigate('/cart')  // Navigate to cart
+  }
+
+  // Method 3: Navigate with parameters
+  const viewProduct = (productId: number) => {
+    navigate(`/products/${productId}`)
+  }
+
+  // Method 4: Navigate back
+  const goBack = () => {
+    navigate(-1)  // Go back one page
+  }
+
+  // Getting URL parameters
+  console.log('Current product ID:', id)
+
+  return (
+    &lt;div&gt;
+      {linkExample}
+      &lt;button onClick={handleButtonClick}&gt;Go to Cart&lt;/button&gt;
+      &lt;button onClick={() => viewProduct(123)}&gt;View Product 123&lt;/button&gt;
+      &lt;button onClick={goBack}&gt;Go Back&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}</code></pre>
+            </div>
+
+            <div class="info-box info-box-purple">
+                <h4><i class="fas fa-map-signs"></i> Route Patterns</h4>
+                <ul>
+                    <li><code>/products</code> - Static route</li>
+                    <li><code>/products/:id</code> - Dynamic parameter (product ID)</li>
+                    <li><code>/category/:categoryId</code> - Another dynamic parameter</li>
+                    <li><code>/orders/:id</code> - Order details with ID</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 11: TypeScript with React -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fab fa-js-square"></i>
+                TypeScript with React
+            </h2>
+
+            <p class="text-content">
+                TypeScript adds static typing to JavaScript, catching errors during development instead of at runtime. 
+                ShopSmart uses TypeScript for better code quality and developer experience.
+            </p>
+
+            <h3 class="section-subtitle">Type Definitions</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fab fa-react"></i>
+                        src/types/index.ts
+                    </span>
+                </div>
+                <pre><code class="language-tsx">// Define data models
+export interface Product {
+  id: number
+  name: string
+  description?: string  // Optional field
+  price: number
+  stockQuantity: number
+  imageUrl?: string
+  isActive: boolean
+  categoryId: number
+  category?: Category
+  isInStock: boolean
+}
+
+export interface Category {
+  id: number
+  name: string
+  description?: string
+  createdAt: string
+  updatedAt: string
+  products?: Product[]
+}
+
+export interface Customer {
+  id: number
+  firstName: string
+  lastName: string
+  email: string
+  phoneNumber?: string
+  address?: string
+  fullName: string
+}
+
+// Enum for order status
+export enum OrderStatus {
+  Pending = 0,
+  Processing = 1,
+  Shipped = 2,
+  Delivered = 3,
+  Cancelled = 4
+}</code></pre>
+            </div>
+
+            <h3 class="section-subtitle">Component Props with TypeScript</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        Typed Component Props
+                    </span>
+                </div>
+                <pre><code class="language-tsx">import React from 'react'
+import { Product } from '../types'
+
+// Define props interface
+interface ProductCardProps {
+  product: Product
+  onAddToCart: (productId: number) => void
+  showDetails?: boolean  // Optional prop
+}
+
+// Use the interface in component
+const ProductCard: React.FC&lt;ProductCardProps&gt; = ({ 
+  product, 
+  onAddToCart,
+  showDetails = false  // Default value
+}) => {
+  // TypeScript knows product has these properties:
+  // product.id, product.name, product.price, etc.
+  
+  const handleClick = () => {
+    onAddToCart(product.id)  // Type-safe!
+  }
+
+  return (
+    &lt;div&gt;
+      &lt;h3&gt;{product.name}&lt;/h3&gt;
+      &lt;p&gt;${product.price.toFixed(2)}&lt;/p&gt;
+      {showDetails && &lt;p&gt;{product.description}&lt;/p&gt;}
+      &lt;button onClick={handleClick}&gt;Add to Cart&lt;/button&gt;
+    &lt;/div&gt;
+  )
+}
+
+export default ProductCard</code></pre>
+            </div>
+
+            <h3 class="section-subtitle">Event Handlers with Types</h3>
+
+            <div class="code-example">
+                <div class="code-header">
+                    <span class="code-file-name">
+                        <i class="fas fa-code"></i>
+                        Typed Event Handlers
+                    </span>
+                </div>
+                <pre><code class="language-tsx">const SearchForm: React.FC = () => {
+  const [query, setQuery] = useState&lt;string&gt;('')
+
+  // Type for form submit event
+  const handleSubmit = (event: React.FormEvent&lt;HTMLFormElement&gt;) => {
+    event.preventDefault()
+    console.log('Search:', query)
+  }
+
+  // Type for input change event
+  const handleChange = (event: React.ChangeEvent&lt;HTMLInputElement&gt;) => {
+    setQuery(event.target.value)
+  }
+
+  // Type for button click event
+  const handleClick = (event: React.MouseEvent&lt;HTMLButtonElement&gt;) => {
+    console.log('Button clicked')
+  }
+
+  return (
+    &lt;form onSubmit={handleSubmit}&gt;
+      &lt;input 
+        type="text" 
+        value={query}
+        onChange={handleChange}
+      /&gt;
+      &lt;button onClick={handleClick}&gt;Search&lt;/button&gt;
+    &lt;/form&gt;
+  )
+}</code></pre>
+            </div>
+
+            <div class="info-box info-box-green">
+                <h4><i class="fas fa-check-circle"></i> TypeScript Benefits</h4>
+                <ul>
+                    <li><strong>Auto-completion:</strong> IDE suggests properties and methods</li>
+                    <li><strong>Error detection:</strong> Catch typos and mistakes before runtime</li>
+                    <li><strong>Better refactoring:</strong> Safely rename and restructure code</li>
+                    <li><strong>Documentation:</strong> Types serve as inline documentation</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 12: Best Practices -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-trophy"></i>
+                React Best Practices
+            </h2>
+
+            <div class="key-concepts">
+                <div class="concept-card">
+                    <h4><i class="fas fa-layer-group"></i> Component Structure</h4>
+                    <p>Keep components small and focused. One component = one responsibility.</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-recycle"></i> Reusability</h4>
+                    <p>Create reusable components. Don't repeat yourself (DRY principle).</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-folder-open"></i> File Organization</h4>
+                    <p>Group related files together. Use clear, descriptive names.</p>
+                </div>
+                <div class="concept-card">
+                    <h4><i class="fas fa-code"></i> Naming Conventions</h4>
+                    <p>Components: PascalCase. Functions/variables: camelCase. Constants: UPPER_CASE.</p>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Common Patterns</h3>
+
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pattern</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Container/Presentational</strong></td>
+                            <td>Separate logic from UI</td>
+                            <td>ProductListContainer → ProductList</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Custom Hooks</strong></td>
+                            <td>Extract reusable logic</td>
+                            <td>useCart, useAuth, useApi</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Controlled Components</strong></td>
+                            <td>React controls form inputs</td>
+                            <td>value={state} onChange={setState}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Composition</strong></td>
+                            <td>Build complex UIs from simple components</td>
+                            <td>Card → CardHeader + CardBody + CardFooter</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="section-subtitle">Performance Tips</h3>
+
+            <div class="info-box info-box-yellow">
+                <h4><i class="fas fa-bolt"></i> Optimize Your React App</h4>
+                <ul>
+                    <li><strong>Use keys in lists:</strong> Help React identify which items changed</li>
+                    <li><strong>Avoid inline functions:</strong> Define functions outside JSX when possible</li>
+                    <li><strong>Lazy loading:</strong> Load components only when needed</li>
+                    <li><strong>Memoization:</strong> Use React.memo, useMemo, useCallback for expensive operations</li>
+                    <li><strong>Code splitting:</strong> Split your app into smaller chunks</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 13: Next Steps -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <i class="fas fa-rocket"></i>
+                Next Steps in Your React Journey
+            </h2>
+
+            <div class="interactive-demo">
+                <h3 class="demo-title">
+                    <i class="fas fa-tasks"></i>
+                    Practice Exercise: Explore ShopSmart
+                </h3>
+                <ol style="line-height: 2; font-size: 1.1rem;">
+                    <li><strong>Open the ShopSmart codebase</strong> in your code editor</li>
+                    <li><strong>Start with App.tsx</strong> - understand the main component structure</li>
+                    <li><strong>Explore HomePage.tsx</strong> - see how hooks and API calls work</li>
+                    <li><strong>Look at CartContext.tsx</strong> - understand Context API implementation</li>
+                    <li><strong>Check Header.tsx</strong> - see how state and events work together</li>
+                    <li><strong>Try modifying</strong> - Change text, colors, add a feature!</li>
+                </ol>
+            </div>
+
+            <h3 class="section-subtitle">Recommended Learning Path</h3>
+
+            <div class="key-concepts">
+                <div class="concept-card">
+                    <h4>1. Master the Basics</h4>
+                    <p>Components, Props, State, Hooks - Practice building small apps</p>
+                </div>
+                <div class="concept-card">
+                    <h4>2. Learn State Management</h4>
+                    <p>Context API, Redux, Zustand - Manage complex state</p>
+                </div>
+                <div class="concept-card">
+                    <h4>3. Explore Advanced Topics</h4>
+                    <p>Performance optimization, Testing, SSR with Next.js</p>
+                </div>
+                <div class="concept-card">
+                    <h4>4. Build Projects</h4>
+                    <p>Create real applications - Portfolio, E-commerce, Social media</p>
+                </div>
+            </div>
+
+            <div class="info-box info-box-blue">
+                <h4><i class="fas fa-book"></i> Additional Resources</h4>
+                <ul>
+                    <li><strong>Official React Docs:</strong> react.dev - Best place to learn</li>
+                    <li><strong>React Query Docs:</strong> tanstack.com/query - Data fetching</li>
+                    <li><strong>Material-UI:</strong> mui.com - Component library used in ShopSmart</li>
+                    <li><strong>TypeScript:</strong> typescriptlang.org - Type system</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Post-Assessment Quiz -->
+        <section class="content-section" style="background: linear-gradient(135deg, #e6ffe6 0%, #e6f3ff 100%); border: 3px solid #48bb78;">
+            <h2 class="section-title" style="color: #2d7a3e;">
+                <i class="fas fa-graduation-cap"></i>
+                Post-Assessment Quiz
+            </h2>
+            
+            <p class="text-content">
+                Congratulations on completing the tutorial! Now let's test your knowledge and see how much you've learned. 
+                This quiz covers all the key concepts we discussed.
+            </p>
+
+            <div id="post-quiz" class="quiz-container">
+                <!-- Questions will be inserted here by JavaScript -->
+            </div>
+
+            <div id="post-results" class="quiz-results" style="display: none;">
+                <h3>Post-Assessment Results</h3>
+                <p class="result-score"></p>
+                <p class="result-message"></p>
+                <div id="comparison" style="display: none; margin-top: 2rem; padding: 2rem; background: white; border-radius: 12px;">
+                    <h4 style="color: #2d3748; margin-bottom: 1rem;">📊 Your Progress</h4>
+                    <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 2rem;">
+                        <div style="text-align: center;">
+                            <p style="font-size: 1rem; color: #4a5568;">Pre-Assessment</p>
+                            <p id="pre-score-display" style="font-size: 3rem; font-weight: bold; color: #f6ad55;"></p>
+                        </div>
+                        <div style="font-size: 3rem; color: #48bb78;">→</div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 1rem; color: #4a5568;">Post-Assessment</p>
+                            <p id="post-score-display" style="font-size: 3rem; font-weight: bold; color: #48bb78;"></p>
+                        </div>
+                    </div>
+                    <p id="improvement-message" style="text-align: center; margin-top: 1.5rem; font-size: 1.2rem; font-weight: 600;"></p>
+                </div>
+                <button class="start-learning-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <i class="fas fa-arrow-up"></i> Back to Top
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        <div class="container">
+            <p>&copy; 2024 Learn With Khairul - React Fundamentals Tutorial</p>
+            <p style="margin-top: 0.5rem; opacity: 0.8;">Built with React, TypeScript, and ❤️</p>
+        </div>
+    </footer>
+
+    <!-- Prism JS for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+
+    <!-- Quiz JavaScript -->
+    <script>
+        // Quiz questions data
+        const quizQuestions = [
+            {
+                question: "What is React?",
+                options: [
+                    "A programming language",
+                    "A JavaScript library for building user interfaces",
+                    "A database management system",
+                    "A CSS framework"
+                ],
+                correct: 1,
+                explanation: "React is a JavaScript library developed by Facebook for building user interfaces, especially single-page applications."
+            },
+            {
+                question: "What does JSX stand for?",
+                options: [
+                    "JavaScript XML",
+                    "Java Syntax Extension",
+                    "JSON Extension",
+                    "JavaScript Extra"
+                ],
+                correct: 0,
+                explanation: "JSX stands for JavaScript XML. It's a syntax extension for JavaScript that looks like HTML but has the power of JavaScript."
+            },
+            {
+                question: "Which hook is used to manage state in functional components?",
+                options: [
+                    "useEffect",
+                    "useState",
+                    "useContext",
+                    "useReducer"
+                ],
+                correct: 1,
+                explanation: "useState is the React hook used to add state to functional components. It returns the current state and a function to update it."
+            },
+            {
+                question: "What are props in React?",
+                options: [
+                    "Properties passed from child to parent components",
+                    "Properties passed from parent to child components",
+                    "A way to style components",
+                    "A type of React hook"
+                ],
+                correct: 1,
+                explanation: "Props (short for properties) are arguments passed from parent components to child components, similar to function parameters."
+            },
+            {
+                question: "What is the purpose of the useEffect hook?",
+                options: [
+                    "To manage component state",
+                    "To perform side effects like API calls or subscriptions",
+                    "To create new components",
+                    "To style components"
+                ],
+                correct: 1,
+                explanation: "useEffect is used to perform side effects in functional components, such as data fetching, subscriptions, or manually changing the DOM."
+            },
+            {
+                question: "In the ShopSmart app, what is the Context API used for?",
+                options: [
+                    "To style components",
+                    "To make API calls",
+                    "To manage global state like shopping cart",
+                    "To create routing"
+                ],
+                correct: 2,
+                explanation: "The Context API is used in ShopSmart to manage global state like the shopping cart and customer information, making it accessible throughout the app."
+            },
+            {
+                question: "What does 'React.FC' mean in TypeScript?",
+                options: [
+                    "React Function Call",
+                    "React Functional Component",
+                    "React Full Container",
+                    "React File Component"
+                ],
+                correct: 1,
+                explanation: "React.FC is a TypeScript type definition that stands for 'React Functional Component'. It's used to type functional components."
+            },
+            {
+                question: "Which library does ShopSmart use for routing?",
+                options: [
+                    "React Native",
+                    "React Query",
+                    "React Router",
+                    "Redux"
+                ],
+                correct: 2,
+                explanation: "ShopSmart uses React Router for navigation between different pages in the single-page application."
+            },
+            {
+                question: "What happens when state changes in a React component?",
+                options: [
+                    "Nothing happens",
+                    "The entire page reloads",
+                    "The component re-renders",
+                    "The application crashes"
+                ],
+                correct: 2,
+                explanation: "When state changes, React automatically re-renders the component to reflect the new state. This is what makes React 'reactive'."
+            },
+            {
+                question: "In ShopSmart, what library is used for making HTTP requests?",
+                options: [
+                    "fetch API only",
+                    "jQuery",
+                    "Axios",
+                    "XMLHttpRequest"
+                ],
+                correct: 2,
+                explanation: "ShopSmart uses Axios for making HTTP requests to the backend API. It provides a clean API and better error handling than the native fetch."
+            }
+        ];
+
+        // Store user answers and scores
+        let preQuizAnswers = {};
+        let postQuizAnswers = {};
+        let preQuizScore = null;
+        let postQuizScore = null;
+
+        // Initialize quizzes
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuiz('pre-quiz', 'pre', preQuizAnswers);
+            renderQuiz('post-quiz', 'post', postQuizAnswers);
+        });
+
+        function renderQuiz(containerId, quizType, answersObj) {
+            const container = document.getElementById(containerId);
+            let html = '';
+
+            quizQuestions.forEach((q, index) => {
+                html += `
+                    <div class="quiz-question" data-question="${index}">
+                        <div class="question-number">Question ${index + 1}</div>
+                        <div class="question-text">${q.question}</div>
+                        <div class="quiz-options">
+                            ${q.options.map((option, optIndex) => `
+                                <div class="quiz-option" 
+                                     data-question="${index}" 
+                                     data-option="${optIndex}"
+                                     onclick="selectOption('${quizType}', ${index}, ${optIndex})">
+                                    ${String.fromCharCode(65 + optIndex)}. ${option}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div id="${quizType}-explanation-${index}" class="explanation" style="display: none;"></div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <button class="submit-quiz-btn" onclick="submitQuiz('${quizType}')" id="${quizType}-submit-btn">
+                    <i class="fas fa-check-circle"></i> Submit Quiz
+                </button>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function selectOption(quizType, questionIndex, optionIndex) {
+            const answersObj = quizType === 'pre' ? preQuizAnswers : postQuizAnswers;
+            
+            // Store the answer
+            answersObj[questionIndex] = optionIndex;
+
+            // Update UI - remove selected class from all options in this question
+            const questionElement = document.querySelector(`#${quizType}-quiz .quiz-question[data-question="${questionIndex}"]`);
+            const allOptions = questionElement.querySelectorAll('.quiz-option');
+            allOptions.forEach(opt => opt.classList.remove('selected'));
+
+            // Add selected class to clicked option
+            const selectedOption = questionElement.querySelector(`.quiz-option[data-question="${questionIndex}"][data-option="${optionIndex}"]`);
+            selectedOption.classList.add('selected');
+
+            // Enable submit button if all questions answered
+            updateSubmitButton(quizType);
+        }
+
+        function updateSubmitButton(quizType) {
+            const answersObj = quizType === 'pre' ? preQuizAnswers : postQuizAnswers;
+            const submitBtn = document.getElementById(`${quizType}-submit-btn`);
+            
+            if (Object.keys(answersObj).length === quizQuestions.length) {
+                submitBtn.disabled = false;
+            }
+        }
+
+        function submitQuiz(quizType) {
+            const answersObj = quizType === 'pre' ? preQuizAnswers : postQuizAnswers;
+            let score = 0;
+
+            // Check answers and show feedback
+            quizQuestions.forEach((q, index) => {
+                const questionElement = document.querySelector(`#${quizType}-quiz .quiz-question[data-question="${index}"]`);
+                const allOptions = questionElement.querySelectorAll('.quiz-option');
+                const userAnswer = answersObj[index];
+                const correctAnswer = q.correct;
+
+                // Disable all options
+                allOptions.forEach(opt => opt.classList.add('disabled'));
+
+                // Mark correct and incorrect answers
+                allOptions.forEach((opt, optIndex) => {
+                    if (optIndex === correctAnswer) {
+                        opt.classList.add('correct');
+                        opt.innerHTML += ' <i class="fas fa-check-circle"></i>';
+                    }
+                    if (optIndex === userAnswer && userAnswer !== correctAnswer) {
+                        opt.classList.add('incorrect');
+                        opt.innerHTML += ' <i class="fas fa-times-circle"></i>';
+                    }
+                });
+
+                // Show explanation
+                const explanationDiv = document.getElementById(`${quizType}-explanation-${index}`);
+                explanationDiv.innerHTML = `<strong>Explanation:</strong> ${q.explanation}`;
+                explanationDiv.style.display = 'block';
+
+                // Calculate score
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+            });
+
+            // Store score
+            if (quizType === 'pre') {
+                preQuizScore = score;
+            } else {
+                postQuizScore = score;
+            }
+
+            // Hide quiz and show results
+            document.getElementById(`${quizType}-quiz`).style.display = 'none';
+            showResults(quizType, score);
+        }
+
+        function showResults(quizType, score) {
+            const resultsDiv = document.getElementById(`${quizType}-results`);
+            const percentage = Math.round((score / quizQuestions.length) * 100);
+            
+            let scoreColor;
+            let message;
+            let emoji;
+
+            if (percentage >= 80) {
+                scoreColor = '#48bb78';
+                message = 'Excellent work!';
+                emoji = '🎉';
+            } else if (percentage >= 60) {
+                scoreColor = '#4299e1';
+                message = 'Good job!';
+                emoji = '👍';
+            } else if (percentage >= 40) {
+                scoreColor = '#f6ad55';
+                message = 'Not bad!';
+                emoji = '📚';
+            } else {
+                scoreColor = '#fc8181';
+                message = quizType === 'pre' ? "Don't worry, let's learn!" : 'Keep practicing!';
+                emoji = '💪';
+            }
+
+            resultsDiv.querySelector('.result-score').innerHTML = `
+                <span style="color: ${scoreColor};">${emoji} ${score}/${quizQuestions.length} (${percentage}%)</span>
+            `;
+            
+            resultsDiv.querySelector('.result-message').innerHTML = `
+                ${message} ${quizType === 'pre' ? "Now let's start learning!" : "Great effort completing the tutorial!"}
+            `;
+
+            resultsDiv.style.display = 'block';
+
+            // If this is post-quiz and we have pre-quiz score, show comparison
+            if (quizType === 'post' && preQuizScore !== null) {
+                showComparison();
+            }
+
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function showComparison() {
+            const comparisonDiv = document.getElementById('comparison');
+            const prePercentage = Math.round((preQuizScore / quizQuestions.length) * 100);
+            const postPercentage = Math.round((postQuizScore / quizQuestions.length) * 100);
+            const improvement = postPercentage - prePercentage;
+
+            document.getElementById('pre-score-display').textContent = `${prePercentage}%`;
+            document.getElementById('post-score-display').textContent = `${postPercentage}%`;
+
+            let improvementMessage;
+            if (improvement > 0) {
+                improvementMessage = `🎯 Amazing! You improved by ${improvement}%! Your learning journey paid off! 🚀`;
+            } else if (improvement === 0) {
+                improvementMessage = `📊 You maintained your score! ${postPercentage >= 80 ? 'You already knew this well!' : 'Consider reviewing the material again.'}`;
+            } else {
+                improvementMessage = `📚 Keep practicing! Review the material and try again.`;
+            }
+
+            document.getElementById('improvement-message').innerHTML = improvementMessage;
+            comparisonDiv.style.display = 'block';
+        }
+
+        function scrollToContent() {
+            document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
