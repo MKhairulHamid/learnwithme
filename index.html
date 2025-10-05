@@ -2198,19 +2198,19 @@ Let's Start Learning Together
                             <button class="email-option" onclick="sendEmail('gmail', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
                                 <i class="fab fa-google"></i>
                                 <span>Gmail</span>
-                                <small>Open in Gmail (web/app)</small>
+                                <small>Open Gmail app (or default if not available)</small>
                             </button>
                             
                             <button class="email-option" onclick="sendEmail('outlook', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
                                 <i class="fab fa-microsoft"></i>
                                 <span>Outlook</span>
-                                <small>Open in Outlook (web/app)</small>
+                                <small>Open Outlook app (or default if not available)</small>
                             </button>
                             
                             <button class="email-option" onclick="sendEmail('yahoo', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
                                 <i class="fab fa-yahoo"></i>
                                 <span>Yahoo Mail</span>
-                                <small>Open in Yahoo Mail</small>
+                                <small>Open your preferred mail app</small>
                             </button>
                             
                             <button class="email-option" onclick="sendEmail('default', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
@@ -2254,23 +2254,15 @@ Let's Start Learning Together
             let mailtoURL;
             
             if (isMobile) {
-                // On mobile, use app-specific URLs or mailto to trigger native apps
+                // On mobile, try app-specific URLs with proper fallback detection
                 switch(provider) {
                     case 'gmail':
-                        // Try Gmail app deep link first, fallback to mailto
-                        mailtoURL = `googlegmail://co?to=${recipientEmail}&subject=${subject}&body=${encodedBody}`;
-                        // Fallback to mailto if Gmail app not installed
-                        setTimeout(() => {
-                            window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
-                        }, 500);
+                        // For mobile Gmail, use mailto with Gmail preference (works better)
+                        mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
                         break;
                     case 'outlook':
-                        // Try Outlook app deep link first, fallback to mailto
-                        mailtoURL = `ms-outlook://compose?to=${recipientEmail}&subject=${subject}&body=${encodedBody}`;
-                        // Fallback to mailto if Outlook app not installed
-                        setTimeout(() => {
-                            window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
-                        }, 500);
+                        // For mobile Outlook, use mailto (most reliable)
+                        mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
                         break;
                     case 'yahoo':
                         // Yahoo doesn't have reliable deep links, use mailto
@@ -2283,13 +2275,8 @@ Let's Start Learning Together
                         break;
                 }
                 
-                // For mobile, use window.location.href instead of window.open
-                try {
-                    window.location.href = mailtoURL;
-                } catch (error) {
-                    // Fallback to mailto if app-specific URL fails
-                    window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
-                }
+                // For mobile, use window.location.href (better for mobile apps)
+                window.location.href = mailtoURL;
                 
             } else {
                 // On desktop, use web URLs
