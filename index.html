@@ -2197,20 +2197,20 @@ Let's Start Learning Together
                         <div class="email-options">
                             <button class="email-option" onclick="sendEmail('gmail', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
                                 <i class="fab fa-google"></i>
-                                <span>Gmail</span>
-                                <small>Open Gmail app (or default if not available)</small>
+                                <span>Gmail App Only</span>
+                                <small>Try to open Gmail app specifically</small>
                             </button>
                             
                             <button class="email-option" onclick="sendEmail('outlook', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
                                 <i class="fab fa-microsoft"></i>
-                                <span>Outlook</span>
-                                <small>Open Outlook app (or default if not available)</small>
+                                <span>Outlook App Only</span>
+                                <small>Try to open Outlook app specifically</small>
                             </button>
                             
-                            <button class="email-option" onclick="sendEmail('yahoo', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
-                                <i class="fab fa-yahoo"></i>
-                                <span>Yahoo Mail</span>
-                                <small>Open your preferred mail app</small>
+                            <button class="email-option" onclick="sendEmail('default', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
+                                <i class="fas fa-envelope"></i>
+                                <span>Default Mail App</span>
+                                <small>Open your device's default email app</small>
                             </button>
                             
                             <button class="email-option" onclick="sendEmail('default', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
@@ -2254,29 +2254,59 @@ Let's Start Learning Together
             let mailtoURL;
             
             if (isMobile) {
-                // On mobile, try app-specific URLs with proper fallback detection
+                // On mobile, use specific deep links for chosen apps
                 switch(provider) {
                     case 'gmail':
-                        // For mobile Gmail, use mailto with Gmail preference (works better)
-                        mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
+                        // Try Gmail app deep link - only Gmail, no fallback
+                        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                            // iOS - try Gmail app deep link
+                            mailtoURL = `googlegmail://co?to=${recipientEmail}&subject=${subject}&body=${encodedBody}`;
+                        } else {
+                            // Android - try Gmail app intent
+                            mailtoURL = `intent://send?to=${recipientEmail}&subject=${subject}&body=${encodedBody}#Intent;scheme=mailto;package=com.google.android.gm;end`;
+                        }
                         break;
                     case 'outlook':
-                        // For mobile Outlook, use mailto (most reliable)
-                        mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
+                        // Try Outlook app deep link - only Outlook, no fallback
+                        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                            // iOS - try Outlook app deep link
+                            mailtoURL = `ms-outlook://compose?to=${recipientEmail}&subject=${subject}&body=${encodedBody}`;
+                        } else {
+                            // Android - try Outlook app intent
+                            mailtoURL = `intent://send?to=${recipientEmail}&subject=${subject}&body=${encodedBody}#Intent;scheme=mailto;package=com.microsoft.office.outlook;end`;
+                        }
                         break;
                     case 'yahoo':
-                        // Yahoo doesn't have reliable deep links, use mailto
-                        mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
-                        break;
+                        // Yahoo doesn't have reliable deep links, inform user
+                        alert('Yahoo Mail app doesn\'t support direct opening. Please choose "Default Mail App" instead.');
+                        return;
                     case 'default':
                     default:
-                        // Use mailto protocol to open default mail app
+                        // ONLY use mailto when user explicitly chooses default
                         mailtoURL = `mailto:${recipientEmail}?subject=${subject}&body=${encodedBody}`;
                         break;
                 }
                 
-                // For mobile, use window.location.href (better for mobile apps)
-                window.location.href = mailtoURL;
+                // Try to open the specific app
+                try {
+                    window.location.href = mailtoURL;
+                    
+                    // For specific apps, if it fails to open, show message instead of fallback
+                    if (provider !== 'default' && provider !== 'yahoo') {
+                        setTimeout(() => {
+                            // Check if page is still visible (app didn't open successfully)
+                            if (!document.hidden) {
+                                showAppNotInstalledMessage(provider, formData);
+                                return;
+                            }
+                        }, 1000);
+                    }
+                } catch (error) {
+                    if (provider !== 'default') {
+                        showAppNotInstalledMessage(provider, formData);
+                        return;
+                    }
+                }
                 
             } else {
                 // On desktop, use web URLs
@@ -2390,6 +2420,53 @@ ${formData.name}`;
             return budgetMap[budget] || budget || 'Not specified';
         }
         
+        // Show message when specific app is not installed
+        function showAppNotInstalledMessage(provider, formData) {
+            const appName = provider.charAt(0).toUpperCase() + provider.slice(1);
+            const modalHTML = `
+                <div class="email-modal-overlay" id="appNotInstalledModal">
+                    <div class="email-modal">
+                        <div class="email-modal-header">
+                            <h3><i class="fas fa-exclamation-triangle" style="color: #f39c12;"></i> ${appName} App Not Found</h3>
+                        </div>
+                        <div class="email-modal-body">
+                            <p>It looks like the ${appName} app is not installed on your device.</p>
+                            <p><strong>What would you like to do?</strong></p>
+                            
+                            <div class="email-options">
+                                <button class="email-option" onclick="sendEmail('default', ${JSON.stringify(formData).replace(/"/g, '&quot;')})">
+                                    <i class="fas fa-envelope"></i>
+                                    <span>Use Default Mail App</span>
+                                    <small>Open your device's default email app</small>
+                                </button>
+                                
+                                <button class="email-option" onclick="copyEmailContent(${JSON.stringify(formData).replace(/"/g, '&quot;')})">
+                                    <i class="fas fa-copy"></i>
+                                    <span>Copy Email Content</span>
+                                    <small>Copy to clipboard and paste manually</small>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="email-modal-footer">
+                            <button class="close-modal-btn" onclick="closeAppNotInstalledModal()">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+        }
+        
+        // Close app not installed modal
+        function closeAppNotInstalledModal() {
+            const modal = document.getElementById('appNotInstalledModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
         // Close modal
         function closeEmailModal() {
             const modal = document.getElementById('emailModal');
@@ -2403,23 +2480,36 @@ ${formData.name}`;
             const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
             const deviceText = isMobile ? 'Your mail app should have opened' : 'Your email client should have opened';
             
-            const form = document.querySelector('form[name="student-inquiry"]');
-            form.innerHTML = `
-                <div style="text-align: center; padding: 3rem;">
-                    <div style="font-size: 4rem; color: #00D4AA; margin-bottom: 1rem;">✅</div>
-                    <h3 style="color: #0A2540; margin-bottom: 1rem;">Email Ready to Send!</h3>
-                    <p style="color: #4a5568; font-size: 1.1rem; margin-bottom: 1.5rem;">
-                        ${deviceText} with your inquiry pre-filled. 
-                        Just review and hit send!
+            // Show success message above the form instead of replacing it
+            const formContainer = document.querySelector('.form-container');
+            
+            // Remove any existing success message first
+            const existingMessage = document.getElementById('success-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            const successMessageHTML = `
+                <div id="success-message" style="background: linear-gradient(135deg, #00D4AA, #0A2540); color: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; text-align: center; box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                    <h3 style="margin-bottom: 1rem; color: white;">Email Ready to Send!</h3>
+                    <p style="font-size: 1.1rem; margin-bottom: 1rem; opacity: 0.9;">
+                        ${deviceText} with your inquiry pre-filled. Just review and hit send!
                     </p>
-                    <p style="color: #4a5568;">
+                    <p style="opacity: 0.8;">
                         <strong>Next steps:</strong> I'll respond within 24 hours with a personalized learning plan.
                     </p>
-                    <button onclick="location.reload()" style="background: linear-gradient(135deg, #0A2540, #00D4AA); color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 25px; margin-top: 1rem; cursor: pointer;">
-                        <i class="fas fa-redo"></i> Send Another Inquiry
+                    <button onclick="document.getElementById('success-message').remove()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1rem; border-radius: 20px; margin-top: 1rem; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                        <i class="fas fa-times"></i> Dismiss
                     </button>
                 </div>
             `;
+            
+            // Insert success message before the form
+            formContainer.insertAdjacentHTML('afterbegin', successMessageHTML);
+            
+            // Scroll to success message
+            document.getElementById('success-message').scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     </script>
 </body>
