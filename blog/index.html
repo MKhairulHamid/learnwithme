@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0PR0GB0TC1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0PR0GB0TC1');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Blog - .NET Development Tips & Tutorials | Learn With Khairul</title>
+    <meta name="description" content="Free programming tutorials, .NET development tips, career advice, and interview preparation guides. Learn from a professional remote .NET engineer with 5+ years international experience.">
+    <meta name="keywords" content=".NET blog, programming tutorials, C# tips, ASP.NET Core guides, software development career, remote developer insights, programming interview preparation">
+    <link rel="canonical" href="https://mkhairulhamid.github.io/learnwithme/blog/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mkhairulhamid.github.io/learnwithme/blog/">
+    <meta property="og:title" content="Programming Blog - .NET Development Tips & Tutorials">
+    <meta property="og:description" content="Free programming tutorials, .NET development tips, and career advice from a professional remote .NET engineer.">
+    <meta property="og:site_name" content="Learn With Khairul">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mkhairulhamid.github.io/learnwithme/blog/">
+    <meta property="twitter:title" content="Programming Blog - .NET Development Tips & Tutorials">
+    <meta property="twitter:description" content="Free programming tutorials and career advice from a professional remote .NET engineer.">
+    
+    <link rel="icon" href="../images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Schema.org Structured Data for Blog -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "Learn With Khairul - Programming Blog",
+      "description": "Programming tutorials, .NET development tips, and career advice",
+      "url": "https://mkhairulhamid.github.io/learnwithme/blog/",
+      "author": {
+        "@type": "Person",
+        "name": "Khairul Hamid",
+        "url": "https://mkhairulhamid.github.io/learnwithme/"
+      },
+      "publisher": {
+        "@type": "Person",
+        "name": "Khairul Hamid"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://mkhairulhamid.github.io/learnwithme/blog/"
+      }
+    }
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+            padding-top: 70px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Header */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo i {
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #667eea;
+        }
+
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .blog-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Blog Content */
+        .blog-section {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            color: #2d3748;
+        }
+
+        /* Featured Article */
+        .featured-article {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 4rem;
+            border-left: 5px solid #667eea;
+        }
+
+        .featured-content {
+            padding: 3rem;
+        }
+
+        .featured-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .featured-article h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .featured-article p {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #667eea;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+        }
+
+        .read-more-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .read-more-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Articles Grid */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .article-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .article-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .article-card p {
+            color: #4a5568;
+            margin-bottom: 1.5rem;
+        }
+
+        .coming-soon {
+            opacity: 0.7;
+            position: relative;
+        }
+
+        .coming-soon::before {
+            content: 'Coming Soon';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ffd700;
+            color: #333;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Newsletter Signup */
+        .newsletter-section {
+            background: linear-gradient(135deg, #0A2540 0%, #1A3B5C 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .newsletter-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+
+        .newsletter-form button {
+            background: #00D4AA;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: #00c499;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .featured-content {
+                padding: 2rem;
+            }
+
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .blog-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                Learn With Khairul
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html" class="nav-link active">Blog</a></li>
+                <li><a href="../learning-materials/learning-materials.html" class="nav-link">Learning Materials</a></li>
+                <li><a href="../index.html#booking" class="nav-link">Book Session</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <h1>Programming Blog</h1>
+            <p>Free tutorials, career insights, and development tips from a professional remote .NET engineer with 5+ years of international experience</p>
+            
+            <div class="blog-stats">
+                <div class="stat-item">
+                    <div class="stat-number">5+</div>
+                    <div class="stat-label">Years Experience</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">Articles Planned</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Countries Served</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Blog Content -->
+    <section class="blog-section">
+        <div class="container">
+            <h2 class="section-title">Latest Articles</h2>
+            
+            <!-- Featured Article -->
+            <article class="featured-article">
+                <div class="featured-content">
+                    <span class="featured-badge">Featured</span>
+                    <h2>Complete Guide to Landing Your First .NET Developer Job in 2024</h2>
+                    <div class="article-meta">
+                        <span><i class="fas fa-calendar"></i> Dec 10, 2024</span>
+                        <span><i class="fas fa-clock"></i> 15 min read</span>
+                        <span><i class="fas fa-user"></i> Khairul Hamid</span>
+                        <span><i class="fas fa-tag"></i> Career Guide</span>
+                    </div>
+                    <p>Breaking into the .NET development field can seem overwhelming, but with the right strategy and preparation, it's absolutely achievable. In this comprehensive guide, I'll share the exact steps I took to become a remote .NET engineer working for international companies, plus insider tips from 5+ years of industry experience.</p>
+                    <a href="complete-guide-first-dotnet-job.html" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Read Full Article
+                    </a>
+                </div>
+            </article>
+
+            <!-- Articles Grid -->
+            <div class="articles-grid">
+                <article class="article-card">
+                    <h3>Best Practices for Writing Clean Code 🌐</h3>
+                    <div class="article-meta">
+                        <span><i class="fas fa-calendar"></i> Dec 15, 2024</span>
+                        <span><i class="fas fa-clock"></i> 8 min read</span>
+                        <span><i class="fas fa-tag"></i> Programming Tips</span>
+                        <span><i class="fas fa-language"></i> English/Arabic</span>
+                    </div>
+                    <p>Learn essential best practices for writing clean, maintainable code. This article is available in both English and Arabic with an easy toggle button!</p>
+                    <a href="clean-code-best-practices.html" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Read Article
+                    </a>
+                </article>
+
+                <article class="article-card coming-soon">
+                    <h3>C# Interview Questions: From Junior to Senior Level</h3>
+                    <div class="article-meta">
+                        <span><i class="fas fa-clock"></i> 12 min read</span>
+                        <span><i class="fas fa-tag"></i> Interview Prep</span>
+                    </div>
+                    <p>A comprehensive collection of C# interview questions organized by skill level, with detailed explanations and real-world examples from actual technical interviews.</p>
+                    <a href="#" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Coming Soon
+                    </a>
+                </article>
+
+                <article class="article-card coming-soon">
+                    <h3>How to Transition from Java to .NET Development</h3>
+                    <div class="article-meta">
+                        <span><i class="fas fa-clock"></i> 10 min read</span>
+                        <span><i class="fas fa-tag"></i> Career Transition</span>
+                    </div>
+                    <p>Making the switch from Java to .NET? Learn the key differences, similarities, and practical steps to transition your skills effectively.</p>
+                    <a href="#" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Coming Soon
+                    </a>
+                </article>
+
+                <article class="article-card coming-soon">
+                    <h3>Building Your First ASP.NET Core API: Complete Tutorial</h3>
+                    <div class="article-meta">
+                        <span><i class="fas fa-clock"></i> 20 min read</span>
+                        <span><i class="fas fa-tag"></i> Tutorial</span>
+                    </div>
+                    <p>Step-by-step tutorial for creating a production-ready REST API using ASP.NET Core, including authentication, validation, and deployment.</p>
+                    <a href="#" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Coming Soon
+                    </a>
+                </article>
+
+                <article class="article-card coming-soon">
+                    <h3>Remote .NET Developer: Essential Skills for International Teams</h3>
+                    <div class="article-meta">
+                        <span><i class="fas fa-clock"></i> 8 min read</span>
+                        <span><i class="fas fa-tag"></i> Remote Work</span>
+                    </div>
+                    <p>What it takes to work as a remote .NET developer for international companies, including technical skills, communication, and cultural considerations.</p>
+                    <a href="#" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Coming Soon
+                    </a>
+                </article>
+
+                <article class="article-card coming-soon">
+                    <h3>Entity Framework Core vs Dapper: Performance Comparison</h3>
+                    <div class="article-meta">
+                        <span><i class="fas fa-clock"></i> 15 min read</span>
+                        <span><i class="fas fa-tag"></i> Performance</span>
+                    </div>
+                    <p>Detailed comparison of EF Core and Dapper, including performance benchmarks, use cases, and recommendations for different scenarios.</p>
+                    <a href="#" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Coming Soon
+                    </a>
+                </article>
+
+                <article class="article-card coming-soon">
+                    <h3>Common .NET Performance Mistakes and Solutions</h3>
+                    <div class="article-meta">
+                        <span><i class="fas fa-clock"></i> 12 min read</span>
+                        <span><i class="fas fa-tag"></i> Performance</span>
+                    </div>
+                    <p>Learn about the most common performance pitfalls in .NET applications and practical solutions based on real-world experience.</p>
+                    <a href="#" class="read-more-btn">
+                        <i class="fas fa-arrow-right"></i>
+                        Coming Soon
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <h3>Stay Updated</h3>
+                <p>Get notified when new programming tutorials and career insights are published. No spam, just valuable content for your development journey.</p>
+                <form class="newsletter-form" action="#" method="POST">
+                    <input type="email" placeholder="Your email address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+                <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 1rem;">
+                    Join 500+ developers who get weekly insights
+                </p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

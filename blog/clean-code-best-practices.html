@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0PR0GB0TC1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0PR0GB0TC1');
+    </script>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Practices for Writing Clean Code | Learn With Khairul</title>
+    <meta name="description" content="Learn essential best practices for writing clean, maintainable code. Tips from a professional .NET engineer with 5+ years of experience.">
+    <link rel="canonical" href="https://mkhairulhamid.github.io/learnwithme/blog/clean-code-best-practices.html">
+    
+    <link rel="icon" href="../images/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background: #f8fafc;
+            padding-top: 70px;
+            transition: all 0.3s ease;
+        }
+
+        /* RTL Support for Arabic */
+        body.rtl {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation Header */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo i {
+            color: #667eea;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #667eea;
+        }
+
+        /* Language Toggle Button */
+        .language-toggle {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .language-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .language-toggle i {
+            font-size: 1rem;
+        }
+
+        /* Article Header */
+        .article-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            flex-wrap: wrap;
+        }
+
+        body.rtl .article-meta {
+            direction: ltr;
+            justify-content: flex-end;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        /* Article Content */
+        .article-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .article-content h2 {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #2d3748;
+            border-left: 4px solid #667eea;
+            padding-left: 1rem;
+        }
+
+        body.rtl .article-content h2 {
+            border-left: none;
+            border-right: 4px solid #667eea;
+            padding-left: 0;
+            padding-right: 1rem;
+        }
+
+        .article-content h3 {
+            font-size: 1.4rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: #4a5568;
+        }
+
+        .article-content p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+            color: #4a5568;
+        }
+
+        .article-content ul, .article-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        body.rtl .article-content ul,
+        body.rtl .article-content ol {
+            padding-left: 0;
+            padding-right: 2rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.8rem;
+            color: #4a5568;
+        }
+
+        .article-content strong {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f0f4ff, #e9f0ff);
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+
+        body.rtl .highlight-box {
+            border-left: none;
+            border-right: 4px solid #667eea;
+        }
+
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .code-example code {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Content Language Sections */
+        .lang-content {
+            display: none;
+        }
+
+        .lang-content.active {
+            display: block;
+        }
+
+        /* Back to Blog Button */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+
+        body.rtl .back-button:hover {
+            transform: translateX(5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                gap: 1rem;
+            }
+
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .article-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .language-toggle {
+                padding: 0.4rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .nav-logo {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span class="logo-text">Learn With Khairul</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="../index.html" class="nav-link">Home</a></li>
+                <li><a href="index.html" class="nav-link">Blog</a></li>
+                <li>
+                    <button class="language-toggle" onclick="toggleLanguage()">
+                        <i class="fas fa-language"></i>
+                        <span id="langButtonText">العربية</span>
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Article Header -->
+    <header class="article-header">
+        <div class="container">
+            <a href="index.html" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span id="backText">Back to Blog</span>
+            </a>
+            <h1 class="article-title" id="articleTitle">Best Practices for Writing Clean Code</h1>
+            <div class="article-meta">
+                <span><i class="fas fa-calendar"></i> <span id="dateText">Dec 15, 2024</span></span>
+                <span><i class="fas fa-clock"></i> <span id="readTime">8 min read</span></span>
+                <span><i class="fas fa-user"></i> Khairul Hamid</span>
+                <span><i class="fas fa-tag"></i> <span id="categoryText">Programming Tips</span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Article Content - English -->
+    <div class="lang-content active" id="english-content">
+        <div class="container">
+            <div class="article-content">
+                <p><strong>Writing clean code is one of the most important skills for any developer.</strong> Clean code is not just about making your code work—it's about making it readable, maintainable, and easy to understand for your future self and other developers.</p>
+
+                <div class="highlight-box">
+                    <p><strong>💡 Key Takeaway:</strong> Clean code is code that is easy to read, understand, and modify. It reduces bugs, speeds up development, and makes collaboration smoother.</p>
+                </div>
+
+                <h2>1. Use Meaningful Names</h2>
+                <p>Variables, functions, and classes should have names that clearly describe their purpose. Avoid single-letter variables (except in loops) and cryptic abbreviations.</p>
+
+                <h3>Bad Example:</h3>
+                <div class="code-example">
+                    <code>
+var d = 86400; // seconds in a day<br>
+var x = GetData();<br>
+void Process(int a, int b)
+                    </code>
+                </div>
+
+                <h3>Good Example:</h3>
+                <div class="code-example">
+                    <code>
+var secondsInDay = 86400;<br>
+var userData = GetUserData();<br>
+void ProcessPayment(int userId, int amount)
+                    </code>
+                </div>
+
+                <h2>2. Keep Functions Small and Focused</h2>
+                <p>Each function should do one thing and do it well. If a function is doing multiple things, split it into smaller functions. This makes your code easier to test and reuse.</p>
+
+                <ul>
+                    <li><strong>Single Responsibility:</strong> One function = one task</li>
+                    <li><strong>Ideal Length:</strong> Aim for 10-20 lines per function</li>
+                    <li><strong>Clear Purpose:</strong> The function name should tell you exactly what it does</li>
+                </ul>
+
+                <h2>3. Write Comments Wisely</h2>
+                <p>Good code should be self-explanatory. Use comments to explain <em>why</em> you're doing something, not <em>what</em> you're doing. The code itself should show what it does.</p>
+
+                <div class="highlight-box">
+                    <p><strong>Remember:</strong> If you need comments to explain what your code does, consider refactoring it to be more readable instead.</p>
+                </div>
+
+                <h2>4. Follow Consistent Formatting</h2>
+                <p>Consistency is key to readable code. Use the same indentation, spacing, and naming conventions throughout your project.</p>
+
+                <ul>
+                    <li>Use consistent indentation (spaces or tabs, pick one)</li>
+                    <li>Follow language-specific naming conventions (camelCase, PascalCase, etc.)</li>
+                    <li>Keep line length reasonable (80-120 characters)</li>
+                    <li>Use consistent bracket placement</li>
+                </ul>
+
+                <h2>5. Avoid Deep Nesting</h2>
+                <p>Deeply nested code is hard to read and understand. Try to keep nesting to a maximum of 2-3 levels. Use early returns and extract methods to flatten your code.</p>
+
+                <h3>Instead of this:</h3>
+                <div class="code-example">
+                    <code>
+if (user != null) {<br>
+&nbsp;&nbsp;if (user.IsActive) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (user.HasPermission) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Do something<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}
+                    </code>
+                </div>
+
+                <h3>Write this:</h3>
+                <div class="code-example">
+                    <code>
+if (user == null) return;<br>
+if (!user.IsActive) return;<br>
+if (!user.HasPermission) return;<br>
+// Do something
+                    </code>
+                </div>
+
+                <h2>6. Handle Errors Properly</h2>
+                <p>Don't ignore errors or use empty catch blocks. Handle exceptions appropriately and provide meaningful error messages.</p>
+
+                <ul>
+                    <li>Use try-catch blocks for operations that can fail</li>
+                    <li>Log errors with enough context to debug issues</li>
+                    <li>Don't catch exceptions you can't handle</li>
+                    <li>Use specific exception types instead of catching all exceptions</li>
+                </ul>
+
+                <h2>7. Write Tests</h2>
+                <p>Clean code includes tests. Tests give you confidence that your code works and make it easier to refactor without breaking functionality.</p>
+
+                <div class="highlight-box">
+                    <p><strong>Best Practice:</strong> Follow the AAA pattern - Arrange (setup), Act (execute), Assert (verify). This makes tests easy to read and understand.</p>
+                </div>
+
+                <h2>8. Keep It Simple (KISS)</h2>
+                <p>Don't overcomplicate things. The simplest solution that works is often the best solution. Avoid premature optimization and over-engineering.</p>
+
+                <ul>
+                    <li>Write straightforward code first</li>
+                    <li>Optimize only when necessary</li>
+                    <li>Don't add features "just in case"</li>
+                    <li>Refactor when complexity grows</li>
+                </ul>
+
+                <h2>Conclusion</h2>
+                <p>Writing clean code is a skill that improves with practice. Start by applying these principles one at a time, and soon they'll become second nature. Remember: code is read far more often than it's written, so invest time in making it clean and readable.</p>
+
+                <div class="highlight-box">
+                    <p><strong>Action Item:</strong> Pick one principle from this article and apply it in your next coding session. Small, consistent improvements lead to mastery over time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Content - Arabic -->
+    <div class="lang-content" id="arabic-content">
+        <div class="container">
+            <div class="article-content">
+                <p><strong>كتابة كود نظيف هي واحدة من أهم المهارات لأي مطور.</strong> الكود النظيف لا يتعلق فقط بجعل الكود يعمل—بل يتعلق بجعله سهل القراءة والصيانة والفهم لنفسك في المستقبل وللمطورين الآخرين.</p>
+
+                <div class="highlight-box">
+                    <p><strong>💡 الفكرة الرئيسية:</strong> الكود النظيف هو كود سهل القراءة والفهم والتعديل. يقلل من الأخطاء، ويسرع التطوير، ويجعل التعاون أكثر سلاسة.</p>
+                </div>
+
+                <h2>١. استخدم أسماء واضحة المعنى</h2>
+                <p>يجب أن يكون للمتغيرات والدوال والفئات أسماء تصف غرضها بوضوح. تجنب المتغيرات ذات الحرف الواحد (باستثناء الحلقات) والاختصارات المبهمة.</p>
+
+                <h3>مثال سيء:</h3>
+                <div class="code-example">
+                    <code>
+var d = 86400; // ثواني في اليوم<br>
+var x = GetData();<br>
+void Process(int a, int b)
+                    </code>
+                </div>
+
+                <h3>مثال جيد:</h3>
+                <div class="code-example">
+                    <code>
+var secondsInDay = 86400;<br>
+var userData = GetUserData();<br>
+void ProcessPayment(int userId, int amount)
+                    </code>
+                </div>
+
+                <h2>٢. اجعل الدوال صغيرة ومركزة</h2>
+                <p>يجب أن تقوم كل دالة بشيء واحد وتقوم به بشكل جيد. إذا كانت الدالة تقوم بأشياء متعددة، قم بتقسيمها إلى دوال أصغر. هذا يجعل الكود أسهل للاختبار وإعادة الاستخدام.</p>
+
+                <ul>
+                    <li><strong>مسؤولية واحدة:</strong> دالة واحدة = مهمة واحدة</li>
+                    <li><strong>الطول المثالي:</strong> اهدف إلى ١٠-٢٠ سطر لكل دالة</li>
+                    <li><strong>غرض واضح:</strong> يجب أن يخبرك اسم الدالة بالضبط عما تفعله</li>
+                </ul>
+
+                <h2>٣. اكتب التعليقات بحكمة</h2>
+                <p>يجب أن يكون الكود الجيد واضحًا بذاته. استخدم التعليقات لشرح <em>لماذا</em> تفعل شيئًا، وليس <em>ماذا</em> تفعل. يجب أن يوضح الكود نفسه ما يفعله.</p>
+
+                <div class="highlight-box">
+                    <p><strong>تذكر:</strong> إذا كنت بحاجة إلى تعليقات لشرح ما يفعله الكود، ففكر في إعادة هيكلته ليكون أكثر وضوحًا.</p>
+                </div>
+
+                <h2>٤. اتبع تنسيقًا متسقًا</h2>
+                <p>الاتساق هو مفتاح الكود القابل للقراءة. استخدم نفس المسافة البادئة والتباعد واصطلاحات التسمية في جميع أنحاء مشروعك.</p>
+
+                <ul>
+                    <li>استخدم مسافة بادئة متسقة (مسافات أو علامات تبويب، اختر واحدة)</li>
+                    <li>اتبع اصطلاحات التسمية الخاصة باللغة (camelCase، PascalCase، إلخ.)</li>
+                    <li>حافظ على طول السطر معقولًا (٨٠-١٢٠ حرفًا)</li>
+                    <li>استخدم وضع أقواس متسق</li>
+                </ul>
+
+                <h2>٥. تجنب التداخل العميق</h2>
+                <p>الكود المتداخل بعمق صعب القراءة والفهم. حاول الحفاظ على التداخل بحد أقصى ٢-٣ مستويات. استخدم الإرجاع المبكر واستخراج الطرق لتسطيح الكود.</p>
+
+                <h3>بدلاً من هذا:</h3>
+                <div class="code-example">
+                    <code>
+if (user != null) {<br>
+&nbsp;&nbsp;if (user.IsActive) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (user.HasPermission) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// افعل شيئًا<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+}
+                    </code>
+                </div>
+
+                <h3>اكتب هذا:</h3>
+                <div class="code-example">
+                    <code>
+if (user == null) return;<br>
+if (!user.IsActive) return;<br>
+if (!user.HasPermission) return;<br>
+// افعل شيئًا
+                    </code>
+                </div>
+
+                <h2>٦. تعامل مع الأخطاء بشكل صحيح</h2>
+                <p>لا تتجاهل الأخطاء أو تستخدم كتل catch فارغة. تعامل مع الاستثناءات بشكل مناسب وقدم رسائل خطأ واضحة.</p>
+
+                <ul>
+                    <li>استخدم كتل try-catch للعمليات التي يمكن أن تفشل</li>
+                    <li>سجل الأخطاء بسياق كافٍ لتصحيح المشكلات</li>
+                    <li>لا تلتقط الاستثناءات التي لا يمكنك التعامل معها</li>
+                    <li>استخدم أنواع استثناءات محددة بدلاً من التقاط جميع الاستثناءات</li>
+                </ul>
+
+                <h2>٧. اكتب الاختبارات</h2>
+                <p>الكود النظيف يشمل الاختبارات. الاختبارات تمنحك الثقة في أن الكود يعمل وتجعل من السهل إعادة الهيكلة دون كسر الوظائف.</p>
+
+                <div class="highlight-box">
+                    <p><strong>أفضل ممارسة:</strong> اتبع نمط AAA - الترتيب (الإعداد)، الإجراء (التنفيذ)، التأكيد (التحقق). هذا يجعل الاختبارات سهلة القراءة والفهم.</p>
+                </div>
+
+                <h2>٨. حافظ على البساطة (KISS)</h2>
+                <p>لا تعقد الأمور. الحل الأبسط الذي يعمل غالبًا ما يكون أفضل حل. تجنب التحسين المبكر والإفراط في الهندسة.</p>
+
+                <ul>
+                    <li>اكتب كودًا مباشرًا أولاً</li>
+                    <li>حسّن فقط عند الضرورة</li>
+                    <li>لا تضف ميزات "في حالة الحاجة"</li>
+                    <li>أعد الهيكلة عندما تنمو التعقيدات</li>
+                </ul>
+
+                <h2>الخلاصة</h2>
+                <p>كتابة كود نظيف هي مهارة تتحسن مع الممارسة. ابدأ بتطبيق هذه المبادئ واحدًا تلو الآخر، وسرعان ما ستصبح طبيعة ثانية. تذكر: يتم قراءة الكود أكثر بكثير مما يتم كتابته، لذلك استثمر الوقت في جعله نظيفًا وسهل القراءة.</p>
+
+                <div class="highlight-box">
+                    <p><strong>عنصر العمل:</strong> اختر مبدأ واحدًا من هذا المقال وطبقه في جلسة البرمجة القادمة. التحسينات الصغيرة المتسقة تؤدي إلى الإتقان مع مرور الوقت.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            const body = document.body;
+            const html = document.documentElement;
+            const englishContent = document.getElementById('english-content');
+            const arabicContent = document.getElementById('arabic-content');
+            const langButtonText = document.getElementById('langButtonText');
+            const articleTitle = document.getElementById('articleTitle');
+            const backText = document.getElementById('backText');
+            const categoryText = document.getElementById('categoryText');
+            const readTime = document.getElementById('readTime');
+
+            if (currentLang === 'en') {
+                // Switch to Arabic
+                currentLang = 'ar';
+                body.classList.add('rtl');
+                html.setAttribute('lang', 'ar');
+                html.setAttribute('dir', 'rtl');
+                englishContent.classList.remove('active');
+                arabicContent.classList.add('active');
+                langButtonText.textContent = 'English';
+                articleTitle.textContent = 'أفضل الممارسات لكتابة كود نظيف';
+                backText.textContent = 'العودة إلى المدونة';
+                categoryText.textContent = 'نصائح البرمجة';
+                readTime.textContent = '٨ دقائق قراءة';
+            } else {
+                // Switch to English
+                currentLang = 'en';
+                body.classList.remove('rtl');
+                html.setAttribute('lang', 'en');
+                html.setAttribute('dir', 'ltr');
+                arabicContent.classList.remove('active');
+                englishContent.classList.add('active');
+                langButtonText.textContent = 'العربية';
+                articleTitle.textContent = 'Best Practices for Writing Clean Code';
+                backText.textContent = 'Back to Blog';
+                categoryText.textContent = 'Programming Tips';
+                readTime.textContent = '8 min read';
+            }
+        }
+
+        // Smooth scroll to top when switching languages
+        window.addEventListener('load', function() {
+            const languageToggle = document.querySelector('.language-toggle');
+            languageToggle.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
