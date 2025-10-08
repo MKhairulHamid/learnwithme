@@ -474,10 +474,15 @@
             <div class="exam-info">
                 <h2>📋 Practice Exam Info</h2>
                 <ul>
-                    <li><strong>Questions:</strong> 5 Practice Questions</li>
+                    <li><strong>Questions:</strong> 65 Questions</li>
                     <li><strong>Format:</strong> Multiple Choice & Multiple Response</li>
-                    <li><strong>Topics:</strong> Architectural Patterns, Idempotency, State Management</li>
+                    <li><strong>Time:</strong> ~130 minutes (like real exam)</li>
                     <li><strong>Passing Score:</strong> 720 / 1000</li>
+                    <li><strong>Content Domains:</strong></li>
+                    <li style="margin-left: 20px;">• Development with AWS Services (32%)</li>
+                    <li style="margin-left: 20px;">• Security (26%)</li>
+                    <li style="margin-left: 20px;">• Deployment (24%)</li>
+                    <li style="margin-left: 20px;">• Troubleshooting & Optimization (18%)</li>
                     <li><strong>Swipe Left:</strong> Skip question (review later)</li>
                     <li><strong>Swipe Right:</strong> Submit your answer</li>
                 </ul>
@@ -536,40 +541,43 @@
 
     <script>
         const questions = [
+            // DOMAIN 1: Development with AWS Services (32% - 21 questions)
             {
                 id: 1,
+                domain: "Development",
                 type: "Multiple Choice",
-                question: "Which architectural pattern is best suited for applications that require components to react to events in real-time without tight coupling?",
+                question: "A developer is building a serverless application using AWS Lambda. The function needs to process messages from an Amazon SQS queue. What is the MOST efficient way to trigger the Lambda function?",
                 options: [
-                    { text: "Monolithic", correct: false },
-                    { text: "Microservices", correct: false },
-                    { text: "Event-driven", correct: true },
-                    { text: "Orchestration", correct: false }
+                    { text: "Configure CloudWatch Events to poll the queue and trigger Lambda", correct: false },
+                    { text: "Use an SQS event source mapping for Lambda", correct: true },
+                    { text: "Create an EC2 instance to poll SQS and invoke Lambda via SDK", correct: false },
+                    { text: "Use Amazon SNS to subscribe Lambda to the queue", correct: false }
                 ],
-                materials: "Event-driven architecture is a software design pattern where components communicate through events. When something happens in one part of the system, it emits an event that other components can listen to and react accordingly. This pattern promotes loose coupling because components don't need to know about each other directly—they only need to know about the events they care about.",
+                materials: "AWS Lambda can be triggered by various event sources. For SQS, Lambda provides native integration through event source mappings that handle polling, batching, and error handling automatically.",
                 explanations: {
-                    "Monolithic": "Incorrect. Monolithic architecture is a traditional approach where all components are tightly integrated into a single application, making it difficult to achieve loose coupling and real-time event handling.",
-                    "Microservices": "Incorrect. While microservices promote loose coupling, the pattern itself doesn't specifically address real-time event handling. Microservices can use event-driven patterns, but they are not synonymous.",
-                    "Event-driven": "Correct! Event-driven architecture is specifically designed for applications where components need to react to events in real-time. It naturally supports loose coupling because components communicate through events rather than direct calls.",
-                    "Orchestration": "Incorrect. Orchestration is a pattern where a central component coordinates the interactions between services. This introduces a degree of coupling through the orchestrator and isn't specifically about real-time event handling."
+                    "Configure CloudWatch Events to poll the queue and trigger Lambda": "Incorrect. CloudWatch Events (EventBridge) cannot directly poll SQS queues.",
+                    "Use an SQS event source mapping for Lambda": "Correct! Event source mapping is the native and most efficient way to integrate Lambda with SQS. Lambda automatically polls the queue, retrieves messages in batches, and invokes your function.",
+                    "Create an EC2 instance to poll SQS and invoke Lambda via SDK": "Incorrect. This adds unnecessary complexity and cost. Lambda can integrate directly with SQS.",
+                    "Use Amazon SNS to subscribe Lambda to the queue": "Incorrect. SNS subscribes to topics, not queues. This adds an unnecessary intermediary service."
                 }
             },
             {
                 id: 2,
+                domain: "Development",
                 type: "Multiple Choice",
-                question: "What does it mean for an operation to be idempotent in a distributed system?",
+                question: "A developer needs to store user session data for a web application running on multiple EC2 instances behind an Application Load Balancer. What is the BEST solution for sharing session data?",
                 options: [
-                    { text: "It can be performed multiple times without changing the result beyond the initial application", correct: true },
-                    { text: "It must be performed only once to ensure consistency", correct: false },
-                    { text: "It requires multiple confirmations to complete successfully", correct: false },
-                    { text: "It cannot be repeated without causing errors", correct: false }
+                    { text: "Enable sticky sessions on the load balancer", correct: false },
+                    { text: "Store session data in Amazon ElastiCache", correct: true },
+                    { text: "Store session data in local EC2 instance storage", correct: false },
+                    { text: "Use Amazon EFS mounted on all EC2 instances", correct: false }
                 ],
-                materials: "Idempotency is a critical property in distributed systems that ensures reliability and consistency. An idempotent operation produces the same result no matter how many times it's executed with the same inputs. This is particularly important in scenarios where network issues might cause requests to be sent multiple times, or where retry mechanisms are in place.",
+                materials: "Session management in distributed systems requires a shared data store accessible by all application instances. ElastiCache provides low-latency, in-memory session storage perfect for web applications.",
                 explanations: {
-                    "It can be performed multiple times without changing the result beyond the initial application": "Correct! This is the definition of idempotency. Whether you perform the operation once or a hundred times with the same inputs, the end result is the same. For example, setting a value to 5 is idempotent (SET x = 5), but incrementing a value is not (x = x + 1).",
-                    "It must be performed only once to ensure consistency": "Incorrect. Idempotent operations can be performed multiple times safely. The key is that performing it multiple times has the same effect as performing it once.",
-                    "It requires multiple confirmations to complete successfully": "Incorrect. Idempotency is about the safety of repeating an operation, not about requiring confirmations. It's unrelated to confirmation mechanisms.",
-                    "It cannot be repeated without causing errors": "Incorrect. This is the opposite of idempotency. Idempotent operations can and should be repeated safely without errors or unintended side effects."
+                    "Enable sticky sessions on the load balancer": "Incorrect. Sticky sessions don't solve the problem if an instance fails. Users lose their session data.",
+                    "Store session data in Amazon ElastiCache": "Correct! ElastiCache (Redis or Memcached) provides fast, shared session storage accessible by all EC2 instances, supporting horizontal scaling.",
+                    "Store session data in local EC2 instance storage": "Incorrect. Local storage isn't shared across instances, breaking the session when load balancer routes to a different instance.",
+                    "Use Amazon EFS mounted on all EC2 instances": "Incorrect. EFS works but has higher latency than ElastiCache. Not optimal for frequently accessed session data."
                 }
             },
             {
@@ -626,6 +634,1172 @@
                     "It synchronizes events between services": "Incorrect. Fanout doesn't synchronize events—it broadcasts them. Services receive events asynchronously and process them independently without coordination.",
                     "It enables parallel processing by multiple services": "Correct! Because multiple consumers receive the same event simultaneously, they can all process it in parallel. This is a key benefit of the fanout pattern for performance and scalability.",
                     "It filters events based on predefined criteria": "Incorrect. This describes a filtering or routing pattern. Fanout broadcasts to all consumers without filtering. Individual consumers might filter what they process, but that's not part of the fanout pattern itself."
+                }
+            },
+            // Continue Domain 1: Development
+            {
+                id: 6,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "A developer is using Amazon DynamoDB and needs to query items based on attributes other than the primary key. What should the developer create?",
+                options: [
+                    { text: "A Global Secondary Index (GSI)", correct: true },
+                    { text: "A Local Secondary Index (LSI)", correct: false },
+                    { text: "A materialized view", correct: false },
+                    { text: "A read replica", correct: false }
+                ],
+                materials: "DynamoDB supports querying on primary keys by default. For queries on other attributes, you need secondary indexes. GSIs provide flexible querying on any attributes.",
+                explanations: {
+                    "A Global Secondary Index (GSI)": "Correct! GSIs allow querying on non-primary key attributes with different partition and sort keys.",
+                    "A Local Secondary Index (LSI)": "Incorrect. LSIs must use the same partition key as the base table, only the sort key can differ.",
+                    "A materialized view": "Incorrect. DynamoDB doesn't have materialized views.",
+                    "A read replica": "Incorrect. DynamoDB uses global tables for replication, not read replicas."
+                }
+            },
+            {
+                id: 7,
+                domain: "Development",
+                type: "Multiple Response",
+                question: "A Lambda function needs access to secrets stored in AWS Secrets Manager. Which actions are required? (Select TWO)",
+                options: [
+                    { text: "Grant the Lambda execution role permissions to access Secrets Manager", correct: true },
+                    { text: "Store the secret ARN in an environment variable", correct: false },
+                    { text: "Use the AWS SDK to retrieve the secret at runtime", correct: true },
+                    { text: "Enable VPC endpoints for Secrets Manager", correct: false },
+                    { text: "Encrypt the Lambda function code", correct: false }
+                ],
+                materials: "Lambda functions access AWS services through IAM roles and AWS SDK. Secrets Manager requires both proper IAM permissions and SDK calls to retrieve secrets securely.",
+                explanations: {
+                    "Grant the Lambda execution role permissions to access Secrets Manager": "Correct! The execution role needs secretsmanager:GetSecretValue permission.",
+                    "Store the secret ARN in an environment variable": "Partially correct practice but not required. The ARN can be hardcoded or from config.",
+                    "Use the AWS SDK to retrieve the secret at runtime": "Correct! Use AWS SDK's SecretsManager client to call GetSecretValue.",
+                    "Enable VPC endpoints for Secrets Manager": "Incorrect. Only needed if Lambda is in a VPC without internet access.",
+                    "Encrypt the Lambda function code": "Incorrect. This doesn't relate to accessing Secrets Manager."
+                }
+            },
+            {
+                id: 8,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "What is the maximum execution time for an AWS Lambda function?",
+                options: [
+                    { text: "3 minutes", correct: false },
+                    { text: "5 minutes", correct: false },
+                    { text: "15 minutes", correct: true },
+                    { text: "30 minutes", correct: false }
+                ],
+                materials: "AWS Lambda has specific limits on execution time, memory, and payload sizes. Understanding these limits is crucial for designing serverless applications.",
+                explanations: {
+                    "3 minutes": "Incorrect. This was an old limit from earlier Lambda versions.",
+                    "5 minutes": "Incorrect. This is less than the current maximum.",
+                    "15 minutes": "Correct! Lambda functions can run for a maximum of 900 seconds (15 minutes).",
+                    "30 minutes": "Incorrect. This exceeds Lambda's maximum execution time."
+                }
+            },
+            {
+                id: 9,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "A developer wants to enable versioning for a Lambda function. What happens when a new version is published?",
+                options: [
+                    { text: "The $LATEST version is automatically updated", correct: false },
+                    { text: "A new immutable version is created with an incremented number", correct: true },
+                    { text: "All previous versions are deleted", correct: false },
+                    { text: "The function code is compressed", correct: false }
+                ],
+                materials: "Lambda versioning allows you to publish immutable versions of your function code and configuration. This enables safe deployment strategies and rollback capabilities.",
+                explanations: {
+                    "The $LATEST version is automatically updated": "Incorrect. $LATEST is mutable and points to the latest unpublished changes.",
+                    "A new immutable version is created with an incremented number": "Correct! Each published version gets an incremented number (1, 2, 3...) and cannot be changed.",
+                    "All previous versions are deleted": "Incorrect. Previous versions remain available unless explicitly deleted.",
+                    "The function code is compressed": "Incorrect. This isn't related to versioning."
+                }
+            },
+            {
+                id: 10,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "Which AWS service should be used to implement a publish/subscribe messaging pattern?",
+                options: [
+                    { text: "Amazon SQS", correct: false },
+                    { text: "Amazon SNS", correct: true },
+                    { text: "Amazon Kinesis", correct: false },
+                    { text: "AWS Step Functions", correct: false }
+                ],
+                materials: "Different AWS services support different messaging patterns. SNS implements pub/sub, SQS implements queuing, Kinesis handles streaming data.",
+                explanations: {
+                    "Amazon SQS": "Incorrect. SQS is a queue service, not pub/sub. One consumer reads each message.",
+                    "Amazon SNS": "Correct! SNS is designed for pub/sub patterns, allowing one message to be delivered to multiple subscribers.",
+                    "Amazon Kinesis": "Incorrect. Kinesis is for real-time data streaming, not simple pub/sub messaging.",
+                    "AWS Step Functions": "Incorrect. Step Functions orchestrate workflows, not messaging."
+                }
+            },
+            {
+                id: 11,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "A developer needs to store large objects up to 5 TB. Which storage solution should be used?",
+                options: [
+                    { text: "Amazon EBS", correct: false },
+                    { text: "Amazon S3", correct: true },
+                    { text: "Amazon EFS", correct: false },
+                    { text: "Amazon DynamoDB", correct: false }
+                ],
+                materials: "AWS offers various storage services with different size limits and use cases. Understanding these limits helps choose the right service.",
+                explanations: {
+                    "Amazon EBS": "Incorrect. EBS volumes have smaller size limits and are block storage for EC2.",
+                    "Amazon S3": "Correct! S3 supports objects up to 5 TB and is designed for large object storage.",
+                    "Amazon EFS": "Incorrect. EFS is a file system, not optimized for individual large objects.",
+                    "Amazon DynamoDB": "Incorrect. DynamoDB has a 400 KB item size limit."
+                }
+            },
+            {
+                id: 12,
+                domain: "Development",
+                type: "Multiple Response",
+                question: "Which DynamoDB operations consume read capacity units? (Select TWO)",
+                options: [
+                    { text: "GetItem", correct: true },
+                    { text: "PutItem", correct: false },
+                    { text: "Query", correct: true },
+                    { text: "UpdateItem", correct: false },
+                    { text: "DeleteItem", correct: false }
+                ],
+                materials: "DynamoDB capacity units are consumed differently by read and write operations. Understanding this is essential for capacity planning and cost optimization.",
+                explanations: {
+                    "GetItem": "Correct! GetItem is a read operation that consumes read capacity units.",
+                    "PutItem": "Incorrect. PutItem is a write operation consuming write capacity units.",
+                    "Query": "Correct! Query reads multiple items and consumes read capacity units.",
+                    "UpdateItem": "Incorrect. UpdateItem is a write operation.",
+                    "DeleteItem": "Incorrect. DeleteItem is a write operation."
+                }
+            },
+            {
+                id: 13,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "What is the purpose of AWS X-Ray in application development?",
+                options: [
+                    { text: "To encrypt data at rest", correct: false },
+                    { text: "To trace and analyze distributed application requests", correct: true },
+                    { text: "To manage application secrets", correct: false },
+                    { text: "To deploy application code", correct: false }
+                ],
+                materials: "AWS X-Ray helps developers debug and analyze microservices applications by tracing requests across services and identifying performance bottlenecks.",
+                explanations: {
+                    "To encrypt data at rest": "Incorrect. X-Ray is for tracing, not encryption. Use KMS for encryption.",
+                    "To trace and analyze distributed application requests": "Correct! X-Ray provides distributed tracing to understand application behavior and performance.",
+                    "To manage application secrets": "Incorrect. Use Secrets Manager or Parameter Store for secrets.",
+                    "To deploy application code": "Incorrect. Use CodeDeploy, Elastic Beanstalk, or other deployment services."
+                }
+            },
+            {
+                id: 14,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "A developer wants to invoke a Lambda function directly using the AWS CLI. Which command should be used?",
+                options: [
+                    { text: "aws lambda execute-function", correct: false },
+                    { text: "aws lambda invoke", correct: true },
+                    { text: "aws lambda run-function", correct: false },
+                    { text: "aws lambda call", correct: false }
+                ],
+                materials: "AWS CLI provides commands to interact with Lambda functions. Understanding the correct commands is essential for testing and automation.",
+                explanations: {
+                    "aws lambda execute-function": "Incorrect. This command doesn't exist.",
+                    "aws lambda invoke": "Correct! 'aws lambda invoke' is the correct command to trigger a Lambda function.",
+                    "aws lambda run-function": "Incorrect. This command doesn't exist.",
+                    "aws lambda call": "Incorrect. This command doesn't exist."
+                }
+            },
+            {
+                id: 15,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "Which S3 storage class is most cost-effective for data that is accessed infrequently but requires millisecond access when needed?",
+                options: [
+                    { text: "S3 Standard", correct: false },
+                    { text: "S3 Intelligent-Tiering", correct: false },
+                    { text: "S3 Standard-IA", correct: true },
+                    { text: "S3 Glacier", correct: false }
+                ],
+                materials: "S3 offers multiple storage classes optimized for different access patterns and cost requirements. Choosing the right class balances cost with performance needs.",
+                explanations: {
+                    "S3 Standard": "Incorrect. Standard is for frequently accessed data and costs more.",
+                    "S3 Intelligent-Tiering": "Incorrect. This works but costs more due to monitoring fees for infrequent access patterns.",
+                    "S3 Standard-IA": "Correct! Standard-IA (Infrequent Access) is optimized for infrequently accessed data with millisecond access times.",
+                    "S3 Glacier": "Incorrect. Glacier requires hours for retrieval, not milliseconds."
+                }
+            },
+            {
+                id: 16,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "A developer needs to execute code in response to S3 object uploads. What is the MOST serverless solution?",
+                options: [
+                    { text: "Configure S3 event notifications to trigger a Lambda function", correct: true },
+                    { text: "Use CloudWatch Events to poll S3", correct: false },
+                    { text: "Run a cron job on EC2 to check for new objects", correct: false },
+                    { text: "Use SQS to poll S3 API", correct: false }
+                ],
+                materials: "S3 can automatically trigger events when objects are created, deleted, or modified. Lambda functions can be configured as event targets for automated processing.",
+                explanations: {
+                    "Configure S3 event notifications to trigger a Lambda function": "Correct! This is fully serverless, automatic, and cost-effective. S3 invokes Lambda directly on object events.",
+                    "Use CloudWatch Events to poll S3": "Incorrect. CloudWatch Events cannot directly poll S3.",
+                    "Run a cron job on EC2 to check for new objects": "Incorrect. This requires managing EC2 instances and isn't serverless.",
+                    "Use SQS to poll S3 API": "Incorrect. SQS doesn't poll S3; this adds unnecessary complexity."
+                }
+            },
+            {
+                id: 17,
+                domain: "Development",
+                type: "Multiple Response",
+                question: "Which AWS services can be used as event sources for Lambda? (Select TWO)",
+                options: [
+                    { text: "Amazon S3", correct: true },
+                    { text: "Amazon RDS", correct: false },
+                    { text: "Amazon DynamoDB Streams", correct: true },
+                    { text: "Amazon EBS", correct: false },
+                    { text: "Amazon Redshift", correct: false }
+                ],
+                materials: "Lambda supports various event sources that can automatically trigger function execution. Understanding supported sources is key to building event-driven architectures.",
+                explanations: {
+                    "Amazon S3": "Correct! S3 can trigger Lambda on object events (PUT, DELETE, etc.).",
+                    "Amazon RDS": "Incorrect. RDS doesn't directly trigger Lambda, though RDS Proxy events can.",
+                    "Amazon DynamoDB Streams": "Correct! DynamoDB Streams trigger Lambda functions on table changes.",
+                    "Amazon EBS": "Incorrect. EBS doesn't have event-based Lambda triggers.",
+                    "Amazon Redshift": "Incorrect. Redshift doesn't directly trigger Lambda functions."
+                }
+            },
+            {
+                id: 18,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "What does eventual consistency mean in DynamoDB?",
+                options: [
+                    { text: "Data is immediately consistent across all replicas", correct: false },
+                    { text: "Reads might not reflect recent write operations", correct: true },
+                    { text: "Writes are lost if not confirmed", correct: false },
+                    { text: "Data is never consistent", correct: false }
+                ],
+                materials: "DynamoDB offers two consistency models: eventual consistency (default) and strong consistency. Eventual consistency provides better performance with slightly delayed consistency.",
+                explanations: {
+                    "Data is immediately consistent across all replicas": "Incorrect. This describes strong consistency, not eventual consistency.",
+                    "Reads might not reflect recent write operations": "Correct! With eventual consistency, reads may return stale data briefly until all replicas sync.",
+                    "Writes are lost if not confirmed": "Incorrect. Writes are always durable once acknowledged.",
+                    "Data is never consistent": "Incorrect. Data becomes consistent eventually, typically within one second."
+                }
+            },
+            {
+                id: 19,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "A Lambda function needs to connect to an RDS database in a private subnet. What must be configured?",
+                options: [
+                    { text: "Deploy Lambda in the same VPC and subnet as RDS", correct: true },
+                    { text: "Enable public access on RDS", correct: false },
+                    { text: "Use AWS Direct Connect", correct: false },
+                    { text: "Create a VPN connection", correct: false }
+                ],
+                materials: "Lambda functions can access resources in VPCs by configuring VPC settings. This enables connection to private resources like RDS databases.",
+                explanations: {
+                    "Deploy Lambda in the same VPC and subnet as RDS": "Correct! Lambda must be configured with VPC access, proper subnets, and security groups to reach RDS.",
+                    "Enable public access on RDS": "Incorrect. This is a security risk and shouldn't be done for private databases.",
+                    "Use AWS Direct Connect": "Incorrect. Direct Connect is for on-premises connectivity, not Lambda to RDS.",
+                    "Create a VPN connection": "Incorrect. VPN is for external connectivity, not Lambda to RDS in the same AWS account."
+                }
+            },
+            {
+                id: 20,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "Which API Gateway caching behavior reduces the number of calls to backend services?",
+                options: [
+                    { text: "Caching request headers", correct: false },
+                    { text: "Caching responses for a configured TTL", correct: true },
+                    { text: "Caching authentication tokens", correct: false },
+                    { text: "Caching API Gateway logs", correct: false }
+                ],
+                materials: "API Gateway caching stores endpoint responses for a specified time-to-live period, reducing latency and backend load for repeated requests.",
+                explanations: {
+                    "Caching request headers": "Incorrect. Headers aren't cached; responses are.",
+                    "Caching responses for a configured TTL": "Correct! API Gateway caches endpoint responses, serving them directly without calling the backend during the TTL period.",
+                    "Caching authentication tokens": "Incorrect. While authorizers can be cached, this isn't the main caching behavior for reducing backend calls.",
+                    "Caching API Gateway logs": "Incorrect. Log caching doesn't reduce backend calls."
+                }
+            },
+            {
+                id: 21,
+                domain: "Development",
+                type: "Multiple Choice",
+                question: "What is the maximum size of an item in DynamoDB?",
+                options: [
+                    { text: "100 KB", correct: false },
+                    { text: "400 KB", correct: true },
+                    { text: "1 MB", correct: false },
+                    { text: "10 MB", correct: false }
+                ],
+                materials: "DynamoDB has specific item size limits that affect how data should be structured and stored. Large items should be split or stored elsewhere.",
+                explanations: {
+                    "100 KB": "Incorrect. The limit is higher than this.",
+                    "400 KB": "Correct! DynamoDB items cannot exceed 400 KB, including attribute names and values.",
+                    "1 MB": "Incorrect. This exceeds DynamoDB's item size limit.",
+                    "10 MB": "Incorrect. This far exceeds the limit."
+                }
+            },
+            // DOMAIN 2: Security (26% - 17 questions)
+            {
+                id: 22,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "A developer needs to grant an EC2 instance access to an S3 bucket. What is the MOST secure method?",
+                options: [
+                    { text: "Store AWS credentials in the application code", correct: false },
+                    { text: "Attach an IAM role to the EC2 instance", correct: true },
+                    { text: "Use environment variables to store access keys", correct: false },
+                    { text: "Create an IAM user and store credentials in a file", correct: false }
+                ],
+                materials: "IAM roles provide temporary security credentials to AWS resources without needing to manage long-term access keys. This is the recommended approach for EC2 instances.",
+                explanations: {
+                    "Store AWS credentials in the application code": "Incorrect. Hardcoding credentials is a major security risk.",
+                    "Attach an IAM role to the EC2 instance": "Correct! IAM roles automatically provide temporary credentials to EC2 instances securely.",
+                    "Use environment variables to store access keys": "Incorrect. While better than hardcoding, this still requires managing long-term credentials.",
+                    "Create an IAM user and store credentials in a file": "Incorrect. This requires managing and rotating credentials manually."
+                }
+            },
+            {
+                id: 23,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "Which service should be used to store database connection strings securely?",
+                options: [
+                    { text: "Amazon S3", correct: false },
+                    { text: "AWS Systems Manager Parameter Store", correct: true },
+                    { text: "Amazon DynamoDB", correct: false },
+                    { text: "AWS CloudFormation", correct: false }
+                ],
+                materials: "Parameter Store provides secure, hierarchical storage for configuration data and secrets. It integrates with KMS for encryption and supports automatic rotation.",
+                explanations: {
+                    "Amazon S3": "Incorrect. S3 is for object storage, not designed for secrets management.",
+                    "AWS Systems Manager Parameter Store": "Correct! Parameter Store (or Secrets Manager) is designed for storing sensitive configuration data securely with encryption.",
+                    "Amazon DynamoDB": "Incorrect. DynamoDB is a database, not a secrets management service.",
+                    "AWS CloudFormation": "Incorrect. CloudFormation is for infrastructure as code, not storing secrets."
+                }
+            },
+            {
+                id: 24,
+                domain: "Security",
+                type: "Multiple Response",
+                question: "Which actions improve Lambda function security? (Select TWO)",
+                options: [
+                    { text: "Use environment variables for sensitive data", correct: false },
+                    { text: "Encrypt environment variables using KMS", correct: true },
+                    { text: "Grant the function administrator access", correct: false },
+                    { text: "Apply the principle of least privilege to IAM roles", correct: true },
+                    { text: "Store credentials in the function code", correct: false }
+                ],
+                materials: "Securing Lambda functions involves encrypting sensitive data, following least privilege principles, and avoiding credential exposure in code or logs.",
+                explanations: {
+                    "Use environment variables for sensitive data": "Partially correct but incomplete. Environment variables should be encrypted.",
+                    "Encrypt environment variables using KMS": "Correct! KMS encryption protects sensitive data in environment variables.",
+                    "Grant the function administrator access": "Incorrect. This violates least privilege principles.",
+                    "Apply the principle of least privilege to IAM roles": "Correct! Functions should only have permissions they actually need.",
+                    "Store credentials in the function code": "Incorrect. This is a critical security vulnerability."
+                }
+            },
+            {
+                id: 25,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "A developer wants to ensure API Gateway endpoints are only accessible to authenticated users. Which feature should be implemented?",
+                options: [
+                    { text: "CORS configuration", correct: false },
+                    { text: "Lambda authorizer or Cognito authorizer", correct: true },
+                    { text: "VPC endpoint", correct: false },
+                    { text: "CloudFront distribution", correct: false }
+                ],
+                materials: "API Gateway supports various authorization methods including AWS_IAM, Cognito User Pools, and Lambda authorizers for custom authentication logic.",
+                explanations: {
+                    "CORS configuration": "Incorrect. CORS controls cross-origin requests, not authentication.",
+                    "Lambda authorizer or Cognito authorizer": "Correct! These provide authentication and authorization for API requests.",
+                    "VPC endpoint": "Incorrect. VPC endpoints control network access, not user authentication.",
+                    "CloudFront distribution": "Incorrect. CloudFront is for content delivery, not authentication."
+                }
+            },
+            {
+                id: 26,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "What is the purpose of AWS KMS Customer Master Keys (CMKs)?",
+                options: [
+                    { text: "To manage user passwords", correct: false },
+                    { text: "To encrypt and decrypt data", correct: true },
+                    { text: "To authenticate API requests", correct: false },
+                    { text: "To rotate IAM access keys", correct: false }
+                ],
+                materials: "AWS Key Management Service (KMS) creates and manages cryptographic keys used to encrypt data across AWS services. CMKs never leave KMS unencrypted.",
+                explanations: {
+                    "To manage user passwords": "Incorrect. KMS is for encryption keys, not password management.",
+                    "To encrypt and decrypt data": "Correct! CMKs are encryption keys used to protect data at rest and in transit.",
+                    "To authenticate API requests": "Incorrect. API authentication uses access keys or roles, not CMKs.",
+                    "To rotate IAM access keys": "Incorrect. Access key rotation is separate from KMS key management."
+                }
+            },
+            {
+                id: 27,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "A developer needs to allow cross-account access to an S3 bucket. What should be configured?",
+                options: [
+                    { text: "S3 bucket policy", correct: true },
+                    { text: "S3 lifecycle policy", correct: false },
+                    { text: "S3 replication rule", correct: false },
+                    { text: "S3 CORS configuration", correct: false }
+                ],
+                materials: "S3 bucket policies define permissions for bucket access. They can grant access to other AWS accounts, IAM users, or public access with specific conditions.",
+                explanations: {
+                    "S3 bucket policy": "Correct! Bucket policies can grant cross-account access by specifying the other account's ARN in the policy.",
+                    "S3 lifecycle policy": "Incorrect. Lifecycle policies manage object transitions and expiration, not access control.",
+                    "S3 replication rule": "Incorrect. Replication copies objects between buckets, not access control.",
+                    "S3 CORS configuration": "Incorrect. CORS controls browser-based cross-origin requests, not cross-account access."
+                }
+            },
+            {
+                id: 28,
+                domain: "Security",
+                type: "Multiple Response",
+                question: "Which AWS services help detect security threats? (Select TWO)",
+                options: [
+                    { text: "AWS GuardDuty", correct: true },
+                    { text: "AWS Config", correct: false },
+                    { text: "AWS Secrets Manager", correct: false },
+                    { text: "Amazon Inspector", correct: true },
+                    { text: "AWS CloudTrail", correct: false }
+                ],
+                materials: "AWS provides multiple security services. GuardDuty detects threats through intelligent analysis, while Inspector assesses application security vulnerabilities.",
+                explanations: {
+                    "AWS GuardDuty": "Correct! GuardDuty continuously monitors for malicious activity and unauthorized behavior using ML.",
+                    "AWS Config": "Incorrect. Config tracks resource configurations and compliance, not active threat detection.",
+                    "AWS Secrets Manager": "Incorrect. Secrets Manager stores and rotates secrets, doesn't detect threats.",
+                    "Amazon Inspector": "Correct! Inspector automatically assesses applications for vulnerabilities and deviations from best practices.",
+                    "AWS CloudTrail": "Incorrect. CloudTrail logs API calls for auditing but doesn't actively detect threats (though GuardDuty analyzes CloudTrail logs)."
+                }
+            },
+            {
+                id: 29,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "What is the AWS Shared Responsibility Model's customer responsibility?",
+                options: [
+                    { text: "Physical security of data centers", correct: false },
+                    { text: "Security configurations of AWS services they use", correct: true },
+                    { text: "Maintaining hypervisor software", correct: false },
+                    { text: "Hardware maintenance", correct: false }
+                ],
+                materials: "In the AWS Shared Responsibility Model, AWS secures the infrastructure while customers secure their data, applications, and configurations in the cloud.",
+                explanations: {
+                    "Physical security of data centers": "Incorrect. AWS manages physical infrastructure security.",
+                    "Security configurations of AWS services they use": "Correct! Customers are responsible for security IN the cloud: data, applications, IAM, OS, network config, encryption.",
+                    "Maintaining hypervisor software": "Incorrect. AWS manages the virtualization layer.",
+                    "Hardware maintenance": "Incorrect. AWS maintains all physical hardware."
+                }
+            },
+            {
+                id: 30,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "A developer needs to enforce MFA for API calls to critical resources. Where should this be configured?",
+                options: [
+                    { text: "In the application code", correct: false },
+                    { text: "In IAM policy conditions", correct: true },
+                    { text: "In CloudWatch Logs", correct: false },
+                    { text: "In VPC security groups", correct: false }
+                ],
+                materials: "IAM policies support conditions that can require MFA for specific actions, adding an extra layer of security for sensitive operations.",
+                explanations: {
+                    "In the application code": "Incorrect. MFA enforcement is an IAM concern, not application logic.",
+                    "In IAM policy conditions": "Correct! IAM policies can include conditions like 'aws:MultiFactorAuthPresent' to require MFA.",
+                    "In CloudWatch Logs": "Incorrect. CloudWatch Logs is for logging, not access control.",
+                    "In VPC security groups": "Incorrect. Security groups control network traffic, not MFA."
+                }
+            },
+            {
+                id: 31,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "Which encryption method does AWS use for data at rest in S3 by default?",
+                options: [
+                    { text: "No encryption", correct: false },
+                    { text: "Server-side encryption with S3-managed keys (SSE-S3)", correct: true },
+                    { text: "Client-side encryption", correct: false },
+                    { text: "Encryption must be manually enabled", correct: false }
+                ],
+                materials: "S3 now automatically encrypts all new objects using server-side encryption with S3-managed keys, providing automatic encryption at rest.",
+                explanations: {
+                    "No encryption": "Incorrect. As of 2023, S3 automatically encrypts all new objects.",
+                    "Server-side encryption with S3-managed keys (SSE-S3)": "Correct! S3 automatically applies SSE-S3 encryption to all new objects by default.",
+                    "Client-side encryption": "Incorrect. While possible, this isn't the default. The application must handle client-side encryption.",
+                    "Encryption must be manually enabled": "Incorrect. Encryption is now enabled by default."
+                }
+            },
+            {
+                id: 32,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "A company wants to audit all API calls made in their AWS account. Which service should they enable?",
+                options: [
+                    { text: "AWS Config", correct: false },
+                    { text: "AWS CloudTrail", correct: true },
+                    { text: "Amazon CloudWatch", correct: false },
+                    { text: "AWS X-Ray", correct: false }
+                ],
+                materials: "CloudTrail logs all API calls made in an AWS account, providing a complete audit trail for security analysis, compliance, and operational troubleshooting.",
+                explanations: {
+                    "AWS Config": "Incorrect. Config tracks resource configuration changes, not all API calls.",
+                    "AWS CloudTrail": "Correct! CloudTrail records all API calls including who made them, when, and from where.",
+                    "Amazon CloudWatch": "Incorrect. CloudWatch monitors metrics and logs but doesn't provide API audit trails.",
+                    "AWS X-Ray": "Incorrect. X-Ray traces application requests, not AWS API calls."
+                }
+            },
+            {
+                id: 33,
+                domain: "Security",
+                type: "Multiple Response",
+                question: "Which statements about IAM roles are true? (Select TWO)",
+                options: [
+                    { text: "Roles have long-term credentials", correct: false },
+                    { text: "Roles provide temporary security credentials", correct: true },
+                    { text: "Roles can be assumed by users, applications, or services", correct: true },
+                    { text: "Roles require a password", correct: false },
+                    { text: "Roles are region-specific", correct: false }
+                ],
+                materials: "IAM roles provide temporary credentials that can be assumed by trusted entities. They're more secure than long-term access keys.",
+                explanations: {
+                    "Roles have long-term credentials": "Incorrect. Roles provide temporary credentials that expire.",
+                    "Roles provide temporary security credentials": "Correct! Roles generate temporary credentials with automatic rotation.",
+                    "Roles can be assumed by users, applications, or services": "Correct! Roles can be assumed by various entities defined in the trust policy.",
+                    "Roles require a password": "Incorrect. Roles use temporary security tokens, not passwords.",
+                    "Roles are region-specific": "Incorrect. IAM roles are global resources."
+                }
+            },
+            {
+                id: 34,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "What is the maximum validity period for IAM role temporary credentials?",
+                options: [
+                    { text: "1 hour", correct: false },
+                    { text: "12 hours", correct: true },
+                    { text: "24 hours", correct: false },
+                    { text: "7 days", correct: false }
+                ],
+                materials: "IAM role temporary credentials have configurable duration limits. Understanding these limits is important for session management and security.",
+                explanations: {
+                    "1 hour": "Incorrect. Credentials can last longer than this.",
+                    "12 hours": "Correct! IAM role session duration can be configured up to 12 hours maximum.",
+                    "24 hours": "Incorrect. This exceeds the maximum duration.",
+                    "7 days": "Incorrect. This far exceeds the maximum duration."
+                }
+            },
+            {
+                id: 35,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "A developer wants to restrict S3 bucket access to specific VPC endpoints only. What should be configured?",
+                options: [
+                    { text: "S3 bucket policy with VPC endpoint condition", correct: true },
+                    { text: "VPC security group", correct: false },
+                    { text: "Network ACL", correct: false },
+                    { text: "S3 lifecycle policy", correct: false }
+                ],
+                materials: "S3 bucket policies can include conditions that restrict access to specific VPC endpoints, preventing data access from outside the VPC.",
+                explanations: {
+                    "S3 bucket policy with VPC endpoint condition": "Correct! Use a bucket policy with condition 'aws:SourceVpce' to allow access only from specific VPC endpoints.",
+                    "VPC security group": "Incorrect. Security groups don't apply to S3 (it's not in a VPC).",
+                    "Network ACL": "Incorrect. NACLs control VPC subnet traffic, not S3 access control.",
+                    "S3 lifecycle policy": "Incorrect. Lifecycle policies manage object retention, not access control."
+                }
+            },
+            {
+                id: 36,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "What is the purpose of Amazon Cognito User Pools?",
+                options: [
+                    { text: "To create and maintain a user directory for authentication", correct: true },
+                    { text: "To encrypt data at rest", correct: false },
+                    { text: "To monitor application performance", correct: false },
+                    { text: "To manage AWS IAM users", correct: false }
+                ],
+                materials: "Cognito User Pools provide a managed user directory and authentication service for web and mobile applications, supporting sign-up, sign-in, and user management.",
+                explanations: {
+                    "To create and maintain a user directory for authentication": "Correct! User Pools handle user registration, authentication, password reset, and account management.",
+                    "To encrypt data at rest": "Incorrect. Cognito is for authentication, not encryption (use KMS for encryption).",
+                    "To monitor application performance": "Incorrect. Use CloudWatch or X-Ray for monitoring.",
+                    "To manage AWS IAM users": "Incorrect. Cognito manages application users, not IAM users."
+                }
+            },
+            {
+                id: 37,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "A developer needs to detect and prevent SQL injection attacks. Which AWS service can help?",
+                options: [
+                    { text: "AWS Shield", correct: false },
+                    { text: "AWS WAF", correct: true },
+                    { text: "AWS GuardDuty", correct: false },
+                    { text: "Amazon Inspector", correct: false }
+                ],
+                materials: "AWS WAF (Web Application Firewall) protects web applications from common exploits like SQL injection, XSS, and other OWASP top 10 vulnerabilities.",
+                explanations: {
+                    "AWS Shield": "Incorrect. Shield protects against DDoS attacks, not application-layer exploits.",
+                    "AWS WAF": "Correct! WAF provides managed and custom rules to filter malicious requests including SQL injection attempts.",
+                    "AWS GuardDuty": "Incorrect. GuardDuty detects threats but doesn't prevent them at the application layer.",
+                    "Amazon Inspector": "Incorrect. Inspector assesses application security but doesn't provide runtime protection."
+                }
+            },
+            {
+                id: 38,
+                domain: "Security",
+                type: "Multiple Choice",
+                question: "What is the difference between AWS Secrets Manager and Parameter Store?",
+                options: [
+                    { text: "Secrets Manager supports automatic rotation", correct: true },
+                    { text: "Parameter Store is more expensive", correct: false },
+                    { text: "Secrets Manager cannot encrypt data", correct: false },
+                    { text: "Parameter Store only stores strings", correct: false }
+                ],
+                materials: "Both services store secrets securely with encryption. Secrets Manager adds automatic rotation capabilities and is specifically designed for database credentials and API keys.",
+                explanations: {
+                    "Secrets Manager supports automatic rotation": "Correct! Secrets Manager includes built-in rotation for RDS, Redshift, and DocumentDB, plus custom rotation via Lambda.",
+                    "Parameter Store is more expensive": "Incorrect. Parameter Store is free for standard parameters; Secrets Manager charges per secret.",
+                    "Secrets Manager cannot encrypt data": "Incorrect. Both services support KMS encryption.",
+                    "Parameter Store only stores strings": "Incorrect. Parameter Store stores strings, StringLists, and SecureStrings."
+                }
+            },
+            // DOMAIN 3: Deployment (24% - 16 questions)
+            {
+                id: 39,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "A developer needs to deploy updates to an Elastic Beanstalk environment with zero downtime. Which deployment policy should be used?",
+                options: [
+                    { text: "All at once", correct: false },
+                    { text: "Rolling", correct: false },
+                    { text: "Rolling with additional batch", correct: false },
+                    { text: "Immutable", correct: true }
+                ],
+                materials: "Elastic Beanstalk offers several deployment policies with different trade-offs between speed, cost, and zero-downtime requirements.",
+                explanations: {
+                    "All at once": "Incorrect. This deploys to all instances simultaneously, causing downtime.",
+                    "Rolling": "Incorrect. Rolling deployment updates batches sequentially, reducing capacity during deployment.",
+                    "Rolling with additional batch": "Incorrect. While this maintains capacity, it doesn't guarantee zero downtime if issues occur.",
+                    "Immutable": "Correct! Immutable deployment creates a new Auto Scaling group with updated instances, then switches traffic with zero downtime."
+                }
+            },
+            {
+                id: 40,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "What is the purpose of AWS CodeDeploy deployment groups?",
+                options: [
+                    { text: "To group source code repositories", correct: false },
+                    { text: "To define sets of instances for deployment", correct: true },
+                    { text: "To store deployment artifacts", correct: false },
+                    { text: "To manage IAM permissions", correct: false }
+                ],
+                materials: "CodeDeploy deployment groups specify which instances receive the deployment and how the deployment progresses through different phases.",
+                explanations: {
+                    "To group source code repositories": "Incorrect. CodeCommit manages repositories, not deployment groups.",
+                    "To define sets of instances for deployment": "Correct! Deployment groups identify target instances using tags, Auto Scaling groups, or EC2 instances.",
+                    "To store deployment artifacts": "Incorrect. S3 or CodeArtifact stores artifacts.",
+                    "To manage IAM permissions": "Incorrect. IAM roles manage permissions separately."
+                }
+            },
+            {
+                id: 41,
+                domain: "Deployment",
+                type: "Multiple Response",
+                question: "Which AWS services are part of the CI/CD pipeline? (Select TWO)",
+                options: [
+                    { text: "AWS CodePipeline", correct: true },
+                    { text: "AWS Lambda", correct: false },
+                    { text: "AWS CodeBuild", correct: true },
+                    { text: "Amazon S3", correct: false },
+                    { text: "Amazon RDS", correct: false }
+                ],
+                materials: "AWS provides a suite of developer tools for building CI/CD pipelines: CodeCommit (source), CodeBuild (build), CodeDeploy (deploy), and CodePipeline (orchestration).",
+                explanations: {
+                    "AWS CodePipeline": "Correct! CodePipeline orchestrates the CI/CD workflow from source to deployment.",
+                    "AWS Lambda": "Incorrect. Lambda can be part of the pipeline as a custom action but isn't a CI/CD service itself.",
+                    "AWS CodeBuild": "Correct! CodeBuild compiles source code, runs tests, and produces deployable artifacts.",
+                    "Amazon S3": "Incorrect. S3 stores artifacts but isn't a CI/CD service.",
+                    "Amazon RDS": "Incorrect. RDS is a database service, not part of CI/CD."
+                }
+            },
+            {
+                id: 42,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "A developer wants to roll back a Lambda function deployment. What should they do?",
+                options: [
+                    { text: "Delete the current version", correct: false },
+                    { text: "Update the function alias to point to the previous version", correct: true },
+                    { text: "Restore from S3 backup", correct: false },
+                    { text: "Redeploy the old code manually", correct: false }
+                ],
+                materials: "Lambda versions and aliases enable safe deployment strategies and quick rollbacks. Aliases can be redirected to different versions instantly.",
+                explanations: {
+                    "Delete the current version": "Incorrect. Published versions are immutable and cannot be deleted if referenced.",
+                    "Update the function alias to point to the previous version": "Correct! Aliases provide a stable endpoint that can be instantly redirected to any version for quick rollbacks.",
+                    "Restore from S3 backup": "Incorrect. Lambda doesn't automatically backup to S3; this adds unnecessary complexity.",
+                    "Redeploy the old code manually": "Incorrect. This is slow and error-prone compared to using versions and aliases."
+                }
+            },
+            {
+                id: 43,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "What file defines the deployment configuration in AWS SAM?",
+                options: [
+                    { text: "package.json", correct: false },
+                    { text: "template.yaml", correct: true },
+                    { text: "buildspec.yml", correct: false },
+                    { text: "Dockerfile", correct: false }
+                ],
+                materials: "AWS SAM (Serverless Application Model) extends CloudFormation with simplified syntax for serverless applications. The template defines all resources.",
+                explanations: {
+                    "package.json": "Incorrect. This is for Node.js dependencies, not SAM configuration.",
+                    "template.yaml": "Correct! SAM uses template.yaml (or template.json) to define Lambda functions, APIs, and other resources.",
+                    "buildspec.yml": "Incorrect. This is for CodeBuild build specifications.",
+                    "Dockerfile": "Incorrect. Dockerfile is for container images."
+                }
+            },
+            {
+                id: 44,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "Which CodeDeploy deployment type minimizes deployment time?",
+                options: [
+                    { text: "In-place deployment", correct: true },
+                    { text: "Blue/Green deployment", correct: false },
+                    { text: "Rolling deployment", correct: false },
+                    { text: "Canary deployment", correct: false }
+                ],
+                materials: "CodeDeploy supports different deployment types with trade-offs between speed, safety, and resource usage.",
+                explanations: {
+                    "In-place deployment": "Correct! In-place updates existing instances directly, making it the fastest but with potential downtime.",
+                    "Blue/Green deployment": "Incorrect. Blue/Green is safer but takes longer as it provisions new instances.",
+                    "Rolling deployment": "Incorrect. Rolling deploys in batches, taking longer than in-place.",
+                    "Canary deployment": "Incorrect. Canary gradually shifts traffic, taking the longest but providing the safest validation."
+                }
+            },
+            {
+                id: 45,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "A developer needs to automate building Docker images. Which AWS service should be used?",
+                options: [
+                    { text: "AWS CodeCommit", correct: false },
+                    { text: "AWS CodeBuild", correct: true },
+                    { text: "AWS CodeDeploy", correct: false },
+                    { text: "Amazon ECR", correct: false }
+                ],
+                materials: "CodeBuild is a fully managed build service that compiles code, runs tests, and produces deployable artifacts including Docker images.",
+                explanations: {
+                    "AWS CodeCommit": "Incorrect. CodeCommit stores source code, doesn't build images.",
+                    "AWS CodeBuild": "Correct! CodeBuild can build Docker images using buildspec.yml and push them to ECR.",
+                    "AWS CodeDeploy": "Incorrect. CodeDeploy handles deployment, not building.",
+                    "Amazon ECR": "Incorrect. ECR stores Docker images, doesn't build them."
+                }
+            },
+            {
+                id: 46,
+                domain: "Deployment",
+                type: "Multiple Response",
+                question: "What information must be specified in a CodeDeploy AppSpec file? (Select TWO)",
+                options: [
+                    { text: "Source code repository URL", correct: false },
+                    { text: "File copy locations", correct: true },
+                    { text: "Lifecycle event hooks", correct: true },
+                    { text: "IAM role ARN", correct: false },
+                    { text: "CloudWatch log group", correct: false }
+                ],
+                materials: "The AppSpec file defines how CodeDeploy should install and configure the application, including file mappings and lifecycle hooks for custom scripts.",
+                explanations: {
+                    "Source code repository URL": "Incorrect. CodePipeline or CodeBuild handles source integration.",
+                    "File copy locations": "Correct! AppSpec specifies which files to copy and where on the target instances.",
+                    "Lifecycle event hooks": "Correct! Hooks define scripts to run at specific deployment phases (BeforeInstall, AfterInstall, ApplicationStart, etc.).",
+                    "IAM role ARN": "Incorrect. IAM roles are configured in deployment groups, not AppSpec.",
+                    "CloudWatch log group": "Incorrect. Logging is configured separately in deployment groups."
+                }
+            },
+            {
+                id: 47,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "What is the primary benefit of using Lambda weighted aliases?",
+                options: [
+                    { text: "Reduced function execution time", correct: false },
+                    { text: "Gradual traffic shifting between versions", correct: true },
+                    { text: "Automatic scaling", correct: false },
+                    { text: "Cost reduction", correct: false }
+                ],
+                materials: "Weighted aliases allow splitting traffic between two Lambda versions, enabling canary deployments and gradual rollouts with automatic rollback if issues occur.",
+                explanations: {
+                    "Reduced function execution time": "Incorrect. Weighted aliases don't affect execution time.",
+                    "Gradual traffic shifting between versions": "Correct! You can route a percentage of traffic to a new version while keeping the rest on the stable version.",
+                    "Automatic scaling": "Incorrect. Lambda scales automatically regardless of aliases.",
+                    "Cost reduction": "Incorrect. Weighted aliases don't directly reduce costs."
+                }
+            },
+            {
+                id: 48,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "Which Elastic Beanstalk deployment policy deploys to new instances without affecting existing capacity?",
+                options: [
+                    { text: "All at once", correct: false },
+                    { text: "Rolling", correct: false },
+                    { text: "Rolling with additional batch", correct: true },
+                    { text: "Immutable", correct: false }
+                ],
+                materials: "Different Elastic Beanstalk deployment policies handle capacity differently during updates, affecting application availability and cost.",
+                explanations: {
+                    "All at once": "Incorrect. This updates all instances simultaneously, taking them out of service.",
+                    "Rolling": "Incorrect. Rolling updates batches in-place, temporarily reducing capacity.",
+                    "Rolling with additional batch": "Correct! This launches new instances first (maintaining full capacity), then updates the original instances in rolling fashion.",
+                    "Immutable": "Incorrect. While immutable also creates new instances, it doesn't roll them out in batches."
+                }
+            },
+            {
+                id: 49,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "What AWS service manages container images for ECS and Kubernetes?",
+                options: [
+                    { text: "Amazon ECS", correct: false },
+                    { text: "Amazon ECR", correct: true },
+                    { text: "AWS Fargate", correct: false },
+                    { text: "Amazon EKS", correct: false }
+                ],
+                materials: "Amazon Elastic Container Registry (ECR) is a fully managed Docker container registry that makes it easy to store, manage, and deploy container images.",
+                explanations: {
+                    "Amazon ECS": "Incorrect. ECS runs containers but doesn't store images.",
+                    "Amazon ECR": "Correct! ECR is AWS's container registry service for storing and managing Docker and OCI images.",
+                    "AWS Fargate": "Incorrect. Fargate is a serverless compute engine for containers, not a registry.",
+                    "Amazon EKS": "Incorrect. EKS runs Kubernetes but doesn't store images."
+                }
+            },
+            {
+                id: 50,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "A CodePipeline stage has failed. What happens to the pipeline?",
+                options: [
+                    { text: "It continues to the next stage", correct: false },
+                    { text: "It stops at the failed stage", correct: true },
+                    { text: "It automatically retries indefinitely", correct: false },
+                    { text: "It rolls back all previous stages", correct: false }
+                ],
+                materials: "CodePipeline executes stages sequentially. When a stage fails, the pipeline stops, preventing buggy code from reaching production.",
+                explanations: {
+                    "It continues to the next stage": "Incorrect. Pipeline execution stops on failure to prevent deploying broken code.",
+                    "It stops at the failed stage": "Correct! The pipeline halts at the failed stage until the issue is resolved or manually retried.",
+                    "It automatically retries indefinitely": "Incorrect. Manual intervention or retry is needed after failure.",
+                    "It rolls back all previous stages": "Incorrect. CodePipeline doesn't automatically rollback; that requires custom actions or CodeDeploy."
+                }
+            },
+            {
+                id: 51,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "What is the purpose of the buildspec.yml file in CodeBuild?",
+                options: [
+                    { text: "To define deployment targets", correct: false },
+                    { text: "To specify build commands and phases", correct: true },
+                    { text: "To configure IAM permissions", correct: false },
+                    { text: "To store build artifacts", correct: false }
+                ],
+                materials: "The buildspec.yml file is a build specification that tells CodeBuild how to run a build, including installing dependencies, running tests, and producing artifacts.",
+                explanations: {
+                    "To define deployment targets": "Incorrect. CodeDeploy defines deployment targets.",
+                    "To specify build commands and phases": "Correct! buildspec.yml defines phases like install, pre_build, build, post_build with their commands.",
+                    "To configure IAM permissions": "Incorrect. IAM roles are configured separately in CodeBuild project settings.",
+                    "To store build artifacts": "Incorrect. S3 stores artifacts; buildspec specifies which files are artifacts."
+                }
+            },
+            {
+                id: 52,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "A developer needs to deploy a Lambda function with dependencies. What should they create?",
+                options: [
+                    { text: "A Lambda layer", correct: false },
+                    { text: "A deployment package", correct: true },
+                    { text: "A CloudFormation stack", correct: false },
+                    { text: "An AMI", correct: false }
+                ],
+                materials: "Lambda deployment packages bundle your function code with its dependencies. For Python, this includes a zip of your code and pip packages.",
+                explanations: {
+                    "A Lambda layer": "Incorrect. While layers can contain dependencies, you still need to package your function code.",
+                    "A deployment package": "Correct! A deployment package is a .zip file containing your code and dependencies.",
+                    "A CloudFormation stack": "Incorrect. CloudFormation deploys infrastructure but the Lambda code still needs packaging.",
+                    "An AMI": "Incorrect. AMIs are for EC2 instances, not Lambda functions."
+                }
+            },
+            {
+                id: 53,
+                domain: "Deployment",
+                type: "Multiple Choice",
+                question: "Which command deploys a SAM application?",
+                options: [
+                    { text: "sam build && sam deploy", correct: true },
+                    { text: "sam init && sam run", correct: false },
+                    { text: "sam create && sam start", correct: false },
+                    { text: "sam package && sam execute", correct: false }
+                ],
+                materials: "AWS SAM CLI provides commands to build, test locally, and deploy serverless applications. The standard deployment workflow includes building and deploying.",
+                explanations: {
+                    "sam build && sam deploy": "Correct! 'sam build' prepares the application and dependencies, then 'sam deploy' packages and deploys to AWS.",
+                    "sam init && sam run": "Incorrect. 'sam init' creates a new project template; there's no 'sam run' command.",
+                    "sam create && sam start": "Incorrect. These commands don't exist in SAM CLI.",
+                    "sam package && sam execute": "Incorrect. 'sam package' exists but is legacy; 'execute' doesn't exist."
+                }
+            },
+            {
+                id: 54,
+                domain: "Deployment",
+                type: "Multiple Response",
+                question: "Which deployment strategies minimize risk? (Select TWO)",
+                options: [
+                    { text: "All at once", correct: false },
+                    { text: "Blue/Green deployment", correct: true },
+                    { text: "Canary deployment", correct: true },
+                    { text: "Big bang deployment", correct: false },
+                    { text: "Direct production deployment", correct: false }
+                ],
+                materials: "Safe deployment strategies gradually roll out changes while monitoring metrics, allowing quick rollback if issues occur.",
+                explanations: {
+                    "All at once": "Incorrect. This is the riskiest strategy, updating everything simultaneously.",
+                    "Blue/Green deployment": "Correct! Blue/Green maintains two environments, allowing instant rollback by switching traffic back.",
+                    "Canary deployment": "Correct! Canary gradually shifts traffic to new version while monitoring metrics, automatically rolling back on errors.",
+                    "Big bang deployment": "Incorrect. This is synonymous with 'all at once' and carries high risk.",
+                    "Direct production deployment": "Incorrect. Deploying directly to production without testing is risky."
+                }
+            },
+            // DOMAIN 4: Troubleshooting and Optimization (18% - 11 questions)
+            {
+                id: 55,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "A Lambda function is timing out after 3 seconds. How can the developer increase the timeout?",
+                options: [
+                    { text: "Modify the Lambda function configuration", correct: true },
+                    { text: "Change the IAM role", correct: false },
+                    { text: "Update the VPC settings", correct: false },
+                    { text: "Increase memory allocation", correct: false }
+                ],
+                materials: "Lambda functions have configurable timeout values from 1 to 900 seconds (15 minutes). Timeouts occur when functions exceed their configured limit.",
+                explanations: {
+                    "Modify the Lambda function configuration": "Correct! You can change the timeout value in the function configuration up to 15 minutes.",
+                    "Change the IAM role": "Incorrect. IAM roles control permissions, not execution timeout.",
+                    "Update the VPC settings": "Incorrect. VPC settings affect network connectivity, not timeout duration.",
+                    "Increase memory allocation": "Incorrect. While more memory provides more CPU and can make functions faster, it doesn't directly increase timeout limits."
+                }
+            },
+            {
+                id: 56,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "Which CloudWatch metric indicates Lambda function performance issues?",
+                options: [
+                    { text: "Invocations", correct: false },
+                    { text: "Duration", correct: true },
+                    { text: "ConcurrentExecutions", correct: false },
+                    { text: "Version", correct: false }
+                ],
+                materials: "CloudWatch Lambda metrics help identify performance problems, errors, throttling, and concurrency issues. Duration measures execution time.",
+                explanations: {
+                    "Invocations": "Incorrect. Invocations show how many times the function ran, not performance.",
+                    "Duration": "Correct! Duration shows how long the function took to execute, helping identify performance problems.",
+                    "ConcurrentExecutions": "Incorrect. This shows how many instances ran simultaneously, not individual performance.",
+                    "Version": "Incorrect. Version is metadata, not a performance metric."
+                }
+            },
+            {
+                id: 57,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "A developer needs to debug API Gateway request/response transformation. What should they enable?",
+                options: [
+                    { text: "CloudTrail logging", correct: false },
+                    { text: "CloudWatch Logs", correct: true },
+                    { text: "X-Ray tracing", correct: false },
+                    { text: "VPC Flow Logs", correct: false }
+                ],
+                materials: "API Gateway can log execution details and full request/response data to CloudWatch Logs, helping debug transformations, authorizers, and integrations.",
+                explanations: {
+                    "CloudTrail logging": "Incorrect. CloudTrail logs API calls to AWS services, not API Gateway request/response data.",
+                    "CloudWatch Logs": "Correct! Enable CloudWatch Logs on API Gateway stages to see detailed execution logs and request/response payloads.",
+                    "X-Ray tracing": "Incorrect. X-Ray shows request tracing but not detailed request/response transformation logs.",
+                    "VPC Flow Logs": "Incorrect. Flow logs capture VPC network traffic, not API Gateway application logs."
+                }
+            },
+            {
+                id: 58,
+                domain: "Troubleshooting",
+                type: "Multiple Response",
+                question: "What can cause Lambda function throttling? (Select TWO)",
+                options: [
+                    { text: "Insufficient memory", correct: false },
+                    { text: "Exceeding concurrent execution limit", correct: true },
+                    { text: "Exceeding reserved concurrency", correct: true },
+                    { text: "Function timeout", correct: false },
+                    { text: "Missing IAM permissions", correct: false }
+                ],
+                materials: "Lambda throttling occurs when invocations exceed concurrency limits. AWS sets account limits and functions can have reserved concurrency limits.",
+                explanations: {
+                    "Insufficient memory": "Incorrect. Low memory causes out-of-memory errors, not throttling.",
+                    "Exceeding concurrent execution limit": "Correct! AWS accounts have concurrent execution limits. Exceeding this causes throttling.",
+                    "Exceeding reserved concurrency": "Correct! If a function has reserved concurrency and exceeds it, additional invocations are throttled.",
+                    "Function timeout": "Incorrect. Timeouts are different from throttling; the function ran but took too long.",
+                    "Missing IAM permissions": "Incorrect. This causes authorization errors, not throttling."
+                }
+            },
+            {
+                id: 59,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "A DynamoDB table is experiencing throttling. What is the FIRST step to resolve this?",
+                options: [
+                    { text: "Enable auto scaling", correct: true },
+                    { text: "Create a Global Secondary Index", correct: false },
+                    { text: "Change the partition key", correct: false },
+                    { text: "Enable point-in-time recovery", correct: false }
+                ],
+                materials: "DynamoDB throttling occurs when read/write requests exceed provisioned capacity. Auto scaling automatically adjusts capacity based on utilization.",
+                explanations: {
+                    "Enable auto scaling": "Correct! Auto scaling automatically increases capacity when utilization is high, preventing throttling.",
+                    "Create a Global Secondary Index": "Incorrect. GSIs help with different query patterns but don't address throttling on the base table.",
+                    "Change the partition key": "Incorrect. While hot partitions can cause throttling, changing the key requires recreating the table—not a first step.",
+                    "Enable point-in-time recovery": "Incorrect. PITR is for backup/restore, not performance."
+                }
+            },
+            {
+                id: 60,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "How can a developer trace a request across multiple AWS services?",
+                options: [
+                    { text: "Use CloudWatch Logs", correct: false },
+                    { text: "Use AWS X-Ray", correct: true },
+                    { text: "Use CloudTrail", correct: false },
+                    { text: "Use VPC Flow Logs", correct: false }
+                ],
+                materials: "X-Ray provides end-to-end request tracing across distributed applications, showing the request path through services and identifying bottlenecks.",
+                explanations: {
+                    "Use CloudWatch Logs": "Incorrect. Logs show events within services but don't automatically trace across services.",
+                    "Use AWS X-Ray": "Correct! X-Ray traces requests across Lambda, API Gateway, DynamoDB, and other services, showing the complete request flow.",
+                    "Use CloudTrail": "Incorrect. CloudTrail logs AWS API calls, not application request tracing.",
+                    "Use VPC Flow Logs": "Incorrect. Flow logs show network traffic, not application-level request tracing."
+                }
+            },
+            {
+                id: 61,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "What causes a Lambda function to have a cold start?",
+                options: [
+                    { text: "Function hasn't been invoked recently", correct: true },
+                    { text: "Function has errors", correct: false },
+                    { text: "Function is throttled", correct: false },
+                    { text: "Function timeout is too short", correct: false }
+                ],
+                materials: "Lambda cold starts occur when AWS must initialize a new execution environment. This adds latency to the first invocation after a period of inactivity.",
+                explanations: {
+                    "Function hasn't been invoked recently": "Correct! When no warm containers exist, Lambda must create a new execution environment, causing cold start latency.",
+                    "Function has errors": "Incorrect. Errors occur during execution, unrelated to cold starts.",
+                    "Function is throttled": "Incorrect. Throttling prevents execution; cold start affects execution latency.",
+                    "Function timeout is too short": "Incorrect. Timeout duration doesn't cause cold starts."
+                }
+            },
+            {
+                id: 62,
+                domain: "Troubleshooting",
+                type: "Multiple Response",
+                question: "How can Lambda function cold starts be reduced? (Select TWO)",
+                options: [
+                    { text: "Increase memory allocation", correct: false },
+                    { text: "Use provisioned concurrency", correct: true },
+                    { text: "Reduce deployment package size", correct: true },
+                    { text: "Enable X-Ray tracing", correct: false },
+                    { text: "Use environment variables", correct: false }
+                ],
+                materials: "Cold start optimization involves keeping functions warm and minimizing initialization time. Provisioned concurrency and smaller packages help.",
+                explanations: {
+                    "Increase memory allocation": "Incorrect. More memory speeds execution but doesn't prevent cold starts.",
+                    "Use provisioned concurrency": "Correct! Provisioned concurrency keeps a specified number of execution environments warm and ready.",
+                    "Reduce deployment package size": "Correct! Smaller packages load faster during initialization, reducing cold start time.",
+                    "Enable X-Ray tracing": "Incorrect. X-Ray helps measure cold starts but doesn't reduce them.",
+                    "Use environment variables": "Incorrect. Environment variables don't affect cold start performance."
+                }
+            },
+            {
+                id: 63,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "A Lambda function receives '429 TooManyRequestsException'. What does this indicate?",
+                options: [
+                    { text: "Function has errors", correct: false },
+                    { text: "Function is being throttled", correct: true },
+                    { text: "Function timed out", correct: false },
+                    { text: "Function out of memory", correct: false }
+                ],
+                materials: "HTTP 429 status codes indicate rate limiting or throttling. In Lambda, this means concurrent executions exceeded the configured limit.",
+                explanations: {
+                    "Function has errors": "Incorrect. Errors produce different error codes.",
+                    "Function is being throttled": "Correct! 429 TooManyRequestsException means invocations exceeded concurrency limits and were throttled.",
+                    "Function timed out": "Incorrect. Timeouts produce Task timed out after X seconds errors.",
+                    "Function out of memory": "Incorrect. Memory issues produce out-of-memory errors."
+                }
+            },
+            {
+                id: 64,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "Which metric helps identify DynamoDB hot partitions?",
+                options: [
+                    { text: "ConsumedReadCapacityUnits per partition", correct: true },
+                    { text: "TableSize", correct: false },
+                    { text: "ItemCount", correct: false },
+                    { text: "GlobalSecondaryIndexes", correct: false }
+                ],
+                materials: "Hot partitions occur when one partition key receives disproportionate traffic. Monitoring per-partition metrics identifies imbalanced access patterns.",
+                explanations: {
+                    "ConsumedReadCapacityUnits per partition": "Correct! Monitoring capacity consumption per partition reveals hot partitions receiving excessive traffic.",
+                    "TableSize": "Incorrect. Table size doesn't indicate access patterns or hot partitions.",
+                    "ItemCount": "Incorrect. Item count shows data distribution, not access patterns.",
+                    "GlobalSecondaryIndexes": "Incorrect. GSI count doesn't relate to hot partitions."
+                }
+            },
+            {
+                id: 65,
+                domain: "Troubleshooting",
+                type: "Multiple Choice",
+                question: "A developer needs to test a Lambda function locally before deployment. Which tool should they use?",
+                options: [
+                    { text: "AWS CloudFormation", correct: false },
+                    { text: "AWS SAM CLI", correct: true },
+                    { text: "AWS CodeBuild", correct: false },
+                    { text: "AWS Cloud9", correct: false }
+                ],
+                materials: "SAM CLI provides 'sam local' commands to invoke Lambda functions locally using Docker, enabling testing before deployment to AWS.",
+                explanations: {
+                    "AWS CloudFormation": "Incorrect. CloudFormation deploys infrastructure but doesn't provide local testing.",
+                    "AWS SAM CLI": "Correct! SAM CLI's 'sam local invoke' and 'sam local start-api' commands test Lambda functions locally.",
+                    "AWS CodeBuild": "Incorrect. CodeBuild runs builds in AWS, not locally.",
+                    "AWS Cloud9": "Incorrect. Cloud9 is an IDE but not specifically for local Lambda testing."
                 }
             }
         ];
@@ -808,9 +1982,10 @@
         function updateProgress() {
             const answeredCount = userAnswers.filter(a => a !== null).length;
             const progress = (answeredCount / questions.length) * 100;
+            const currentQuestionNumber = questionOrder[currentQuestionIndex] + 1; // Get actual question number (1-5)
             document.getElementById('progressFill').style.width = progress + '%';
             document.getElementById('progressText').textContent = 
-                `Question ${currentQuestionIndex + 1} of ${questionOrder.length} | ${answeredCount} answered`;
+                `Question ${currentQuestionNumber} of ${questions.length} | ${answeredCount} answered`;
         }
 
         function setupSwipeHandlers() {
