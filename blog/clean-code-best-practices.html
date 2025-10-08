@@ -282,12 +282,56 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                padding: 0.75rem 0;
+            }
+
+            .nav-container {
+                padding: 0 15px;
+            }
+
+            .nav-logo {
+                font-size: 1.1rem;
+            }
+
+            .nav-logo .logo-text {
+                display: none;
+            }
+
+            .nav-logo i {
+                font-size: 1.5rem;
+            }
+
             .nav-menu {
-                gap: 1rem;
+                gap: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-link {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .language-toggle {
+                padding: 0.35rem 0.8rem;
+                font-size: 0.75rem;
+                gap: 0.3rem;
+            }
+
+            .language-toggle i {
+                font-size: 0.85rem;
+            }
+
+            .article-header {
+                padding: 3rem 0 1.5rem;
             }
 
             .article-title {
-                font-size: 2rem;
+                font-size: 1.75rem;
             }
 
             .article-content {
@@ -297,14 +341,76 @@
             .article-content h2 {
                 font-size: 1.5rem;
             }
+        }
 
-            .language-toggle {
-                padding: 0.4rem 1rem;
-                font-size: 0.85rem;
+        @media (max-width: 480px) {
+            body {
+                padding-top: 55px;
             }
 
-            .nav-logo {
-                font-size: 1.2rem;
+            .navbar {
+                padding: 0.6rem 0;
+            }
+
+            .nav-container {
+                padding: 0 10px;
+            }
+
+            .nav-logo i {
+                font-size: 1.3rem;
+            }
+
+            .nav-menu {
+                gap: 0.3rem;
+            }
+
+            .nav-link {
+                padding: 0.25rem 0.4rem;
+                font-size: 0.8rem;
+            }
+
+            .language-toggle {
+                padding: 0.3rem 0.6rem;
+                font-size: 0.7rem;
+            }
+
+            .language-toggle span {
+                display: none;
+            }
+
+            .language-toggle i {
+                font-size: 0.9rem;
+                margin: 0;
+            }
+
+            .article-header {
+                padding: 2.5rem 0 1.25rem;
+            }
+
+            .article-title {
+                font-size: 1.5rem;
+            }
+
+            .article-meta {
+                font-size: 0.8rem;
+                gap: 1rem;
+            }
+
+            .article-content {
+                padding: 1.5rem 1rem;
+            }
+
+            .article-content h2 {
+                font-size: 1.3rem;
+            }
+
+            .article-content h3 {
+                font-size: 1.1rem;
+            }
+
+            .article-content p,
+            .article-content li {
+                font-size: 0.95rem;
             }
         }
     </style>

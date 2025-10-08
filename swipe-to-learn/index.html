@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swipe To Learn - Practice Certifications | Learn With Me</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0A2540 0%, #1A3B5C 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .header .emoji {
+            font-size: 64px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .mobile-notice {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 40px;
+            color: white;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .mobile-notice .icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .mobile-notice p {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .exams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .exam-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .exam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .exam-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .exam-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .exam-provider {
+            display: inline-block;
+            background: #0A2540;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .exam-description {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .exam-stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .exam-topics {
+            background: #f3f4f6;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .exam-topics-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .exam-topics-list {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #0A2540, #00D4AA);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            box-shadow: 0 5px 15px rgba(10, 37, 64, 0.3);
+        }
+
+        .start-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .coming-soon {
+            opacity: 0.6;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .coming-soon::after {
+            content: 'Coming Soon';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fbbf24;
+            color: #78350f;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-link {
+            display: inline-block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .back-link:hover {
+            transform: translateX(-5px);
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            color: white;
+        }
+
+        .features h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .header .emoji {
+                font-size: 48px;
+            }
+
+            .exams-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back to Home</a>
+
+        <div class="header">
+            <span class="emoji">📱</span>
+            <h1>Swipe To Learn</h1>
+            <p>Practice certification exams on your mobile device with an intuitive swipe interface. Master your knowledge, one swipe at a time!</p>
+        </div>
+
+        <div class="mobile-notice">
+            <div class="icon">📱✨</div>
+            <p><strong>Best experienced on mobile!</strong> Swipe right to submit answers, swipe left to skip questions. Desktop users can use the buttons provided.</p>
+        </div>
+
+        <div class="exams-grid">
+            <!-- AWS Certified Developer Associate -->
+            <div class="exam-card">
+                <span class="exam-icon">☁️</span>
+                <div class="exam-provider">AWS</div>
+                <h2 class="exam-title">Certified Developer - Associate</h2>
+                <p class="exam-description">
+                    Practice exam focusing on AWS development, architectural patterns, and best practices for building cloud applications.
+                </p>
+                
+                <div class="exam-stats">
+                    <div class="stat">
+                        <span>📝</span>
+                        <span>5 Questions</span>
+                    </div>
+                    <div class="stat">
+                        <span>⏱️</span>
+                        <span>~10 mins</span>
+                    </div>
+                    <div class="stat">
+                        <span>🎯</span>
+                        <span>720/1000 to pass</span>
+                    </div>
+                </div>
+
+                <div class="exam-topics">
+                    <div class="exam-topics-title">Topics Covered</div>
+                    <div class="exam-topics-list">
+                        • Architectural patterns<br>
+                        • Idempotency concepts<br>
+                        • Stateful vs Stateless<br>
+                        • Coupling in systems<br>
+                        • Event-driven architecture
+                    </div>
+                </div>
+
+                <a href="aws-developer-associate.html">
+                    <button class="start-btn">Start Practice Exam →</button>
+                </a>
+            </div>
+
+            <!-- Azure Developer Associate - Coming Soon -->
+            <div class="exam-card coming-soon">
+                <span class="exam-icon">☁️</span>
+                <div class="exam-provider">Microsoft Azure</div>
+                <h2 class="exam-title">Azure Developer Associate</h2>
+                <p class="exam-description">
+                    Practice for AZ-204: Developing Solutions for Microsoft Azure certification exam.
+                </p>
+                
+                <div class="exam-stats">
+                    <div class="stat">
+                        <span>📝</span>
+                        <span>TBD Questions</span>
+                    </div>
+                    <div class="stat">
+                        <span>⏱️</span>
+                        <span>TBD mins</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Google Cloud Professional Developer - Coming Soon -->
+            <div class="exam-card coming-soon">
+                <span class="exam-icon">☁️</span>
+                <div class="exam-provider">Google Cloud</div>
+                <h2 class="exam-title">Professional Cloud Developer</h2>
+                <p class="exam-description">
+                    Prepare for the Google Cloud Professional Cloud Developer certification.
+                </p>
+                
+                <div class="exam-stats">
+                    <div class="stat">
+                        <span>📝</span>
+                        <span>TBD Questions</span>
+                    </div>
+                    <div class="stat">
+                        <span>⏱️</span>
+                        <span>TBD mins</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kubernetes CKAD - Coming Soon -->
+            <div class="exam-card coming-soon">
+                <span class="exam-icon">⎈</span>
+                <div class="exam-provider">CNCF</div>
+                <h2 class="exam-title">Kubernetes CKAD</h2>
+                <p class="exam-description">
+                    Certified Kubernetes Application Developer practice exam.
+                </p>
+                
+                <div class="exam-stats">
+                    <div class="stat">
+                        <span>📝</span>
+                        <span>TBD Questions</span>
+                    </div>
+                    <div class="stat">
+                        <span>⏱️</span>
+                        <span>TBD mins</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Docker DCA - Coming Soon -->
+            <div class="exam-card coming-soon">
+                <span class="exam-icon">🐳</span>
+                <div class="exam-provider">Docker</div>
+                <h2 class="exam-title">Docker Certified Associate</h2>
+                <p class="exam-description">
+                    Practice for Docker Certified Associate (DCA) certification.
+                </p>
+                
+                <div class="exam-stats">
+                    <div class="stat">
+                        <span>📝</span>
+                        <span>TBD Questions</span>
+                    </div>
+                    <div class="stat">
+                        <span>⏱️</span>
+                        <span>TBD mins</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- React Certification - Coming Soon -->
+            <div class="exam-card coming-soon">
+                <span class="exam-icon">⚛️</span>
+                <div class="exam-provider">React</div>
+                <h2 class="exam-title">React Fundamentals</h2>
+                <p class="exam-description">
+                    Test your knowledge of React concepts, hooks, and best practices.
+                </p>
+                
+                <div class="exam-stats">
+                    <div class="stat">
+                        <span>📝</span>
+                        <span>TBD Questions</span>
+                    </div>
+                    <div class="stat">
+                        <span>⏱️</span>
+                        <span>TBD mins</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <h2>✨ Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">👆</div>
+                    <div class="feature-title">Swipe Interface</div>
+                    <div class="feature-desc">Intuitive mobile-first design. Swipe right to submit, left to skip.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔀</div>
+                    <div class="feature-title">Randomized Questions</div>
+                    <div class="feature-desc">Questions and answers are randomized for better learning.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💡</div>
+                    <div class="feature-title">Study Materials</div>
+                    <div class="feature-desc">Each question includes related materials to help you learn.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-title">Detailed Results</div>
+                    <div class="feature-desc">Get scaled scores and detailed explanations for every answer.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-title">Review Later</div>
+                    <div class="feature-desc">Skip difficult questions and come back to them at the end.</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📱</div>
+                    <div class="feature-title">Mobile Optimized</div>
+                    <div class="feature-desc">Designed for on-the-go learning and practice.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

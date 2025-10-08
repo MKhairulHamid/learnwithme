@@ -362,6 +362,39 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
+            body {
+                padding-top: 60px;
+            }
+
+            .navbar {
+                padding: 0.75rem 0;
+            }
+
+            .nav-container {
+                padding: 0 15px;
+            }
+
+            .nav-logo {
+                font-size: 1.1rem;
+            }
+
+            .nav-logo span {
+                display: none;
+            }
+
+            .nav-logo i {
+                font-size: 1.5rem;
+            }
+
+            .nav-menu {
+                gap: 0.5rem;
+            }
+
+            .nav-link {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
             .page-header h1 {
                 font-size: 2.5rem;
             }
@@ -383,6 +416,65 @@
                 gap: 1rem;
             }
         }
+
+        @media (max-width: 480px) {
+            body {
+                padding-top: 55px;
+            }
+
+            .navbar {
+                padding: 0.6rem 0;
+            }
+
+            .nav-container {
+                padding: 0 10px;
+            }
+
+            .nav-logo i {
+                font-size: 1.3rem;
+            }
+
+            .nav-menu {
+                gap: 0.3rem;
+            }
+
+            .nav-link {
+                padding: 0.25rem 0.4rem;
+                font-size: 0.8rem;
+            }
+
+            .page-header {
+                padding: 3rem 0 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .page-header p {
+                font-size: 1rem;
+            }
+
+            .stat-number {
+                font-size: 1.5rem;
+            }
+
+            .stat-label {
+                font-size: 0.8rem;
+            }
+
+            .featured-article h2 {
+                font-size: 1.5rem;
+            }
+
+            .featured-content {
+                padding: 1.5rem;
+            }
+
+            .article-card {
+                padding: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -391,7 +483,7 @@
         <div class="nav-container">
             <a href="../index.html" class="nav-logo">
                 <i class="fas fa-graduation-cap"></i>
-                Learn With Khairul
+                <span>Learn With Khairul</span>
             </a>
             <ul class="nav-menu">
                 <li><a href="../index.html" class="nav-link">Home</a></li>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Developer Associate - Swipe To Learn | Learn With Me</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0A2540 0%, #1A3B5C 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            height: 8px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #4ade80;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            color: white;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            position: relative;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .card.swipe-left {
+            transform: translateX(-100%) rotate(-10deg);
+            opacity: 0;
+        }
+
+        .card.swipe-right {
+            transform: translateX(100%) rotate(10deg);
+            opacity: 0;
+        }
+
+        .question-type {
+            display: inline-block;
+            background: #0A2540;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .answers {
+            margin-bottom: 20px;
+        }
+
+        .answer-option {
+            background: #f3f4f6;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            user-select: none;
+        }
+
+        .answer-option:hover {
+            background: #e5e7eb;
+        }
+
+        .answer-option.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+        .answer-option.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        .answer-option.incorrect {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .answer-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #9ca3af;
+            border-radius: 6px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .answer-option.selected .answer-checkbox {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .answer-option.selected .answer-checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+        }
+
+        .answer-text {
+            flex: 1;
+            color: #374151;
+            font-size: 15px;
+        }
+
+        .materials-btn {
+            width: 100%;
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+        }
+
+        .materials-btn:hover {
+            background: #fde68a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(245, 158, 11, 0.2);
+        }
+
+        .materials-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.1);
+        }
+
+        .materials-content {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 0 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            max-height: 0;
+            overflow: hidden;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #78350f;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .materials-content.show {
+            max-height: 500px;
+            padding: 15px;
+        }
+
+        .swipe-area {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .swipe-area p {
+            user-select: none;
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .results-container.show {
+            display: block;
+        }
+
+        .score-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .score-number {
+            font-size: 72px;
+            font-weight: bold;
+            color: #0A2540;
+            margin: 20px 0;
+        }
+
+        .score-label {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+
+        .pass-status {
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+
+        .pass-status.pass {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .pass-status.fail {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .review-header {
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .review-question {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .review-question-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0A2540;
+            margin-bottom: 10px;
+        }
+
+        .review-question-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .review-answer {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .review-answer.user-answer {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .review-answer.correct-answer {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
+
+        .review-answer.wrong-answer {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+
+        .explanation {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .explanation-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .start-container {
+            text-align: center;
+        }
+
+        .start-btn {
+            background: white;
+            color: #0A2540;
+            border: none;
+            padding: 20px 50px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .exam-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .exam-info h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .exam-info ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .exam-info li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .exam-info li:last-child {
+            border-bottom: none;
+        }
+
+        .unanswered-tag {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        @media (min-width: 768px) {
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .question-text {
+                font-size: 20px;
+            }
+
+            .swipe-area {
+                display: none;
+            }
+
+            .desktop-buttons {
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .desktop-btn {
+                flex: 1;
+                padding: 15px;
+                border: none;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .desktop-btn.skip {
+                background: #fee2e2;
+                color: #991b1b;
+            }
+
+            .desktop-btn.submit {
+                background: #d1fae5;
+                color: #065f46;
+            }
+
+            .desktop-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+        }
+
+        @media (max-width: 767px) {
+            .desktop-buttons {
+                display: none;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Swipe To Learn</h1>
+            <p>AWS Certified Developer - Associate</p>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="startScreen" class="start-container">
+            <div class="exam-info">
+                <h2>📋 Practice Exam Info</h2>
+                <ul>
+                    <li><strong>Questions:</strong> 5 Practice Questions</li>
+                    <li><strong>Format:</strong> Multiple Choice & Multiple Response</li>
+                    <li><strong>Topics:</strong> Architectural Patterns, Idempotency, State Management</li>
+                    <li><strong>Passing Score:</strong> 720 / 1000</li>
+                    <li><strong>Swipe Left:</strong> Skip question (review later)</li>
+                    <li><strong>Swipe Right:</strong> Submit your answer</li>
+                </ul>
+            </div>
+            <button class="start-btn" onclick="startExam()">Start Practice Exam</button>
+        </div>
+
+        <!-- Exam Screen -->
+        <div id="examScreen" class="hidden">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText"></div>
+
+            <div id="questionCard" class="card">
+                <span class="question-type" id="questionType"></span>
+                <div class="question-text" id="questionText"></div>
+                
+                <button class="materials-btn" onclick="toggleMaterials()">
+                    💡 Show Related Materials
+                </button>
+                
+                <div class="materials-content" id="materialsContent"></div>
+                
+                <div class="answers" id="answersContainer"></div>
+
+                <div class="swipe-area">
+                    <p style="text-align: center; font-size: 14px; color: #6b7280; padding: 30px 20px; margin: 0;">
+                        👈 <strong>Swipe Left</strong> to Skip • 👉 <strong>Swipe Right</strong> to Submit
+                    </p>
+                </div>
+
+                <div class="desktop-buttons">
+                    <button class="desktop-btn skip" onclick="skipQuestion()">Skip Question</button>
+                    <button class="desktop-btn submit" onclick="submitAnswer()">Submit Answer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="resultsScreen" class="results-container">
+            <div class="score-card">
+                <div class="score-label">Your Score</div>
+                <div class="score-number" id="finalScore"></div>
+                <div class="score-label">Out of 1000</div>
+                <div class="pass-status" id="passStatus"></div>
+                <p style="margin-top: 20px; color: #6b7280;">
+                    <span id="correctCount"></span> correct out of <span id="totalCount"></span> questions
+                </p>
+            </div>
+
+            <h2 class="review-header">📝 Question Review</h2>
+            <div id="reviewContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 1,
+                type: "Multiple Choice",
+                question: "Which architectural pattern is best suited for applications that require components to react to events in real-time without tight coupling?",
+                options: [
+                    { text: "Monolithic", correct: false },
+                    { text: "Microservices", correct: false },
+                    { text: "Event-driven", correct: true },
+                    { text: "Orchestration", correct: false }
+                ],
+                materials: "Event-driven architecture is a software design pattern where components communicate through events. When something happens in one part of the system, it emits an event that other components can listen to and react accordingly. This pattern promotes loose coupling because components don't need to know about each other directly—they only need to know about the events they care about.",
+                explanations: {
+                    "Monolithic": "Incorrect. Monolithic architecture is a traditional approach where all components are tightly integrated into a single application, making it difficult to achieve loose coupling and real-time event handling.",
+                    "Microservices": "Incorrect. While microservices promote loose coupling, the pattern itself doesn't specifically address real-time event handling. Microservices can use event-driven patterns, but they are not synonymous.",
+                    "Event-driven": "Correct! Event-driven architecture is specifically designed for applications where components need to react to events in real-time. It naturally supports loose coupling because components communicate through events rather than direct calls.",
+                    "Orchestration": "Incorrect. Orchestration is a pattern where a central component coordinates the interactions between services. This introduces a degree of coupling through the orchestrator and isn't specifically about real-time event handling."
+                }
+            },
+            {
+                id: 2,
+                type: "Multiple Choice",
+                question: "What does it mean for an operation to be idempotent in a distributed system?",
+                options: [
+                    { text: "It can be performed multiple times without changing the result beyond the initial application", correct: true },
+                    { text: "It must be performed only once to ensure consistency", correct: false },
+                    { text: "It requires multiple confirmations to complete successfully", correct: false },
+                    { text: "It cannot be repeated without causing errors", correct: false }
+                ],
+                materials: "Idempotency is a critical property in distributed systems that ensures reliability and consistency. An idempotent operation produces the same result no matter how many times it's executed with the same inputs. This is particularly important in scenarios where network issues might cause requests to be sent multiple times, or where retry mechanisms are in place.",
+                explanations: {
+                    "It can be performed multiple times without changing the result beyond the initial application": "Correct! This is the definition of idempotency. Whether you perform the operation once or a hundred times with the same inputs, the end result is the same. For example, setting a value to 5 is idempotent (SET x = 5), but incrementing a value is not (x = x + 1).",
+                    "It must be performed only once to ensure consistency": "Incorrect. Idempotent operations can be performed multiple times safely. The key is that performing it multiple times has the same effect as performing it once.",
+                    "It requires multiple confirmations to complete successfully": "Incorrect. Idempotency is about the safety of repeating an operation, not about requiring confirmations. It's unrelated to confirmation mechanisms.",
+                    "It cannot be repeated without causing errors": "Incorrect. This is the opposite of idempotency. Idempotent operations can and should be repeated safely without errors or unintended side effects."
+                }
+            },
+            {
+                id: 3,
+                type: "Multiple Choice",
+                question: "Which of the following best describes a stateless application?",
+                options: [
+                    { text: "It maintains user session data on the server", correct: false },
+                    { text: "It stores all client data in a centralized database", correct: false },
+                    { text: "It does not store any client session data on the server", correct: true },
+                    { text: "It requires a dedicated server for each client session", correct: false }
+                ],
+                materials: "In application architecture, state refers to data that is preserved between requests. A stateless application treats each request as independent and complete in itself—it doesn't remember previous requests from the same client. All necessary information must be included in each request. This contrasts with stateful applications that maintain session information on the server between requests.",
+                explanations: {
+                    "It maintains user session data on the server": "Incorrect. This describes a stateful application. Stateful applications keep track of user sessions and their data on the server between requests.",
+                    "It stores all client data in a centralized database": "Incorrect. While stateless applications might use databases, storing client data in a database doesn't define statefulness. The key is whether session information is maintained between requests.",
+                    "It does not store any client session data on the server": "Correct! Stateless applications don't maintain session data on the server between requests. Each request must contain all the information needed to process it. This makes the application easier to scale horizontally since any server can handle any request.",
+                    "It requires a dedicated server for each client session": "Incorrect. This is actually the opposite of what stateless applications need. Stateless applications don't require dedicated servers per session—any server can handle any request, which is one of their main advantages."
+                }
+            },
+            {
+                id: 4,
+                type: "Multiple Choice",
+                question: "What is a key difference between tightly coupled and loosely coupled components in a system?",
+                options: [
+                    { text: "Tightly coupled components are easier to scale horizontally", correct: false },
+                    { text: "Loosely coupled components depend heavily on each other", correct: false },
+                    { text: "Tightly coupled components have strong dependencies, making changes more complex", correct: true },
+                    { text: "Loosely coupled components require synchronous communication", correct: false }
+                ],
+                materials: "Coupling refers to the degree of interdependence between software components. In tightly coupled systems, components have direct knowledge of each other and their internal workings. Changes in one component often require changes in dependent components. Loosely coupled systems minimize dependencies between components, typically through interfaces, message queues, or event systems, allowing components to evolve independently.",
+                explanations: {
+                    "Tightly coupled components are easier to scale horizontally": "Incorrect. Tightly coupled components are actually harder to scale horizontally because they have strong dependencies on each other. Loosely coupled components are easier to scale.",
+                    "Loosely coupled components depend heavily on each other": "Incorrect. This describes tightly coupled components. Loosely coupled components have minimal dependencies and can function independently.",
+                    "Tightly coupled components have strong dependencies, making changes more complex": "Correct! In tightly coupled systems, components are highly dependent on each other. When you change one component, you often need to modify multiple other components, increasing complexity and reducing flexibility.",
+                    "Loosely coupled components require synchronous communication": "Incorrect. Loosely coupled components often use asynchronous communication patterns (like message queues or events) rather than synchronous calls. This further reduces dependencies."
+                }
+            },
+            {
+                id: 5,
+                type: "Multiple Response",
+                question: "In an event-driven architecture, which of the following are characteristics of the fanout pattern? (Select TWO)",
+                options: [
+                    { text: "It aggregates multiple events into a single event", correct: false },
+                    { text: "It distributes a single event to multiple consumers", correct: true },
+                    { text: "It synchronizes events between services", correct: false },
+                    { text: "It enables parallel processing by multiple services", correct: true },
+                    { text: "It filters events based on predefined criteria", correct: false }
+                ],
+                materials: "The fanout pattern is a messaging pattern commonly used in event-driven architectures. When an event occurs, instead of being sent to a single consumer, it's broadcast to multiple consumers simultaneously. Think of it like a notification system where one event (like a user registration) triggers multiple actions across different services (send welcome email, create user profile, log analytics, etc.).",
+                explanations: {
+                    "It aggregates multiple events into a single event": "Incorrect. This describes an aggregation or consolidation pattern, not fanout. Fanout does the opposite—it takes one event and distributes it to many consumers.",
+                    "It distributes a single event to multiple consumers": "Correct! This is the core characteristic of the fanout pattern. One event is published and multiple consumers receive it, allowing each to process it according to their needs.",
+                    "It synchronizes events between services": "Incorrect. Fanout doesn't synchronize events—it broadcasts them. Services receive events asynchronously and process them independently without coordination.",
+                    "It enables parallel processing by multiple services": "Correct! Because multiple consumers receive the same event simultaneously, they can all process it in parallel. This is a key benefit of the fanout pattern for performance and scalability.",
+                    "It filters events based on predefined criteria": "Incorrect. This describes a filtering or routing pattern. Fanout broadcasts to all consumers without filtering. Individual consumers might filter what they process, but that's not part of the fanout pattern itself."
+                }
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let questionOrder = [];
+        let unansweredQuestions = [];
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        function shuffle(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function startExam() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('examScreen').classList.remove('hidden');
+            
+            // Randomize question order
+            questionOrder = shuffle([...Array(questions.length).keys()]);
+            
+            // Randomize answer options for each question
+            questions.forEach(q => {
+                q.shuffledOptions = shuffle(q.options);
+            });
+
+            userAnswers = new Array(questions.length).fill(null);
+            currentQuestionIndex = 0;
+            loadQuestion();
+            setupSwipeHandlers();
+        }
+
+        function loadQuestion() {
+            const questionIndex = questionOrder[currentQuestionIndex];
+            const question = questions[questionIndex];
+            
+            document.getElementById('questionType').textContent = question.type;
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('materialsContent').textContent = question.materials;
+            document.getElementById('materialsContent').classList.remove('show');
+            
+            // Reset the materials button text
+            const materialsBtn = document.querySelector('.materials-btn');
+            if (materialsBtn) {
+                materialsBtn.innerHTML = '💡 Show Related Materials';
+            }
+            
+            const answersContainer = document.getElementById('answersContainer');
+            answersContainer.innerHTML = '';
+            
+            question.shuffledOptions.forEach((option, index) => {
+                const answerDiv = document.createElement('div');
+                answerDiv.className = 'answer-option';
+                answerDiv.onclick = () => selectAnswer(index, question.type);
+                answerDiv.innerHTML = `
+                    <div class="answer-checkbox"></div>
+                    <div class="answer-text">${option.text}</div>
+                `;
+                answersContainer.appendChild(answerDiv);
+            });
+
+            // Restore previous selections if any
+            if (userAnswers[questionIndex] !== null) {
+                const selections = userAnswers[questionIndex];
+                if (Array.isArray(selections)) {
+                    selections.forEach(idx => {
+                        answersContainer.children[idx].classList.add('selected');
+                    });
+                } else {
+                    answersContainer.children[selections].classList.add('selected');
+                }
+            }
+
+            updateProgress();
+            
+            // Reset card animation
+            const card = document.getElementById('questionCard');
+            card.classList.remove('swipe-left', 'swipe-right');
+            card.style.transform = '';
+        }
+
+        function selectAnswer(index, type) {
+            const questionIndex = questionOrder[currentQuestionIndex];
+            const answersContainer = document.getElementById('answersContainer');
+            const options = answersContainer.children;
+
+            if (type === 'Multiple Choice') {
+                // Deselect all others
+                Array.from(options).forEach(opt => opt.classList.remove('selected'));
+                options[index].classList.add('selected');
+                userAnswers[questionIndex] = index;
+            } else {
+                // Multiple Response - toggle selection
+                options[index].classList.toggle('selected');
+                
+                // Get all selected indices
+                const selected = [];
+                Array.from(options).forEach((opt, idx) => {
+                    if (opt.classList.contains('selected')) {
+                        selected.push(idx);
+                    }
+                });
+                
+                userAnswers[questionIndex] = selected.length > 0 ? selected : null;
+            }
+        }
+
+        function toggleMaterials() {
+            const materials = document.getElementById('materialsContent');
+            const button = document.querySelector('.materials-btn');
+            
+            if (materials.classList.contains('show')) {
+                materials.classList.remove('show');
+                button.innerHTML = '💡 Show Related Materials';
+            } else {
+                materials.classList.add('show');
+                button.innerHTML = '🔽 Hide Related Materials';
+            }
+        }
+
+        function skipQuestion() {
+            const questionIndex = questionOrder[currentQuestionIndex];
+            
+            // Mark as unanswered if not already answered
+            if (userAnswers[questionIndex] === null && !unansweredQuestions.includes(questionIndex)) {
+                unansweredQuestions.push(questionIndex);
+            }
+
+            moveToNextQuestion('left');
+        }
+
+        function submitAnswer() {
+            const questionIndex = questionOrder[currentQuestionIndex];
+            
+            if (userAnswers[questionIndex] === null) {
+                alert('Please select an answer before submitting.');
+                return;
+            }
+
+            // Remove from unanswered if it was there
+            unansweredQuestions = unansweredQuestions.filter(q => q !== questionIndex);
+
+            moveToNextQuestion('right');
+        }
+
+        function moveToNextQuestion(direction) {
+            const card = document.getElementById('questionCard');
+            card.classList.add(`swipe-${direction}`);
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                
+                // Check if there are unanswered questions to review
+                if (currentQuestionIndex >= questions.length && unansweredQuestions.length > 0) {
+                    // Add unanswered questions back to the queue
+                    unansweredQuestions.forEach(q => {
+                        if (!questionOrder.slice(currentQuestionIndex).includes(q)) {
+                            questionOrder.push(q);
+                        }
+                    });
+                    unansweredQuestions = [];
+                }
+
+                if (currentQuestionIndex < questionOrder.length) {
+                    loadQuestion();
+                } else {
+                    showResults();
+                }
+            }, 300);
+        }
+
+        function updateProgress() {
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            const progress = (answeredCount / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                `Question ${currentQuestionIndex + 1} of ${questionOrder.length} | ${answeredCount} answered`;
+        }
+
+        function setupSwipeHandlers() {
+            const card = document.getElementById('questionCard');
+            let isSwiping = false;
+            let startTarget = null;
+            
+            card.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+                touchEndX = touchStartX; // Initialize to start position
+                touchEndY = touchStartY;
+                isSwiping = false;
+                startTarget = e.target;
+            }, false);
+
+            card.addEventListener('touchmove', (e) => {
+                // Check if touch started on an interactive element
+                const isInteractive = startTarget.closest('.answer-option') || 
+                                     startTarget.closest('.materials-btn') ||
+                                     startTarget.closest('button');
+                
+                if (isInteractive) {
+                    return; // Don't swipe if touching an interactive element
+                }
+                
+                touchEndX = e.changedTouches[0].screenX;
+                touchEndY = e.changedTouches[0].screenY;
+                
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
+                
+                // Only consider it a swipe if horizontal movement is greater than vertical
+                // and movement is significant enough
+                if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
+                    isSwiping = true;
+                    card.style.transform = `translateX(${diffX}px) rotate(${diffX / 20}deg)`;
+                    e.preventDefault(); // Prevent scrolling during swipe
+                }
+            }, false);
+
+            card.addEventListener('touchend', (e) => {
+                const diffX = touchEndX - touchStartX;
+                const diffY = touchEndY - touchStartY;
+                
+                card.style.transform = '';
+                
+                // Only trigger swipe action if:
+                // 1. User was actually swiping (not just tapping)
+                // 2. Horizontal movement is significant (> 100px)
+                // 3. Movement is primarily horizontal
+                if (isSwiping && Math.abs(diffX) > 100 && Math.abs(diffX) > Math.abs(diffY)) {
+                    if (diffX > 0) {
+                        submitAnswer();
+                    } else {
+                        skipQuestion();
+                    }
+                }
+                
+                // Reset all values
+                touchStartX = 0;
+                touchEndX = 0;
+                touchStartY = 0;
+                touchEndY = 0;
+                isSwiping = false;
+                startTarget = null;
+            }, false);
+        }
+
+        function calculateScore() {
+            let correct = 0;
+            
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                
+                if (userAnswer === null) return;
+
+                if (question.type === 'Multiple Choice') {
+                    if (question.shuffledOptions[userAnswer].correct) {
+                        correct++;
+                    }
+                } else {
+                    // Multiple Response
+                    const correctIndices = question.shuffledOptions
+                        .map((opt, idx) => opt.correct ? idx : -1)
+                        .filter(idx => idx !== -1);
+                    
+                    const userSelections = Array.isArray(userAnswer) ? userAnswer : [userAnswer];
+                    
+                    // Check if arrays match
+                    if (correctIndices.length === userSelections.length &&
+                        correctIndices.every(idx => userSelections.includes(idx))) {
+                        correct++;
+                    }
+                }
+            });
+
+            // Calculate scaled score (100-1000, with 720 as passing)
+            const percentage = correct / questions.length;
+            const scaledScore = Math.round(100 + (percentage * 900));
+            
+            return { scaledScore, correct, total: questions.length };
+        }
+
+        function showResults() {
+            document.getElementById('examScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('show');
+            
+            const { scaledScore, correct, total } = calculateScore();
+            const passed = scaledScore >= 720;
+
+            document.getElementById('finalScore').textContent = scaledScore;
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('totalCount').textContent = total;
+            
+            const passStatus = document.getElementById('passStatus');
+            passStatus.textContent = passed ? '✓ PASSED' : '✗ FAILED';
+            passStatus.className = 'pass-status ' + (passed ? 'pass' : 'fail');
+
+            displayReview();
+            
+            setTimeout(() => {
+                document.getElementById('resultsScreen').classList.add('show');
+            }, 100);
+        }
+
+        function displayReview() {
+            const reviewContainer = document.getElementById('reviewContainer');
+            reviewContainer.innerHTML = '';
+
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                const reviewDiv = document.createElement('div');
+                reviewDiv.className = 'review-question';
+
+                let userAnswerText = '';
+                let correctAnswerText = '';
+                let isCorrect = false;
+
+                if (question.type === 'Multiple Choice') {
+                    if (userAnswer !== null) {
+                        userAnswerText = question.shuffledOptions[userAnswer].text;
+                        isCorrect = question.shuffledOptions[userAnswer].correct;
+                    } else {
+                        userAnswerText = 'Not answered';
+                    }
+                    
+                    const correctOption = question.shuffledOptions.find(opt => opt.correct);
+                    correctAnswerText = correctOption.text;
+                } else {
+                    // Multiple Response
+                    const correctOptions = question.shuffledOptions
+                        .map((opt, idx) => opt.correct ? idx : -1)
+                        .filter(idx => idx !== -1);
+                    
+                    if (userAnswer !== null) {
+                        const userSelections = Array.isArray(userAnswer) ? userAnswer : [userAnswer];
+                        userAnswerText = userSelections
+                            .map(idx => question.shuffledOptions[idx].text)
+                            .join(', ');
+                        
+                        isCorrect = correctOptions.length === userSelections.length &&
+                                   correctOptions.every(idx => userSelections.includes(idx));
+                    } else {
+                        userAnswerText = 'Not answered';
+                    }
+                    
+                    correctAnswerText = correctOptions
+                        .map(idx => question.shuffledOptions[idx].text)
+                        .join(', ');
+                }
+
+                let answerHTML = '';
+                if (userAnswer === null) {
+                    answerHTML = `<div class="review-answer wrong-answer">
+                        <strong>Your Answer:</strong> Not answered
+                    </div>`;
+                } else if (isCorrect) {
+                    answerHTML = `<div class="review-answer correct-answer">
+                        <strong>Your Answer:</strong> ${userAnswerText} ✓
+                    </div>`;
+                } else {
+                    answerHTML = `
+                        <div class="review-answer wrong-answer">
+                            <strong>Your Answer:</strong> ${userAnswerText} ✗
+                        </div>
+                        <div class="review-answer correct-answer">
+                            <strong>Correct Answer:</strong> ${correctAnswerText}
+                        </div>
+                    `;
+                }
+
+                // Build explanations HTML
+                let explanationsHTML = '<div class="explanation"><div class="explanation-title">Answer Explanations:</div>';
+                question.shuffledOptions.forEach(option => {
+                    const explanation = question.explanations[option.text];
+                    if (explanation) {
+                        explanationsHTML += `<p><strong>${option.text}:</strong> ${explanation}</p>`;
+                    }
+                });
+                explanationsHTML += '</div>';
+
+                const wasUnanswered = userAnswer === null ? '<span class="unanswered-tag">Unanswered</span>' : '';
+
+                reviewDiv.innerHTML = `
+                    <div class="review-question-number">Question ${index + 1} ${wasUnanswered}</div>
+                    <div class="review-question-text">${question.question}</div>
+                    ${answerHTML}
+                    ${explanationsHTML}
+                `;
+
+                reviewContainer.appendChild(reviewDiv);
+            });
+        }
+    </script>
+</body>
+</html>
+

@@ -7,6 +7,7 @@ Sitemap: https://mkhairulhamid.github.io/learnwithme/sitemap.xml
 # Directories to crawl
 Allow: /learning-materials/
 Allow: /blog/
+Allow: /swipe-to-learn/
 Allow: /images/
 
 # Optimize crawling
