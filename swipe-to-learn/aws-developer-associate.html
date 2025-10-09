@@ -73,6 +73,7 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             backdrop-filter: blur(10px);
+            position: relative;
         }
 
         .timer-display {
@@ -83,6 +84,30 @@
         .score-display {
             font-size: 18px;
             font-weight: 600;
+        }
+
+        .restart-exam-btn {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .restart-exam-btn:hover {
+            background: rgba(220, 38, 38, 1);
+            transform: scale(1.1);
         }
 
         .card {
@@ -640,6 +665,7 @@
         <!-- Exam Screen -->
         <div id="examScreen" class="hidden">
             <div class="timer-score-container">
+                <button class="restart-exam-btn" onclick="confirmRestartDuringExam()" title="Restart Exam">🔄</button>
                 <div class="timer-display" id="timerDisplay">⏱️ 00:00</div>
                 <div class="score-display" id="scoreDisplay">📊 Score: 0</div>
             </div>
@@ -2086,8 +2112,15 @@
         }
 
         // Activity Tracking Functions
+        let activityThrottle = null;
         function trackActivity() {
-            lastActivityTime = Date.now();
+            // Throttle activity updates to avoid excessive calls (especially from mousemove/scroll)
+            if (!activityThrottle) {
+                lastActivityTime = Date.now();
+                activityThrottle = setTimeout(() => {
+                    activityThrottle = null;
+                }, 1000); // Update at most once per second
+            }
         }
 
         function startActivityTracking() {
@@ -2095,19 +2128,28 @@
             document.addEventListener('click', trackActivity);
             document.addEventListener('touchstart', trackActivity);
             document.addEventListener('keypress', trackActivity);
+            document.addEventListener('mousemove', trackActivity);
+            document.addEventListener('scroll', trackActivity);
+            document.addEventListener('touchmove', trackActivity);
             
             // Check for inactivity every second
             activityCheckInterval = setInterval(checkActivity, 1000);
             
-            // Track focus/blur events
+            // Track focus/blur events (desktop)
             window.addEventListener('blur', handleFocusLost);
             window.addEventListener('focus', handleFocusGained);
+            
+            // Track visibility changes (mobile - better support for closing apps)
+            document.addEventListener('visibilitychange', handleVisibilityChange);
         }
 
         function stopActivityTracking() {
             document.removeEventListener('click', trackActivity);
             document.removeEventListener('touchstart', trackActivity);
             document.removeEventListener('keypress', trackActivity);
+            document.removeEventListener('mousemove', trackActivity);
+            document.removeEventListener('scroll', trackActivity);
+            document.removeEventListener('touchmove', trackActivity);
             
             if (activityCheckInterval) {
                 clearInterval(activityCheckInterval);
@@ -2116,6 +2158,7 @@
             
             window.removeEventListener('blur', handleFocusLost);
             window.removeEventListener('focus', handleFocusGained);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
         }
 
         function handleFocusLost() {
@@ -2124,6 +2167,18 @@
 
         function handleFocusGained() {
             focusLostTime = null;
+            lastActivityTime = Date.now(); // Reset activity timer when coming back
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                // Page is hidden (user switched tabs, closed app, or locked phone)
+                focusLostTime = Date.now();
+            } else {
+                // Page is visible again
+                focusLostTime = null;
+                lastActivityTime = Date.now(); // Reset activity timer when coming back
+            }
         }
 
         function checkActivity() {
@@ -2133,16 +2188,28 @@
             const timeSinceActivity = (now - lastActivityTime) / 1000;
             const timeSinceFocusLost = focusLostTime ? (now - focusLostTime) / 1000 : 0;
             
-            // Pause if no activity for 2 minutes OR focus lost for 10 seconds
-            if (timeSinceActivity >= 120 || timeSinceFocusLost >= 10) {
-                pauseExam();
+            // Pause if focus lost for 5 seconds OR no activity for 2 minutes (while focused)
+            if (timeSinceFocusLost >= 5) {
+                pauseExam('focus');
+            } else if (timeSinceActivity >= 120) {
+                pauseExam('inactivity');
             }
         }
 
-        function pauseExam() {
+        function pauseExam(reason) {
             isPaused = true;
             document.getElementById('pauseOverlay').classList.add('show');
             saveProgress();
+            
+            // Update pause message based on reason
+            const pauseModal = document.querySelector('.pause-modal p');
+            if (reason === 'focus') {
+                pauseModal.textContent = 'The exam has been paused because you switched to another tab/app or locked your device for more than 5 seconds.';
+            } else if (reason === 'inactivity') {
+                pauseModal.textContent = 'The exam has been paused due to 2 minutes of inactivity.';
+            } else {
+                pauseModal.textContent = 'The exam has been paused.';
+            }
         }
 
         function resumeExam() {
@@ -2205,6 +2272,17 @@
                 
                 // Start fresh exam
                 startExam();
+            }
+        }
+
+        function confirmRestartDuringExam() {
+            if (confirm('Are you sure you want to restart the exam? All your progress and answers will be lost.')) {
+                clearProgress();
+                stopTimer();
+                stopActivityTracking();
+                
+                // Reload the page to start fresh
+                location.reload();
             }
         }
 
@@ -2660,9 +2738,8 @@
         window.addEventListener('DOMContentLoaded', () => {
             const savedProgress = localStorage.getItem('awsExamProgress');
             if (savedProgress) {
-                // Show resume options instead of regular start button
-                document.getElementById('startButtons').style.display = 'none';
-                document.getElementById('resumeButtons').style.display = 'block';
+                // Automatically resume the exam - go directly to it
+                startExam();
             }
         });
     </script>
