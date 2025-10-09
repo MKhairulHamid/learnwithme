@@ -63,6 +63,28 @@
             margin-top: 10px;
         }
 
+        .timer-score-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            margin: 10px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .timer-display {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .score-display {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
         .card {
             background: white;
             border-radius: 20px;
@@ -74,12 +96,12 @@
         }
 
         .card.swipe-left {
-            transform: translateX(-100%) rotate(-10deg);
+            transform: scale(0.8) rotate(-10deg);
             opacity: 0;
         }
 
         .card.swipe-right {
-            transform: translateX(100%) rotate(10deg);
+            transform: scale(0.8) rotate(10deg);
             opacity: 0;
         }
 
@@ -460,6 +482,118 @@
         .hidden {
             display: none;
         }
+
+        .pause-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 37, 64, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .pause-overlay.show {
+            display: flex;
+        }
+
+        .pause-modal {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .pause-modal h2 {
+            font-size: 28px;
+            color: #0A2540;
+            margin-bottom: 20px;
+        }
+
+        .pause-modal p {
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .pause-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .pause-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pause-btn.continue {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .pause-btn.restart {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .pause-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .previous-results {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .previous-results h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item .result-score {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .result-item .result-date {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .result-item.passed {
+            border-left: 4px solid #10b981;
+        }
+
+        .result-item.failed {
+            border-left: 4px solid #ef4444;
+        }
     </style>
 </head>
 <body>
@@ -487,11 +621,28 @@
                     <li><strong>Swipe Right:</strong> Submit your answer</li>
                 </ul>
             </div>
-            <button class="start-btn" onclick="startExam()">Start Practice Exam</button>
+            <div id="startButtons">
+                <button class="start-btn" onclick="startExam()" id="startBtn">Start Practice Exam</button>
+            </div>
+            <div id="resumeButtons" style="display: none;">
+                <button class="start-btn" onclick="startExam()" style="background: #4ade80; margin-bottom: 15px;">
+                    ▶️ Continue Saved Exam
+                </button>
+                <button class="start-btn" onclick="startNewExam()" style="background: #fee2e2; color: #991b1b;">
+                    🔄 Start New Exam
+                </button>
+                <p style="color: white; margin-top: 20px; text-align: center; opacity: 0.9; font-size: 14px;">
+                    ℹ️ You have a saved exam in progress
+                </p>
+            </div>
         </div>
 
         <!-- Exam Screen -->
         <div id="examScreen" class="hidden">
+            <div class="timer-score-container">
+                <div class="timer-display" id="timerDisplay">⏱️ 00:00</div>
+                <div class="score-display" id="scoreDisplay">📊 Score: 0</div>
+            </div>
             <div class="progress-bar">
                 <div class="progress-fill" id="progressFill"></div>
             </div>
@@ -536,6 +687,23 @@
 
             <h2 class="review-header">📝 Question Review</h2>
             <div id="reviewContainer"></div>
+
+            <div class="previous-results" id="previousResults">
+                <h3>📈 Previous Results</h3>
+                <div id="resultsHistory"></div>
+            </div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div class="pause-overlay" id="pauseOverlay">
+            <div class="pause-modal">
+                <h2>⏸️ Exam Paused</h2>
+                <p>The exam has been paused due to inactivity or loss of focus.</p>
+                <div class="pause-buttons">
+                    <button class="pause-btn continue" onclick="resumeExam()">Continue Exam</button>
+                    <button class="pause-btn restart" onclick="confirmRestart()">Restart Exam</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1812,6 +1980,15 @@
         let touchEndX = 0;
         let touchStartY = 0;
         let touchEndY = 0;
+        
+        // Timer and activity tracking
+        let examStartTime = null;
+        let elapsedTime = 0;
+        let timerInterval = null;
+        let lastActivityTime = Date.now();
+        let activityCheckInterval = null;
+        let focusLostTime = null;
+        let isPaused = false;
 
         function shuffle(array) {
             const newArray = [...array];
@@ -1822,22 +1999,213 @@
             return newArray;
         }
 
+        // Local Storage Functions
+        function saveProgress() {
+            const progress = {
+                currentQuestionIndex,
+                userAnswers,
+                questionOrder,
+                unansweredQuestions,
+                elapsedTime,
+                examStartTime,
+                shuffledOptions: questions.map(q => q.shuffledOptions)
+            };
+            localStorage.setItem('awsExamProgress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('awsExamProgress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                currentQuestionIndex = progress.currentQuestionIndex;
+                userAnswers = progress.userAnswers;
+                questionOrder = progress.questionOrder;
+                unansweredQuestions = progress.unansweredQuestions || [];
+                elapsedTime = progress.elapsedTime || 0;
+                examStartTime = progress.examStartTime;
+                
+                // Restore shuffled options
+                if (progress.shuffledOptions) {
+                    progress.shuffledOptions.forEach((opts, idx) => {
+                        questions[idx].shuffledOptions = opts;
+                    });
+                }
+                return true;
+            }
+            return false;
+        }
+
+        function clearProgress() {
+            localStorage.removeItem('awsExamProgress');
+        }
+
+        function saveResult(score, correct, total, timeTaken) {
+            const results = JSON.parse(localStorage.getItem('awsExamResults') || '[]');
+            results.push({
+                score,
+                correct,
+                total,
+                timeTaken,
+                date: new Date().toISOString(),
+                passed: score >= 720
+            });
+            // Keep only last 10 results
+            if (results.length > 10) {
+                results.shift();
+            }
+            localStorage.setItem('awsExamResults', JSON.stringify(results));
+        }
+
+        function loadResults() {
+            return JSON.parse(localStorage.getItem('awsExamResults') || '[]');
+        }
+
+        // Timer Functions
+        function startTimer() {
+            examStartTime = Date.now() - (elapsedTime * 1000);
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            if (isPaused) return;
+            
+            elapsedTime = Math.floor((Date.now() - examStartTime) / 1000);
+            const minutes = Math.floor(elapsedTime / 60);
+            const seconds = elapsedTime % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `⏱️ ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            saveProgress(); // Auto-save progress
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+        }
+
+        // Activity Tracking Functions
+        function trackActivity() {
+            lastActivityTime = Date.now();
+        }
+
+        function startActivityTracking() {
+            // Track user interactions
+            document.addEventListener('click', trackActivity);
+            document.addEventListener('touchstart', trackActivity);
+            document.addEventListener('keypress', trackActivity);
+            
+            // Check for inactivity every second
+            activityCheckInterval = setInterval(checkActivity, 1000);
+            
+            // Track focus/blur events
+            window.addEventListener('blur', handleFocusLost);
+            window.addEventListener('focus', handleFocusGained);
+        }
+
+        function stopActivityTracking() {
+            document.removeEventListener('click', trackActivity);
+            document.removeEventListener('touchstart', trackActivity);
+            document.removeEventListener('keypress', trackActivity);
+            
+            if (activityCheckInterval) {
+                clearInterval(activityCheckInterval);
+                activityCheckInterval = null;
+            }
+            
+            window.removeEventListener('blur', handleFocusLost);
+            window.removeEventListener('focus', handleFocusGained);
+        }
+
+        function handleFocusLost() {
+            focusLostTime = Date.now();
+        }
+
+        function handleFocusGained() {
+            focusLostTime = null;
+        }
+
+        function checkActivity() {
+            if (isPaused) return;
+            
+            const now = Date.now();
+            const timeSinceActivity = (now - lastActivityTime) / 1000;
+            const timeSinceFocusLost = focusLostTime ? (now - focusLostTime) / 1000 : 0;
+            
+            // Pause if no activity for 2 minutes OR focus lost for 10 seconds
+            if (timeSinceActivity >= 120 || timeSinceFocusLost >= 10) {
+                pauseExam();
+            }
+        }
+
+        function pauseExam() {
+            isPaused = true;
+            document.getElementById('pauseOverlay').classList.add('show');
+            saveProgress();
+        }
+
+        function resumeExam() {
+            isPaused = false;
+            document.getElementById('pauseOverlay').classList.remove('show');
+            lastActivityTime = Date.now();
+            focusLostTime = null;
+            examStartTime = Date.now() - (elapsedTime * 1000); // Adjust start time
+        }
+
+        function confirmRestart() {
+            if (confirm('Are you sure you want to restart? All current progress will be lost.')) {
+                clearProgress();
+                isPaused = false;
+                document.getElementById('pauseOverlay').classList.remove('show');
+                stopTimer();
+                stopActivityTracking();
+                location.reload();
+            }
+        }
+
         function startExam() {
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('examScreen').classList.remove('hidden');
             
-            // Randomize question order
-            questionOrder = shuffle([...Array(questions.length).keys()]);
+            // Check if there's saved progress
+            const hasProgress = loadProgress();
             
-            // Randomize answer options for each question
-            questions.forEach(q => {
-                q.shuffledOptions = shuffle(q.options);
-            });
+            if (!hasProgress) {
+                // Randomize question order
+                questionOrder = shuffle([...Array(questions.length).keys()]);
+                
+                // Randomize answer options for each question
+                questions.forEach(q => {
+                    q.shuffledOptions = shuffle(q.options);
+                });
 
-            userAnswers = new Array(questions.length).fill(null);
-            currentQuestionIndex = 0;
+                userAnswers = new Array(questions.length).fill(null);
+                currentQuestionIndex = 0;
+            }
+            
             loadQuestion();
             setupSwipeHandlers();
+            startTimer();
+            startActivityTracking();
+        }
+
+        function startNewExam() {
+            if (confirm('Are you sure you want to start a new exam? Your current progress will be lost.')) {
+                clearProgress();
+                
+                // Reset all state
+                currentQuestionIndex = 0;
+                userAnswers = [];
+                questionOrder = [];
+                unansweredQuestions = [];
+                elapsedTime = 0;
+                examStartTime = null;
+                isPaused = false;
+                
+                // Start fresh exam
+                startExam();
+            }
         }
 
         function loadQuestion() {
@@ -1913,6 +2281,10 @@
                 
                 userAnswers[questionIndex] = selected.length > 0 ? selected : null;
             }
+            
+            // Update score and save progress
+            updateCurrentScore();
+            saveProgress();
         }
 
         function toggleMaterials() {
@@ -1936,6 +2308,7 @@
                 unansweredQuestions.push(questionIndex);
             }
 
+            saveProgress();
             moveToNextQuestion('left');
         }
 
@@ -1950,6 +2323,7 @@
             // Remove from unanswered if it was there
             unansweredQuestions = unansweredQuestions.filter(q => q !== questionIndex);
 
+            saveProgress();
             moveToNextQuestion('right');
         }
 
@@ -1982,10 +2356,45 @@
         function updateProgress() {
             const answeredCount = userAnswers.filter(a => a !== null).length;
             const progress = (answeredCount / questions.length) * 100;
-            const currentQuestionNumber = questionOrder[currentQuestionIndex] + 1; // Get actual question number (1-5)
+            const currentQuestionNumber = questionOrder[currentQuestionIndex] + 1;
             document.getElementById('progressFill').style.width = progress + '%';
             document.getElementById('progressText').textContent = 
                 `Question ${currentQuestionNumber} of ${questions.length} | ${answeredCount} answered`;
+            
+            // Update current score
+            updateCurrentScore();
+        }
+
+        function updateCurrentScore() {
+            let correct = 0;
+            
+            questions.forEach((question, index) => {
+                const userAnswer = userAnswers[index];
+                
+                if (userAnswer === null) return;
+
+                if (question.type === 'Multiple Choice') {
+                    if (question.shuffledOptions[userAnswer].correct) {
+                        correct++;
+                    }
+                } else {
+                    // Multiple Response
+                    const correctIndices = question.shuffledOptions
+                        .map((opt, idx) => opt.correct ? idx : -1)
+                        .filter(idx => idx !== -1);
+                    
+                    const userSelections = Array.isArray(userAnswer) ? userAnswer : [userAnswer];
+                    
+                    if (correctIndices.length === userSelections.length &&
+                        correctIndices.every(idx => userSelections.includes(idx))) {
+                        correct++;
+                    }
+                }
+            });
+
+            const percentage = correct / questions.length;
+            const scaledScore = Math.round(100 + (percentage * 900));
+            document.getElementById('scoreDisplay').textContent = `📊 Score: ${scaledScore}`;
         }
 
         function setupSwipeHandlers() {
@@ -2091,11 +2500,21 @@
         }
 
         function showResults() {
+            // Stop timer and tracking
+            stopTimer();
+            stopActivityTracking();
+            
             document.getElementById('examScreen').classList.add('hidden');
             document.getElementById('resultsScreen').classList.remove('show');
             
             const { scaledScore, correct, total } = calculateScore();
             const passed = scaledScore >= 720;
+
+            // Save result to history
+            saveResult(scaledScore, correct, total, elapsedTime);
+            
+            // Clear current progress
+            clearProgress();
 
             document.getElementById('finalScore').textContent = scaledScore;
             document.getElementById('correctCount').textContent = correct;
@@ -2106,10 +2525,46 @@
             passStatus.className = 'pass-status ' + (passed ? 'pass' : 'fail');
 
             displayReview();
+            displayPreviousResults();
             
             setTimeout(() => {
                 document.getElementById('resultsScreen').classList.add('show');
             }, 100);
+        }
+
+        function displayPreviousResults() {
+            const results = loadResults();
+            const container = document.getElementById('resultsHistory');
+            
+            if (results.length === 0) {
+                container.innerHTML = '<p style="opacity: 0.7; text-align: center;">No previous results yet.</p>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            // Display results in reverse order (newest first)
+            results.reverse().forEach(result => {
+                const date = new Date(result.date);
+                const dateStr = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                const minutes = Math.floor(result.timeTaken / 60);
+                const seconds = result.timeTaken % 60;
+                const timeStr = `${minutes}:${String(seconds).padStart(2, '0')}`;
+                
+                const resultDiv = document.createElement('div');
+                resultDiv.className = `result-item ${result.passed ? 'passed' : 'failed'}`;
+                resultDiv.innerHTML = `
+                    <div>
+                        <div class="result-score">${result.score}/1000 ${result.passed ? '✓' : '✗'}</div>
+                        <div class="result-date">${dateStr} • ${timeStr}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 14px;">${result.correct}/${result.total}</div>
+                        <div style="font-size: 12px; opacity: 0.8;">${Math.round((result.correct/result.total)*100)}%</div>
+                    </div>
+                `;
+                container.appendChild(resultDiv);
+            });
         }
 
         function displayReview() {
@@ -2200,6 +2655,16 @@
                 reviewContainer.appendChild(reviewDiv);
             });
         }
+
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedProgress = localStorage.getItem('awsExamProgress');
+            if (savedProgress) {
+                // Show resume options instead of regular start button
+                document.getElementById('startButtons').style.display = 'none';
+                document.getElementById('resumeButtons').style.display = 'block';
+            }
+        });
     </script>
 </body>
 </html>
