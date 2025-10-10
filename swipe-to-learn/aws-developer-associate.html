@@ -65,8 +65,7 @@
 
         .timer-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-direction: column;
             color: white;
             margin: 10px 0;
             padding: 15px;
@@ -80,6 +79,35 @@
             font-size: 18px;
             font-weight: 600;
             transition: color 0.5s ease;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .timer-progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .timer-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ade80, #22c55e);
+            border-radius: 10px;
+            transition: width 1s linear, background 0.5s ease;
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+
+        .timer-progress-fill.warning {
+            background: linear-gradient(90deg, #fbbf24, #f59e0b);
+            box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+        }
+
+        .timer-progress-fill.critical {
+            background: linear-gradient(90deg, #ef4444, #dc2626);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
         }
 
         .question-navigation {
@@ -938,7 +966,10 @@
         <!-- Exam Screen -->
         <div id="examScreen" class="hidden">
             <div class="timer-container">
-                <div class="timer-display" id="timerDisplay">⏱️ Time Remaining: 130:00</div>
+                <div class="timer-display" id="timerDisplay">⏱️ Time Remaining: 02:10:00</div>
+                <div class="timer-progress-bar">
+                    <div class="timer-progress-fill" id="timerProgressFill" style="width: 100%;"></div>
+                </div>
             </div>
 
             <div class="question-navigation">
@@ -2434,24 +2465,35 @@
             
             elapsedTime = Math.floor((Date.now() - examStartTime) / 1000);
             const remainingTime = Math.max(0, EXAM_DURATION - elapsedTime);
-            const minutes = Math.floor(remainingTime / 60);
+            const hours = Math.floor(remainingTime / 3600);
+            const minutes = Math.floor((remainingTime % 3600) / 60);
             const seconds = remainingTime % 60;
             
             const timerDisplay = document.getElementById('timerDisplay');
             timerDisplay.textContent = 
-                `⏱️ Time Remaining: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                `⏱️ Time Remaining: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // Update progress bar
+            const progressFill = document.getElementById('timerProgressFill');
+            const progressPercentage = (remainingTime / EXAM_DURATION) * 100;
+            progressFill.style.width = `${progressPercentage}%`;
             
             // Color coding based on remaining time
             const timerContainer = timerDisplay.parentElement;
+            progressFill.classList.remove('warning', 'critical');
+            
             if (remainingTime <= 0) {
                 timerContainer.style.background = 'rgba(239, 68, 68, 0.3)'; // Red
                 timerDisplay.style.color = '#fef2f2';
+                progressFill.classList.add('critical');
             } else if (remainingTime <= 600) { // 10 minutes or less
                 timerContainer.style.background = 'rgba(239, 68, 68, 0.2)'; // Red
                 timerDisplay.style.color = '#fee2e2';
+                progressFill.classList.add('critical');
             } else if (remainingTime <= 1800) { // 30 minutes or less
                 timerContainer.style.background = 'rgba(251, 191, 36, 0.2)'; // Yellow/Orange
                 timerDisplay.style.color = '#fef3c7';
+                progressFill.classList.add('warning');
             } else {
                 timerContainer.style.background = 'rgba(255, 255, 255, 0.1)'; // Default
                 timerDisplay.style.color = 'white';
