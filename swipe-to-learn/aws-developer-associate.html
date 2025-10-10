@@ -73,11 +73,13 @@
             background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
             backdrop-filter: blur(10px);
+            transition: background 0.5s ease;
         }
 
         .timer-display {
             font-size: 18px;
             font-weight: 600;
+            transition: color 0.5s ease;
         }
 
         .question-navigation {
@@ -936,7 +938,7 @@
         <!-- Exam Screen -->
         <div id="examScreen" class="hidden">
             <div class="timer-container">
-                <div class="timer-display" id="timerDisplay">⏱️ 00:00</div>
+                <div class="timer-display" id="timerDisplay">⏱️ Time Remaining: 130:00</div>
             </div>
 
             <div class="question-navigation">
@@ -2342,6 +2344,7 @@
         let touchEndY = 0;
         
         // Timer and activity tracking
+        const EXAM_DURATION = 7800; // 130 minutes in seconds
         let examStartTime = null;
         let elapsedTime = 0;
         let timerInterval = null;
@@ -2430,10 +2433,29 @@
             if (isPaused) return;
             
             elapsedTime = Math.floor((Date.now() - examStartTime) / 1000);
-            const minutes = Math.floor(elapsedTime / 60);
-            const seconds = elapsedTime % 60;
-            document.getElementById('timerDisplay').textContent = 
-                `⏱️ ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            const remainingTime = Math.max(0, EXAM_DURATION - elapsedTime);
+            const minutes = Math.floor(remainingTime / 60);
+            const seconds = remainingTime % 60;
+            
+            const timerDisplay = document.getElementById('timerDisplay');
+            timerDisplay.textContent = 
+                `⏱️ Time Remaining: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            
+            // Color coding based on remaining time
+            const timerContainer = timerDisplay.parentElement;
+            if (remainingTime <= 0) {
+                timerContainer.style.background = 'rgba(239, 68, 68, 0.3)'; // Red
+                timerDisplay.style.color = '#fef2f2';
+            } else if (remainingTime <= 600) { // 10 minutes or less
+                timerContainer.style.background = 'rgba(239, 68, 68, 0.2)'; // Red
+                timerDisplay.style.color = '#fee2e2';
+            } else if (remainingTime <= 1800) { // 30 minutes or less
+                timerContainer.style.background = 'rgba(251, 191, 36, 0.2)'; // Yellow/Orange
+                timerDisplay.style.color = '#fef3c7';
+            } else {
+                timerContainer.style.background = 'rgba(255, 255, 255, 0.1)'; // Default
+                timerDisplay.style.color = 'white';
+            }
             
             saveProgress(); // Auto-save progress
         }
@@ -2762,6 +2784,11 @@
         function toggleMaterials() {
             const overlay = document.getElementById('materialsOverlay');
             overlay.classList.add('show');
+            
+            // Scroll materials content to top
+            const materialsContent = document.getElementById('materialsContent');
+            materialsContent.scrollTop = 0;
+            
             // Add keyboard listener for Escape key
             document.addEventListener('keydown', handleMaterialsEscape);
         }
