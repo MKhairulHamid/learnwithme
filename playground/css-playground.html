@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Playground - 15 Challenges | Learn With Me</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1f2937; }
+        .header { background: linear-gradient(135deg, #0A2540 0%, #1e3a5f 100%); color: white; padding: 20px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        .back-link { position: absolute; top: 15px; left: 20px; color: white; text-decoration: none; padding: 8px 16px; background: rgba(255,255,255,0.1); border-radius: 8px; font-weight: 600; transition: all 0.3s; font-size: 0.9rem; }
+        .back-link:hover { background: rgba(255,255,255,0.2); transform: translateX(-5px); }
+        h1 { font-size: 1.8rem; margin-bottom: 6px; }
+        .subtitle { opacity: 0.9; font-size: 0.95rem; }
+        .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+        .challenge { background: white; border-radius: 16px; padding: 40px; margin-bottom: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: none; }
+        .challenge.active { display: block; animation: fadeIn 0.4s; }
+        .challenge-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+        .challenge-number { background: linear-gradient(135deg, #0A2540, #00D4AA); color: white; padding: 8px 20px; border-radius: 20px; font-weight: 700; font-size: 0.9rem; }
+        .challenge-title { font-size: 1.8rem; color: #0A2540; font-weight: 700; }
+        .challenge-desc { color: #6b7280; margin-bottom: 32px; line-height: 1.7; font-size: 1.1rem; }
+        
+        .demo-section { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 32px; }
+        .demo-box { padding: 24px; border-radius: 12px; }
+        .goal-preview { background: #f0fdfa; border: 2px solid #00D4AA; }
+        .goal-preview h3 { color: #0A2540; margin-bottom: 16px; font-size: 1.1rem; }
+        .live-preview { background: #f8fafc; border: 2px solid #0A2540; }
+        .live-preview h3 { color: #0A2540; margin-bottom: 16px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        
+        .code-section { margin-bottom: 24px; }
+        .code-section h4 { color: #0A2540; margin-bottom: 12px; font-size: 1rem; display: flex; align-items: center; gap: 8px; }
+        .code-box { background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.9rem; overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-wrap: break-word; }
+        
+        /* Editable Code Editor */
+        .code-editor { width: 100%; min-height: 180px; background: #1e293b; color: #e2e8f0; padding: 20px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.6; border: 2px solid #334155; resize: vertical; }
+        .code-editor:focus { outline: none; border-color: #00D4AA; }
+        
+        .preview-area { min-height: 200px; background: white; border-radius: 8px; padding: 20px; margin-top: 12px; }
+        
+        .action-buttons { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+        .btn { padding: 12px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 0.9rem; }
+        .btn-primary { background: linear-gradient(135deg, #0A2540, #00D4AA); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(10, 37, 64, 0.4); }
+        .btn-secondary { background: #e5e7eb; color: #374151; }
+        .btn-secondary:hover { background: #d1d5db; }
+        .btn-danger { background: #fee2e2; color: #991b1b; }
+        .btn-danger:hover { background: #fecaca; }
+        
+        .solution-section { margin-top: 24px; border-top: 2px solid #e5e7eb; padding-top: 24px; }
+        .solution-toggle { background: linear-gradient(135deg, #0A2540, #1e3a5f); color: white; border: none; padding: 14px 28px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.3s; }
+        .solution-toggle:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(10, 37, 64, 0.3); }
+        .solution-content { display: none; margin-top: 20px; padding: 20px; background: #f0fdfa; border-radius: 8px; border-left: 4px solid #00D4AA; }
+        .solution-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .hint-box { background: #f0fdfa; border-left: 4px solid #00D4AA; padding: 16px; border-radius: 8px; margin: 20px 0; color: #0A2540; }
+        .btn-hint { background: #fef3c7; color: #92400e; border: 2px solid #f59e0b; }
+        
+        /* Study Materials Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: fadeIn 0.3s; }
+        .modal-overlay.active { display: flex; }
+        .study-modal { background: white; border-radius: 20px; max-width: 800px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { background: linear-gradient(135deg, #0A2540 0%, #00D4AA 100%); color: white; padding: 24px 32px; border-radius: 20px 20px 0 0; position: sticky; top: 0; z-index: 10; }
+        .modal-header h3 { font-size: 1.5rem; margin-bottom: 8px; }
+        .modal-header p { opacity: 0.9; font-size: 0.95rem; }
+        .modal-close { position: absolute; top: 24px; right: 32px; background: rgba(255, 255, 255, 0.2); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .modal-close:hover { background: rgba(255, 255, 255, 0.3); transform: rotate(90deg); }
+        .modal-content { padding: 32px; }
+        .property-section { margin-bottom: 32px; padding-bottom: 32px; border-bottom: 2px solid #f1f5f9; }
+        .property-section:last-child { border-bottom: none; }
+        .property-name { font-family: 'Courier New', monospace; font-size: 1.2rem; font-weight: 700; color: #0A2540; margin-bottom: 12px; background: #f0fdfa; padding: 8px 16px; border-radius: 8px; display: inline-block; }
+        .property-desc { color: #4a5568; line-height: 1.7; margin-bottom: 16px; font-size: 1rem; }
+        .property-example { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.6; margin-bottom: 12px; white-space: pre-wrap; }
+        .property-values { background: #fef9f3; padding: 16px; border-radius: 8px; border-left: 4px solid #f59e0b; margin-top: 12px; }
+        .property-values strong { color: #92400e; }
+        .property-values ul { margin: 8px 0 0 20px; color: #78350f; }
+        .property-values li { margin: 4px 0; }
+        .success-badge { display: inline-block; background: rgba(0, 212, 170, 0.15); color: #00A884; border: 1px solid rgba(0, 212, 170, 0.3); padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-left: 12px; }
+        
+        /* Pagination Navigation */
+        .pagination-nav { background: white; padding: 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-top: 20px; display: flex; flex-direction: column; gap: 20px; }
+        .nav-buttons { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+        .nav-btn { padding: 14px 28px; border: none; border-radius: 10px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; }
+        .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-prev { background: #e5e7eb; color: #374151; }
+        .btn-prev:not(:disabled):hover { background: #d1d5db; transform: translateX(-3px); }
+        .btn-next { background: linear-gradient(135deg, #0A2540, #00D4AA); color: white; }
+        .btn-next:not(:disabled):hover { transform: translateX(3px); box-shadow: 0 6px 20px rgba(10, 37, 64, 0.4); }
+        .challenge-dots { display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap; }
+        .dot { width: 36px; height: 36px; border-radius: 8px; background: #e5e7eb; border: 2px solid transparent; cursor: pointer; transition: all 0.3s; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; color: #6b7280; }
+        .dot:hover { background: #d1d5db; transform: translateY(-2px); }
+        .dot.active { background: linear-gradient(135deg, #0A2540, #00D4AA); color: white; border-color: #00D4AA; transform: scale(1.1); }
+        .progress-info { text-align: center; color: #6b7280; font-size: 0.95rem; font-weight: 500; }
+        
+        @media (max-width: 768px) {
+            .demo-section { grid-template-columns: 1fr; }
+            h1 { font-size: 1.5rem; }
+            .challenge { padding: 24px; }
+            .code-editor { font-size: 0.85rem; min-height: 150px; }
+            .nav-buttons { flex-direction: column; }
+            .nav-btn { width: 100%; }
+            .dot { width: 32px; height: 32px; font-size: 0.85rem; }
+            .back-link { font-size: 0.85rem; padding: 6px 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="index.html" class="back-link">← Back</a>
+        <h1>🎨 CSS Playground</h1>
+        <p class="subtitle">10 Interactive Challenges • Type & See Results Live</p>
+    </div>
+
+    <div class="container">
+        
+        <!-- Challenge 1: Center a Div -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 1</div>
+                <div>
+                    <h2 class="challenge-title">Center a Div</h2>
+                </div>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Center a box both horizontally and vertically in its container using Flexbox.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <div style="height: 200px; background: #f0fdfa; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                        <div style="width: 100px; height: 100px; background: #0A2540; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                            Centered!
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>
+                        💻 Your Result
+                        <span class="success-badge" id="success-1" style="display: none;">✓ Looks Good!</span>
+                    </h3>
+                    <div class="preview-area" id="preview-1">
+                        <div id="preview-container-1" style="height: 200px; background: #f0fdfa; border-radius: 8px;">
+                            <div id="preview-box-1" style="width: 100px; height: 100px; background: #0A2540; border-radius: 8px; color: white; font-weight: bold; display: flex; align-items: center; justify-content: center;">
+                                Centered!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS here (type & see live results):</h4>
+                <textarea class="code-editor" id="css-editor-1">.container {
+  height: 200px;
+  background: #f0fdfa;
+  border-radius: 8px;
+  /* Type your CSS below this line */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(1)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(1)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(1)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(1)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-1">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> Flexbox is the modern way to center elements. <code>display: flex</code> makes the container flexible, <code>align-items: center</code> centers vertically, and <code>justify-content: center</code> centers horizontally.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(1)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 2: Hover Button Effect -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 2</div>
+                <h2 class="challenge-title">Hover Button Effect</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Create a button that changes color, lifts up, and shows a shadow when hovered.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <button style="padding: 14px 32px; background: #0A2540; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s;" onmouseover="this.style.background='#00D4AA'; this.style.transform='translateY(-3px)'; this.style.boxShadow='0 8px 16px rgba(0, 212, 170, 0.4)'" onmouseout="this.style.background='#0A2540'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        Hover Me!
+                    </button>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area" id="preview-2">
+                        <button id="preview-button-2" style="padding: 14px 32px; background: #0A2540; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                            Hover Me!
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS (add transition and hover effects):</h4>
+                <textarea class="code-editor" id="css-editor-2">.btn {
+  padding: 14px 32px;
+  background: #0A2540;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  /* Add your CSS here */
+  
+}
+
+.btn:hover {
+  /* Add hover effects here */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(2)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(2)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(2)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(2)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-2">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: #00D4AA;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 212, 170, 0.4);
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> The <code>transition</code> property creates smooth animations. <code>transform: translateY(-3px)</code> moves the button up, and <code>box-shadow</code> adds depth.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(2)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 3: Responsive Grid -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 3</div>
+                <h2 class="challenge-title">Responsive Grid</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Create a 3-column grid with equal spacing.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+                        <div style="background: #f0fdfa; padding: 24px; border-radius: 8px; text-align: center; font-weight: 600; color: #0A2540; border: 1px solid #00D4AA;">1</div>
+                        <div style="background: #f0fdfa; padding: 24px; border-radius: 8px; text-align: center; font-weight: 600; color: #0A2540; border: 1px solid #00D4AA;">2</div>
+                        <div style="background: #f0fdfa; padding: 24px; border-radius: 8px; text-align: center; font-weight: 600; color: #0A2540; border: 1px solid #00D4AA;">3</div>
+                    </div>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area">
+                        <div id="preview-grid-3">
+                            <div style="background: #f0fdfa; padding: 24px; border-radius: 8px; text-align: center; font-weight: 600; color: #0A2540; border: 1px solid #00D4AA;">1</div>
+                            <div style="background: #f0fdfa; padding: 24px; border-radius: 8px; text-align: center; font-weight: 600; color: #0A2540; border: 1px solid #00D4AA;">2</div>
+                            <div style="background: #f0fdfa; padding: 24px; border-radius: 8px; text-align: center; font-weight: 600; color: #0A2540; border: 1px solid #00D4AA;">3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS (use CSS Grid):</h4>
+                <textarea class="code-editor" id="css-editor-3">.grid-container {
+  /* Add your CSS here */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(3)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(3)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(3)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(3)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-3">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> <code>repeat(3, 1fr)</code> creates 3 equal columns, <code>gap</code> adds spacing.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(3)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 4: Card with Shadow -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 4</div>
+                <h2 class="challenge-title">Card with Shadow</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Create a card with a shadow that grows larger on hover.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <div style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: all 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='0 12px 24px rgba(0,0,0,0.15)'; this.style.transform='translateY(-5px)'" onmouseout="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'; this.style.transform='translateY(0)'">
+                        <h4 style="color: #0A2540; margin-bottom: 8px; font-size: 1.2rem;">Card Title</h4>
+                        <p style="color: #6b7280; font-size: 0.95rem; margin: 0;">Hover to see the shadow effect!</p>
+                    </div>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area" id="preview-4">
+                        <div id="preview-card-4" style="background: white; padding: 24px; border-radius: 12px; cursor: pointer;">
+                            <h4 style="color: #0A2540; margin-bottom: 8px; font-size: 1.2rem;">Card Title</h4>
+                            <p style="color: #6b7280; font-size: 0.95rem; margin: 0;">Hover to see the shadow effect!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS:</h4>
+                <textarea class="code-editor" id="css-editor-4">.card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  /* Add box-shadow and transition */
+  
+}
+
+.card:hover {
+  /* Increase shadow on hover */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(4)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(4)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(4)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(4)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-4">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.card {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  transform: translateY(-5px);
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> Box-shadow creates depth. The hover state increases shadow blur and offset while lifting the card up with transform.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(4)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 5: Gradient Background -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 5</div>
+                <h2 class="challenge-title">Gradient Background</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Create a box with a beautiful gradient background.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <div style="height: 150px; background: linear-gradient(135deg, #0A2540 0%, #00D4AA 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.2rem;">
+                        Gradient Box
+                    </div>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area" id="preview-5">
+                        <div id="preview-gradient-5" style="height: 150px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1.2rem;">
+                            Gradient Box
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS:</h4>
+                <textarea class="code-editor" id="css-editor-5">.gradient-box {
+  height: 150px;
+  border-radius: 12px;
+  /* Add gradient background */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(5)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(5)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(5)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(5)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-5">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.gradient-box {
+  background: linear-gradient(135deg, #0A2540 0%, #00D4AA 100%);
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> Linear-gradient creates smooth color transitions. The angle (135deg) determines direction, and percentages control where colors blend.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(5)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 6: Circle Avatar -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 6</div>
+                <h2 class="challenge-title">Circle Avatar</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Transform a square div into a perfect circle with centered text.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <div style="width: 120px; height: 120px; background: #0A2540; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 2rem; margin: 0 auto;">
+                        JD
+                    </div>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area" id="preview-6" style="display: flex; justify-content: center;">
+                        <div id="preview-avatar-6" style="width: 120px; height: 120px; background: #0A2540; color: white; font-weight: 700; font-size: 2rem; display: flex; align-items: center; justify-content: center;">
+                            JD
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS:</h4>
+                <textarea class="code-editor" id="css-editor-6">.avatar {
+  width: 120px;
+  height: 120px;
+  background: #0A2540;
+  /* Make it circular */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(6)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(6)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(6)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(6)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-6">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.avatar {
+  border-radius: 50%;
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> Border-radius: 50% on a square element creates a perfect circle. Equal width and height are essential for this to work.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(6)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 7: Text Truncation -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 7</div>
+                <h2 class="challenge-title">Text Truncation</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Show text in a single line with ellipsis (...) for overflow.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <p style="width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; background: #f0fdfa; padding: 12px; border-radius: 6px; margin: 0; border: 1px solid #00D4AA;">
+                        This is a very long text that will be truncated with ellipsis
+                    </p>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area" id="preview-7">
+                        <p id="preview-truncate-7" style="width: 250px; background: #f0fdfa; padding: 12px; border-radius: 6px; margin: 0; border: 1px solid #00D4AA;">
+                            This is a very long text that will be truncated with ellipsis
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS:</h4>
+                <textarea class="code-editor" id="css-editor-7">.truncate {
+  width: 250px;
+  /* Add truncation properties */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(7)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(7)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(7)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(7)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-7">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> Three properties work together: white-space: nowrap keeps text on one line, overflow: hidden hides overflow, and text-overflow: ellipsis adds "...".</p>
+                    <button class="btn btn-secondary" onclick="copySolution(7)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 8: Sticky Header -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 8</div>
+                <h2 class="challenge-title">Sticky Header</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Make a header stick to the top when scrolling (simulated).
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <div style="position: sticky; top: 0; background: #0A2540; color: white; padding: 16px; border-radius: 8px; z-index: 100;">
+                        Sticky Header (stays at top)
+                    </div>
+                    <div style="height: 100px; background: #f0fdfa; margin-top: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6b7280;">
+                        Scroll content below...
+                    </div>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area" id="preview-8">
+                        <div id="preview-sticky-8" style="background: #0A2540; color: white; padding: 16px; border-radius: 8px;">
+                            Sticky Header
+                        </div>
+                        <div style="height: 100px; background: #f0fdfa; margin-top: 10px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6b7280;">
+                            Content below
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS:</h4>
+                <textarea class="code-editor" id="css-editor-8">.header {
+  background: #0A2540;
+  padding: 16px;
+  /* Make it sticky */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(8)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(8)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(8)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(8)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-8">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> Position: sticky makes the element stick when scrolling. Top: 0 specifies where it sticks, and z-index keeps it above other content.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(8)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 9: Flexbox Navigation -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 9</div>
+                <h2 class="challenge-title">Flexbox Navigation</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Create a horizontal navigation bar with logo on left and links on right.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <nav style="background: #0A2540; padding: 16px 24px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="color: white; font-weight: 700; font-size: 1.1rem;">Logo</div>
+                        <div style="display: flex; gap: 24px;">
+                            <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Home</a>
+                            <a href="#" style="color: white; text-decoration: none; font-weight: 500;">About</a>
+                            <a href="#" style="color: white; text-decoration: none; font-weight: 500;">Contact</a>
+                        </div>
+                    </nav>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area" id="preview-9">
+                        <nav id="preview-nav-9" style="background: #0A2540; padding: 16px 24px; border-radius: 8px;">
+                            <div style="color: white; font-weight: 700; font-size: 1.1rem;">Logo</div>
+                            <div id="preview-links-9" style="color: white;">
+                                <a href="#" style="color: white; text-decoration: none; font-weight: 500; margin: 0 12px;">Home</a>
+                                <a href="#" style="color: white; text-decoration: none; font-weight: 500; margin: 0 12px;">About</a>
+                                <a href="#" style="color: white; text-decoration: none; font-weight: 500; margin: 0 12px;">Contact</a>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS:</h4>
+                <textarea class="code-editor" id="css-editor-9">.navbar {
+  background: #0A2540;
+  padding: 16px 24px;
+  /* Add flexbox layout */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(9)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(9)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(9)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(9)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-9">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> Flexbox with space-between pushes items to opposite ends. Align-items: center vertically aligns everything.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(9)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge 10: Glassmorphism Card -->
+        <div class="challenge">
+            <div class="challenge-header">
+                <div class="challenge-number">Challenge 10</div>
+                <h2 class="challenge-title">Glassmorphism Effect</h2>
+            </div>
+            <p class="challenge-desc">
+                <strong>Goal:</strong> Create a modern "frosted glass" effect with blur and transparency.
+            </p>
+            
+            <div class="demo-section">
+                <div class="demo-box goal-preview">
+                    <h3>🎯 Goal</h3>
+                    <div style="background: linear-gradient(135deg, #0A2540, #00D4AA); padding: 40px; border-radius: 12px;">
+                        <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 24px; border-radius: 12px; color: white;">
+                            <h4 style="margin-bottom: 8px;">Glass Card</h4>
+                            <p style="font-size: 0.9rem; opacity: 0.9; margin: 0;">Frosted glass effect!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="demo-box live-preview">
+                    <h3>💻 Your Result</h3>
+                    <div class="preview-area" id="preview-10">
+                        <div style="background: linear-gradient(135deg, #0A2540, #00D4AA); padding: 40px; border-radius: 12px;">
+                            <div id="preview-glass-10" style="padding: 24px; border-radius: 12px; color: white;">
+                                <h4 style="margin-bottom: 8px;">Glass Card</h4>
+                                <p style="font-size: 0.9rem; opacity: 0.9; margin: 0;">Frosted glass effect!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="code-section">
+                <h4>📝 Write your CSS:</h4>
+                <textarea class="code-editor" id="css-editor-10">.glass-card {
+  padding: 24px;
+  border-radius: 12px;
+  /* Add glassmorphism effect */
+  
+}</textarea>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="applyCSS(10)">▶ Apply CSS</button>
+                    <button class="btn btn-danger" onclick="resetChallenge(10)">↻ Reset</button>
+                    <button class="btn btn-hint" onclick="openStudyMaterial(10)">📚 Study Materials</button>
+                </div>
+            </div>
+
+            <div class="solution-section">
+                <button class="solution-toggle" onclick="toggleSolution(10)">👁️ Show Solution</button>
+                <div class="solution-content" id="solution-10">
+                    <h4 style="margin-bottom: 12px; color: #0A2540;">✅ Solution:</h4>
+                    <div class="code-box">.glass-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}</div>
+                    <p style="margin-top: 16px; color: #0A2540;"><strong>Explanation:</strong> Glassmorphism combines semi-transparent backgrounds (rgba), blur effects (backdrop-filter: blur), and subtle borders to create a frosted glass look.</p>
+                    <button class="btn btn-secondary" onclick="copySolution(10)" style="margin-top: 12px;">📋 Copy Solution to Editor</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Pagination Navigation -->
+        <div class="pagination-nav" style="margin-top: 20px;">
+            <div class="progress-info">
+                Challenge <span id="currentChallenge">1</span> of 10
+            </div>
+            <div class="challenge-dots">
+                <div class="dot" onclick="goToChallenge(1)">1</div>
+                <div class="dot" onclick="goToChallenge(2)">2</div>
+                <div class="dot" onclick="goToChallenge(3)">3</div>
+                <div class="dot" onclick="goToChallenge(4)">4</div>
+                <div class="dot" onclick="goToChallenge(5)">5</div>
+                <div class="dot" onclick="goToChallenge(6)">6</div>
+                <div class="dot" onclick="goToChallenge(7)">7</div>
+                <div class="dot" onclick="goToChallenge(8)">8</div>
+                <div class="dot" onclick="goToChallenge(9)">9</div>
+                <div class="dot" onclick="goToChallenge(10)">10</div>
+            </div>
+            <div class="nav-buttons">
+                <button class="nav-btn btn-prev" onclick="previousChallenge()">
+                    ← Previous
+                </button>
+                <button class="nav-btn btn-next" onclick="nextChallenge()">
+                    Next →
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Study Materials Modal -->
+    <div class="modal-overlay" id="studyModal">
+        <div class="study-modal">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeStudyMaterial()">✕</button>
+                <h3 id="modalTitle">📚 Study Materials</h3>
+                <p id="modalSubtitle">Learn the CSS properties you need for this challenge</p>
+            </div>
+            <div class="modal-content" id="modalContent">
+                <!-- Content will be inserted by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Apply CSS from editor to preview
+        function applyCSS(challengeNum) {
+            const editor = document.getElementById(`css-editor-${challengeNum}`);
+            const css = editor.value;
+            
+            // Remove old style tag if exists
+            const oldStyle = document.getElementById(`dynamic-style-${challengeNum}`);
+            if (oldStyle) oldStyle.remove();
+            
+            // Create new style tag
+            const style = document.createElement('style');
+            style.id = `dynamic-style-${challengeNum}`;
+            
+            // Map challenge-specific elements
+            const mappings = {
+                1: { from: '.container', to: '#preview-container-1', extract: true },
+                2: { from: '.btn', to: '#preview-button-2' },
+                3: { from: '.grid-container', to: '#preview-grid-3' },
+                4: { from: '.card', to: '#preview-card-4' },
+                5: { from: '.gradient-box', to: '#preview-gradient-5' },
+                6: { from: '.avatar', to: '#preview-avatar-6' },
+                7: { from: '.truncate', to: '#preview-truncate-7' },
+                8: { from: '.header', to: '#preview-sticky-8' },
+                9: { from: '.navbar', to: '#preview-nav-9' },
+                10: { from: '.glass-card', to: '#preview-glass-10' }
+            };
+            
+            if (mappings[challengeNum]) {
+                const map = mappings[challengeNum];
+                if (map.extract) {
+                    style.textContent = `
+                        ${map.to} {
+                            ${extractContainerCSS(css)}
+                        }
+                    `;
+                } else {
+                    style.textContent = css.replace(new RegExp(map.from.replace('.', '\\.'), 'g'), map.to);
+                }
+            }
+            
+            document.head.appendChild(style);
+            showSuccess(challengeNum);
+        }
+        
+        // Extract CSS properties from text
+        function extractContainerCSS(css) {
+            const match = css.match(/\.container\s*{([^}]*)}/);
+            return match ? match[1] : '';
+        }
+        
+        // Reset challenge
+        function resetChallenge(challengeNum) {
+            const editor = document.getElementById(`css-editor-${challengeNum}`);
+            const style = document.getElementById(`dynamic-style-${challengeNum}`);
+            if (style) style.remove();
+            
+            // Reset editor content based on challenge
+            const starters = {
+                1: `.container {
+  height: 200px;
+  background: #f0fdfa;
+  border-radius: 8px;
+  /* Type your CSS below this line */
+  
+}`,
+                2: `.btn {
+  padding: 14px 32px;
+  background: #0A2540;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  /* Add transition here */
+  
+}
+
+.btn:hover {
+  /* Add hover effects here */
+  
+}`,
+                3: `.grid-container {
+  /* Add your CSS here */
+  
+}`,
+                4: `.card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  /* Add box-shadow and transition */
+  
+}
+
+.card:hover {
+  /* Increase shadow on hover */
+  
+}`,
+                5: `.gradient-box {
+  height: 150px;
+  border-radius: 12px;
+  /* Add gradient background */
+  
+}`,
+                6: `.avatar {
+  width: 120px;
+  height: 120px;
+  background: #0A2540;
+  /* Make it circular */
+  
+}`,
+                7: `.truncate {
+  width: 250px;
+  /* Add truncation properties */
+  
+}`,
+                8: `.header {
+  background: #0A2540;
+  padding: 16px;
+  /* Make it sticky */
+  
+}`,
+                9: `.navbar {
+  background: #0A2540;
+  padding: 16px 24px;
+  /* Add flexbox layout */
+  
+}`,
+                10: `.glass-card {
+  padding: 24px;
+  border-radius: 12px;
+  /* Add glassmorphism effect */
+  
+}`
+            };
+            
+            editor.value = starters[challengeNum] || '';
+            hideSuccess(challengeNum);
+        }
+        
+        // Toggle solution visibility
+        function toggleSolution(num) {
+            const solution = document.getElementById(`solution-${num}`);
+            const button = solution.previousElementSibling;
+            
+            if (solution.classList.contains('active')) {
+                solution.classList.remove('active');
+                button.textContent = '👁️ Show Solution';
+            } else {
+                solution.classList.add('active');
+                button.textContent = '🙈 Hide Solution';
+            }
+        }
+        
+        // Study Materials Content
+        const studyMaterials = {
+            1: {
+                title: "Challenge 1: Centering with Flexbox",
+                subtitle: "Learn how to center elements using modern CSS Flexbox",
+                content: `
+                    <div class="property-section">
+                        <div class="property-name">display: flex</div>
+                        <p class="property-desc">
+                            The <code>display: flex</code> property turns an element into a flex container, enabling powerful layout capabilities. 
+                            This is the foundation for modern CSS layouts and makes centering content incredibly easy.
+                        </p>
+                        <div class="property-example">/* Make element a flex container */
+.container {
+  display: flex;
+}</div>
+                        <div class="property-values">
+                            <strong>Why use Flexbox?</strong>
+                            <ul>
+                                <li>Easy alignment of child elements</li>
+                                <li>Responsive by default</li>
+                                <li>Works in one dimension (row or column)</li>
+                                <li>Better browser support than older methods</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">justify-content</div>
+                        <p class="property-desc">
+                            Controls horizontal alignment (main axis) in a flex container. This property distributes space between and around items.
+                        </p>
+                        <div class="property-example">/* Center items horizontally */
+.container {
+  justify-content: center;
+}</div>
+                        <div class="property-values">
+                            <strong>Common values:</strong>
+                            <ul>
+                                <li><code>center</code> - Centers items horizontally</li>
+                                <li><code>flex-start</code> - Aligns to the left</li>
+                                <li><code>flex-end</code> - Aligns to the right</li>
+                                <li><code>space-between</code> - Space between items</li>
+                                <li><code>space-around</code> - Space around items</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">align-items</div>
+                        <p class="property-desc">
+                            Controls vertical alignment (cross axis) in a flex container. This works perpendicular to justify-content.
+                        </p>
+                        <div class="property-example">/* Center items vertically */
+.container {
+  align-items: center;
+}</div>
+                        <div class="property-values">
+                            <strong>Common values:</strong>
+                            <ul>
+                                <li><code>center</code> - Centers items vertically</li>
+                                <li><code>flex-start</code> - Aligns to the top</li>
+                                <li><code>flex-end</code> - Aligns to the bottom</li>
+                                <li><code>stretch</code> - Stretches to fill container (default)</li>
+                                <li><code>baseline</code> - Aligns text baselines</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">💡 Complete Solution Approach</div>
+                        <p class="property-desc">
+                            To center an element both horizontally and vertically, combine all three properties:
+                        </p>
+                        <div class="property-example">.container {
+  display: flex;           /* Enable flexbox */
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+}</div>
+                    </div>
+                `
+            },
+            2: {
+                title: "Challenge 2: Hover Effects & Transitions",
+                subtitle: "Create smooth interactive button animations",
+                content: `
+                    <div class="property-section">
+                        <div class="property-name">transition</div>
+                        <p class="property-desc">
+                            The <code>transition</code> property creates smooth animations when CSS properties change. 
+                            It's essential for creating professional, polished user interfaces.
+                        </p>
+                        <div class="property-example">/* Animate all properties over 0.3 seconds */
+.button {
+  transition: all 0.3s ease;
+}</div>
+                        <div class="property-values">
+                            <strong>Syntax: transition: property duration timing-function delay;</strong>
+                            <ul>
+                                <li><code>all</code> - Animate all properties</li>
+                                <li><code>0.3s</code> - Duration (seconds or milliseconds)</li>
+                                <li><code>ease</code> - Timing function (ease, linear, ease-in, ease-out)</li>
+                                <li><code>0s</code> - Delay before starting (optional)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">transform</div>
+                        <p class="property-desc">
+                            The <code>transform</code> property lets you rotate, scale, skew, or translate an element without affecting the document flow.
+                        </p>
+                        <div class="property-example">/* Move button up by 3 pixels */
+.button:hover {
+  transform: translateY(-3px);
+}</div>
+                        <div class="property-values">
+                            <strong>Common transform functions:</strong>
+                            <ul>
+                                <li><code>translateY(-3px)</code> - Move up 3 pixels</li>
+                                <li><code>translateX(10px)</code> - Move right 10 pixels</li>
+                                <li><code>scale(1.1)</code> - Grow by 10%</li>
+                                <li><code>rotate(45deg)</code> - Rotate 45 degrees</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">box-shadow</div>
+                        <p class="property-desc">
+                            Adds depth and dimension to elements by creating shadows. Essential for modern UI design and creating "lifted" effects.
+                        </p>
+                        <div class="property-example">/* Add shadow on hover */
+.button:hover {
+  box-shadow: 0 8px 16px rgba(0, 212, 170, 0.4);
+}</div>
+                        <div class="property-values">
+                            <strong>Syntax: box-shadow: x-offset y-offset blur spread color;</strong>
+                            <ul>
+                                <li><code>0</code> - Horizontal offset</li>
+                                <li><code>8px</code> - Vertical offset (shadow below)</li>
+                                <li><code>16px</code> - Blur radius (softness)</li>
+                                <li><code>rgba(0,0,0,0.4)</code> - Semi-transparent color</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">:hover pseudo-class</div>
+                        <p class="property-desc">
+                            The <code>:hover</code> pseudo-class applies styles when a user hovers over an element with their cursor.
+                        </p>
+                        <div class="property-example">/* Apply styles on hover */
+.button:hover {
+  background: #00D4AA;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 212, 170, 0.4);
+}</div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">💡 Complete Solution Approach</div>
+                        <p class="property-desc">
+                            Combine transition with hover effects for smooth, professional animations:
+                        </p>
+                        <div class="property-example">.button {
+  transition: all 0.3s ease;  /* Enable smooth animations */
+}
+
+.button:hover {
+  background: #00D4AA;        /* Change color */
+  transform: translateY(-3px); /* Lift up */
+  box-shadow: 0 8px 16px rgba(0, 212, 170, 0.4); /* Add shadow */
+}</div>
+                    </div>
+                `
+            },
+            3: {
+                title: "Challenge 3: CSS Grid Layout",
+                subtitle: "Create responsive grid layouts with ease",
+                content: `
+                    <div class="property-section">
+                        <div class="property-name">display: grid</div>
+                        <p class="property-desc">
+                            The <code>display: grid</code> property enables CSS Grid Layout, a powerful two-dimensional layout system. 
+                            It's perfect for creating complex, responsive layouts with rows and columns.
+                        </p>
+                        <div class="property-example">/* Make element a grid container */
+.container {
+  display: grid;
+}</div>
+                        <div class="property-values">
+                            <strong>Grid vs Flexbox:</strong>
+                            <ul>
+                                <li>Grid: Two-dimensional (rows AND columns)</li>
+                                <li>Flexbox: One-dimensional (row OR column)</li>
+                                <li>Grid: Better for page layouts</li>
+                                <li>Flexbox: Better for component layouts</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">grid-template-columns</div>
+                        <p class="property-desc">
+                            Defines the number and size of columns in your grid. You can use fixed sizes, fractions, or the repeat() function.
+                        </p>
+                        <div class="property-example">/* Create 3 equal columns */
+.container {
+  grid-template-columns: repeat(3, 1fr);
+}</div>
+                        <div class="property-values">
+                            <strong>Different ways to define columns:</strong>
+                            <ul>
+                                <li><code>1fr 1fr 1fr</code> - Three equal columns</li>
+                                <li><code>repeat(3, 1fr)</code> - Same as above (cleaner)</li>
+                                <li><code>200px 1fr 200px</code> - Fixed sides, flexible middle</li>
+                                <li><code>repeat(auto-fit, minmax(250px, 1fr))</code> - Responsive</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">repeat() function</div>
+                        <p class="property-desc">
+                            The <code>repeat()</code> function is a shorthand for repeating patterns. It makes your code cleaner and easier to maintain.
+                        </p>
+                        <div class="property-example">/* Instead of: 1fr 1fr 1fr */
+.container {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* First argument: how many times to repeat */
+/* Second argument: what to repeat */</div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">fr unit</div>
+                        <p class="property-desc">
+                            The <code>fr</code> (fraction) unit represents a fraction of the available space. 
+                            It's like saying "give me 1 part of the remaining space."
+                        </p>
+                        <div class="property-example">/* 1fr means "1 equal part" */
+.container {
+  grid-template-columns: 1fr 1fr 1fr;  /* 3 equal columns */
+}
+
+/* Mix with fixed sizes */
+.container {
+  grid-template-columns: 200px 1fr 1fr;  /* Fixed + 2 flexible */
+}</div>
+                        <div class="property-values">
+                            <strong>Understanding fr:</strong>
+                            <ul>
+                                <li><code>1fr 1fr 1fr</code> - Each gets 33.33% of space</li>
+                                <li><code>1fr 2fr 1fr</code> - Middle gets twice as much space</li>
+                                <li>fr units share remaining space after fixed sizes</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">gap</div>
+                        <p class="property-desc">
+                            The <code>gap</code> property (formerly grid-gap) adds spacing between grid items. 
+                            It's much cleaner than using margins on individual items.
+                        </p>
+                        <div class="property-example">/* Add 16px space between all items */
+.container {
+  gap: 16px;
+}
+
+/* Different horizontal and vertical gaps */
+.container {
+  gap: 20px 10px;  /* 20px vertical, 10px horizontal */
+}</div>
+                    </div>
+
+                    <div class="property-section">
+                        <div class="property-name">💡 Complete Solution Approach</div>
+                        <p class="property-desc">
+                            Combine these properties to create a 3-column grid with spacing:
+                        </p>
+                        <div class="property-example">.container {
+  display: grid;                    /* Enable grid */
+  grid-template-columns: repeat(3, 1fr);  /* 3 equal columns */
+  gap: 16px;                        /* Space between items */
+}</div>
+                    </div>
+                `
+            }
+        };
+
+        // Open study material modal
+        function openStudyMaterial(challengeNum) {
+            const modal = document.getElementById('studyModal');
+            const content = studyMaterials[challengeNum];
+            
+            document.getElementById('modalTitle').innerHTML = `📚 ${content.title}`;
+            document.getElementById('modalSubtitle').textContent = content.subtitle;
+            document.getElementById('modalContent').innerHTML = content.content;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        // Close study material modal
+        function closeStudyMaterial() {
+            const modal = document.getElementById('studyModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('studyModal');
+            if (e.target === modal) {
+                closeStudyMaterial();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeStudyMaterial();
+            }
+        });
+        
+        // Copy solution to editor
+        function copySolution(num) {
+            const solutions = {
+                1: `.container {
+  height: 200px;
+  background: #f0fdfa;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}`,
+                2: `.btn {
+  padding: 14px 32px;
+  background: #0A2540;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  background: #00D4AA;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 212, 170, 0.4);
+}`,
+                3: `.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}`,
+                4: `.card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+  transform: translateY(-5px);
+}`,
+                5: `.gradient-box {
+  height: 150px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0A2540 0%, #00D4AA 100%);
+}`,
+                6: `.avatar {
+  width: 120px;
+  height: 120px;
+  background: #0A2540;
+  border-radius: 50%;
+}`,
+                7: `.truncate {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}`,
+                8: `.header {
+  background: #0A2540;
+  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}`,
+                9: `.navbar {
+  background: #0A2540;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}`,
+                10: `.glass-card {
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}`
+            };
+            
+            document.getElementById(`css-editor-${num}`).value = solutions[num];
+            alert('✅ Solution copied to editor! Now click "Apply CSS" to see it work.');
+        }
+        
+        function showSuccess(num) {
+            const badge = document.getElementById(`success-${num}`);
+            if (badge) {
+                badge.style.display = 'inline-block';
+                setTimeout(() => badge.style.display = 'none', 3000);
+            }
+        }
+        
+        function hideSuccess(num) {
+            const badge = document.getElementById(`success-${num}`);
+            if (badge) badge.style.display = 'none';
+        }
+        
+        // Pagination System
+        let currentChallengeIndex = 1;
+        const totalChallenges = 10;
+
+        // Initialize pagination on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            showChallenge(1);
+        });
+
+        function showChallenge(challengeNum) {
+            // Hide all challenges
+            document.querySelectorAll('.challenge').forEach(challenge => {
+                challenge.classList.remove('active');
+            });
+
+            // Show selected challenge
+            const challenges = document.querySelectorAll('.challenge');
+            if (challenges[challengeNum - 1]) {
+                challenges[challengeNum - 1].classList.add('active');
+            }
+
+            // Update current challenge index
+            currentChallengeIndex = challengeNum;
+
+            // Update UI
+            updatePaginationUI();
+
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updatePaginationUI() {
+            // Update challenge number display
+            document.getElementById('currentChallenge').textContent = currentChallengeIndex;
+
+            // Update all dots
+            document.querySelectorAll('.dot').forEach((dot) => {
+                const dotNum = parseInt(dot.textContent);
+                if (dotNum === currentChallengeIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+
+            // Update all prev/next buttons (top and bottom)
+            const prevBtns = document.querySelectorAll('.btn-prev');
+            const nextBtns = document.querySelectorAll('.btn-next');
+
+            prevBtns.forEach(btn => {
+                btn.disabled = currentChallengeIndex === 1;
+            });
+
+            nextBtns.forEach(btn => {
+                btn.disabled = currentChallengeIndex === totalChallenges;
+                if (currentChallengeIndex === totalChallenges) {
+                    btn.innerHTML = '🎉 Complete!';
+                } else {
+                    btn.innerHTML = 'Next →';
+                }
+            });
+        }
+
+        function nextChallenge() {
+            if (currentChallengeIndex < totalChallenges) {
+                showChallenge(currentChallengeIndex + 1);
+            }
+        }
+
+        function previousChallenge() {
+            if (currentChallengeIndex > 1) {
+                showChallenge(currentChallengeIndex - 1);
+            }
+        }
+
+        function goToChallenge(challengeNum) {
+            if (challengeNum >= 1 && challengeNum <= totalChallenges) {
+                showChallenge(challengeNum);
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            // Don't interfere if modal is open or user is typing
+            const modal = document.getElementById('studyModal');
+            if (modal && modal.classList.contains('active')) return;
+            if (document.activeElement.tagName === 'TEXTAREA') return;
+
+            if (e.key === 'ArrowRight') {
+                nextChallenge();
+            } else if (e.key === 'ArrowLeft') {
+                previousChallenge();
+            }
+        });
+    </script>
+</body>
+</html>

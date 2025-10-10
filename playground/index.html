@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playground - Learn By Doing | Learn With Me</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0A2540 0%, #1e3a5f 50%, #0A2540 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 80px 20px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .hero-emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: clamp(40px, 8vw, 72px);
+            margin-bottom: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #00D4AA 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: clamp(18px, 3vw, 24px);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .playground-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .playground-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .playground-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #0A2540 0%, #00D4AA 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .playground-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(10, 37, 64, 0.3);
+        }
+
+        .playground-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card-badge {
+            display: inline-block;
+            background: rgba(0, 212, 170, 0.2);
+            color: #00D4AA;
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .card-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .card-features {
+            list-style: none;
+            margin-bottom: 28px;
+        }
+
+        .card-features li {
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-features li::before {
+            content: '✓';
+            color: #00D4AA;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .card-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #00D4AA 0%, #00A884 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .card-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 212, 170, 0.4);
+        }
+
+        .coming-soon {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .coming-soon .card-btn {
+            background: rgba(255, 255, 255, 0.1);
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 60px 20px;
+            }
+
+            .back-link {
+                top: 20px;
+                left: 20px;
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+
+            .playground-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="../index.html" class="back-link">← Back to Home</a>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-emoji">🎨</div>
+            <h1>Playground</h1>
+            <p class="subtitle">Learn by doing! Practice your coding skills with interactive challenges. See the goal, write the code, and compare with solutions.</p>
+
+            <div class="playground-grid">
+                <!-- CSS Playground -->
+                <div class="playground-card">
+                    <span class="card-icon">🎨</span>
+                    <div class="card-badge">10 Challenges</div>
+                    <h2 class="card-title">CSS Playground</h2>
+                    <p class="card-desc">Master CSS with 10 hands-on challenges. Each challenge shows you the goal, provides starter code, and includes detailed study materials.</p>
+                    <ul class="card-features">
+                        <li>Visual goal previews</li>
+                        <li>Starter code provided</li>
+                        <li>Hidden solutions available</li>
+                        <li>Real-world scenarios</li>
+                        <li>Beginner to intermediate</li>
+                    </ul>
+                    <a href="css-playground.html" class="card-btn">Start CSS Challenges →</a>
+                </div>
+
+                <!-- JavaScript Playground -->
+                <div class="playground-card coming-soon">
+                    <span class="card-icon">⚡</span>
+                    <div class="card-badge">Coming Soon</div>
+                    <h2 class="card-title">JavaScript Playground</h2>
+                    <p class="card-desc">Build interactive functionality with JavaScript challenges covering DOM manipulation, events, and more.</p>
+                    <ul class="card-features">
+                        <li>Interactive demos</li>
+                        <li>Console output testing</li>
+                        <li>Step-by-step hints</li>
+                        <li>Modern ES6+ syntax</li>
+                    </ul>
+                    <div class="card-btn">Coming Soon</div>
+                </div>
+
+                <!-- React Playground -->
+                <div class="playground-card coming-soon">
+                    <span class="card-icon">⚛️</span>
+                    <div class="card-badge">Coming Soon</div>
+                    <h2 class="card-title">React Playground</h2>
+                    <p class="card-desc">Practice React components, hooks, and state management with practical exercises.</p>
+                    <ul class="card-features">
+                        <li>Component challenges</li>
+                        <li>Hooks practice</li>
+                        <li>State management</li>
+                        <li>Best practices</li>
+                    </ul>
+                    <div class="card-btn">Coming Soon</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
